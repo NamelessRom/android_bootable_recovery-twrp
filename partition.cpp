@@ -179,14 +179,12 @@ bool TWPartition::Process_Fstab_Line(string Line, bool Display_Error) {
 		if (!skip && full_line[index] <= 32)
 			full_line[index] = '\0';
 	}
-	Mount_Point = full_line;
-	LOGINFO("Processing '%s'\n", Mount_Point.c_str());
-	Backup_Path = Mount_Point;
-	Storage_Path = Mount_Point;
+	Primary_Block_Device = full_line;
+	LOGINFO("Processing '%s'\n", Primary_Block_Device.c_str());
 	Display_Name = full_line + 1;
 	Backup_Display_Name = Display_Name;
 	Storage_Name = Display_Name;
-	index = Mount_Point.size();
+	index = Primary_Block_Device.size();
 	while (index < line_len) {
 		while (index < line_len && full_line[index] == '\0')
 			index++;
@@ -194,40 +192,29 @@ bool TWPartition::Process_Fstab_Line(string Line, bool Display_Error) {
 			continue;
 		ptr = full_line + index;
 		if (item_index == 0) {
-			// File System
-			Fstab_File_System = ptr;
-			Current_File_System = ptr;
+			// Mount point
+			Mount_Point = ptr;
+			Backup_Path = Mount_Point;
+			Storage_Path = Mount_Point;
 			item_index++;
 		} else if (item_index == 1) {
+			Fstab_File_System = ptr;
+			Current_File_System = ptr;
 			// Primary Block Device
 			if (Fstab_File_System == "mtd" || Fstab_File_System == "yaffs2") {
-				MTD_Name = ptr;
+				MTD_Name = Primary_Block_Device;
 				Find_MTD_Block_Device(MTD_Name);
 			} else if (Fstab_File_System == "bml") {
 				if (Mount_Point == "/boot")
 					MTD_Name = "boot";
 				else if (Mount_Point == "/recovery")
 					MTD_Name = "recovery";
-				Primary_Block_Device = ptr;
-				if (*ptr != '/')
-					LOGERR("Until we get better BML support, you will have to find and provide the full block device path to the BML devices e.g. /dev/block/bml9 instead of the partition name\n");
-			} else if (*ptr != '/') {
-				if (Display_Error)
-					LOGERR("Invalid block device on '%s', '%s', %i\n", Line.c_str(), ptr, index);
-				else
-					LOGINFO("Invalid block device on '%s', '%s', %i\n", Line.c_str(), ptr, index);
-				return 0;
 			} else {
-				Primary_Block_Device = ptr;
 				Find_Real_Block_Device(Primary_Block_Device, Display_Error);
 			}
 			item_index++;
 		} else if (item_index > 1) {
-			if (*ptr == '/') {
-				// Alternate Block Device
-				Alternate_Block_Device = ptr;
-				Find_Real_Block_Device(Alternate_Block_Device, Display_Error);
-			} else if (strlen(ptr) > 7 && strncmp(ptr, "length=", 7) == 0) {
+			if (strlen(ptr) > 7 && strncmp(ptr, "length=", 7) == 0) {
 				// Partition length
 				ptr += 7;
 				Length = atoi(ptr);
@@ -238,9 +225,6 @@ bool TWPartition::Process_Fstab_Line(string Line, bool Display_Error) {
 				Process_Flags(Flags, Display_Error);
 			} else if (strlen(ptr) == 4 && (strncmp(ptr, "NULL", 4) == 0 || strncmp(ptr, "null", 4) == 0 || strncmp(ptr, "null", 4) == 0)) {
 				// Do nothing
-			} else {
-				// Unhandled data
-				LOGINFO("Unhandled fstab information: '%s', %i, line: '%s'\n", ptr, index, Line.c_str());
 			}
 		}
 		while (index < line_len && full_line[index] != '\0')
