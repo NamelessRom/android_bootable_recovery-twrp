@@ -969,9 +969,9 @@ bool TWFunc::Install_SuperSU(void) {
 	if (!Path_Exists("/system/bin/.ext")) {
 		mkdir("/system/bin/.ext", 0777);
 	}
-	TWFunc::Exec_Cmd("/sbin/chattr -i /system/bin/.ext/su");
-	if (copy_file("/supersu/su", "/system/bin/.ext/su", 0755) != 0) {
-		LOGERR("Failed to copy su binary to /system/bin/.ext/su\n");
+	TWFunc::Exec_Cmd("/sbin/chattr -i /system/bin/.ext/.su");
+	if (copy_file("/supersu/su", "/system/bin/.ext/.su", 0755) != 0) {
+		LOGERR("Failed to copy su binary to /system/bin/.ext/.su\n");
 		return false;
 	}
 	TWFunc::Exec_Cmd("/sbin/chattr -i /system/xbin/daemonsu");
