@@ -143,10 +143,10 @@ LOCAL_MODULE_TAGS := eng
 LOCAL_C_INCLUDES += system/extras/ext4_utils
 
 #TWRP Build Flags
-ifeq ($(TW_EXCLUDE_MTP),)
-    LOCAL_SHARED_LIBRARIES += libtwrpmtp
-    LOCAL_CFLAGS += -DTW_HAS_MTP
-endif
+#ifeq ($(TW_EXCLUDE_MTP),)
+#    LOCAL_SHARED_LIBRARIES += libtwrpmtp
+#    LOCAL_CFLAGS += -DTW_HAS_MTP
+#endif
 ifneq ($(TW_NO_SCREEN_TIMEOUT),)
     LOCAL_CFLAGS += -DTW_NO_SCREEN_TIMEOUT
 endif
