@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <sys/vfs.h>
 #include <sys/types.h>
 #include <time.h>
 #include <unistd.h>
@@ -322,6 +323,27 @@ int main(int argc, char **argv) {
 		DataManager::SetValue("tw_mtp_enabled", 0);
 	}
 #endif
+
+	// Set vars for special OPPO Find7 variants and storage layouts
+	char product_model[PROPERTY_VALUE_MAX];
+	char device_model[PROPERTY_VALUE_MAX];
+	property_get("ro.product.model", product_model, "unknown");
+	property_get("ro.oppo.device", device_model, product_model);
+	DataManager::SetValue("tw_device_model", device_model);
+
+	struct statfs st;
+	char storage_layout[16];
+	storage_layout[0]=0;
+	const char *userdata_path = "/dev/block/platform/msm_sdcc.1/by-name/userdata";
+	if (strstr(device_model, "find7") || strstr(device_model, "FIND7") || strstr(device_model, "Find7")) {
+		if (statfs(userdata_path, &st)== 0) {
+			if(st.f_blocks * st.f_bsize >  400000000UL) {
+				strcat(storage_layout, "u");
+			}
+		}
+	}
+	if(TWFunc::Path_Exists("/dev/lvpool/userdata")) strcat(storage_layout, "l");
+	DataManager::SetValue("tw_storage_layout", storage_layout);
 
 	// Launch the main GUI
 	gui_start();

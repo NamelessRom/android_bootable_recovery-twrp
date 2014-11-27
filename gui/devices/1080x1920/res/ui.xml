@@ -237,7 +237,13 @@
 
 			<object type="text" color="%text_color%">
 				<font resource="font" />
-				<placement x="405" y="114" />
+				<placement x="272" y="114" />
+				<text>Device/Layout: %tw_device_model%%tw_storage_layout%</text>
+			</object>
+
+			<object type="text" color="%text_color%">
+				<font resource="font" />
+				<placement x="667" y="114" />
 				<conditions>
 					<condition var1="tw_no_battery_percent" var2="0" />
 					<condition var1="tw_battery" op=">" var2="0" />
@@ -248,7 +254,7 @@
 
 			<object type="text" color="%text_color%">
 				<font resource="font" />
-				<placement x="760" y="114" />
+				<placement x="892" y="114" />
 				<conditions>
 					<condition var1="tw_no_cpu_temp" var2="0" />
 				</conditions>
