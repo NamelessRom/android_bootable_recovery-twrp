@@ -3899,10 +3899,22 @@
 				<text>Install SuperSU now?</text>
 			</object>
 
-			<object type="text" color="%text_color%">
+			<object type="text" color="%highlight_color%">
 				<font resource="font" />
-				<placement x="%center_x%" y="%row4_text_y%" placement="5"/>
-				<text>This will root your device.</text>
+				<placement x="%center_x%" y="%row7_text_y%" placement="5"/>
+				<text>WARNING: Auto-rooting is not recommended.</text>
+			</object>
+
+			<object type="text" color="%highlight_color%">
+				<font resource="font" />
+				<placement x="%center_x%" y="%row8_text_y%" placement="5"/>
+				<text>The recommended way is to either re-install your ROM or</text>
+			</object>
+
+			<object type="text" color="%highlight_color%">
+				<font resource="font" />
+				<placement x="%center_x%" y="%row9_text_y%" placement="5"/>
+				<text>to flash a SuperSU-version that is known to work with it.</text>
 			</object>
 
 			<object type="button">
@@ -3928,7 +3940,7 @@
 			<object type="text" color="%text_color%">
 				<font resource="font" />
 				<placement x="%center_x%" y="%slider_text_y%" placement="4" />
-				<text>Swipe to Install</text>
+				<text>Swipe to Install SuperSU anyway</text>
 			</object>
 		</page>
 	</pages>
