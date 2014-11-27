@@ -363,10 +363,10 @@ ifeq ($(TW_INCLUDE_DUMLOCK), true)
         htcdumlock htcdumlocksys flash_imagesys dump_imagesys libbmlutils.so \
         libflashutils.so libmmcutils.so libmtdutils.so HTCDumlock.apk
 endif
-ifneq ($(TW_EXCLUDE_SUPERSU), true)
-    LOCAL_ADDITIONAL_DEPENDENCIES += \
-        su install-recovery.sh 99SuperSUDaemon Superuser.apk
-endif
+#ifneq ($(TW_EXCLUDE_SUPERSU), true)
+#    LOCAL_ADDITIONAL_DEPENDENCIES += \
+#        su install-recovery.sh 99SuperSUDaemon Superuser.apk
+#endif
 ifneq ($(TW_NO_EXFAT_FUSE), true)
     LOCAL_ADDITIONAL_DEPENDENCIES += exfat-fuse
 endif
