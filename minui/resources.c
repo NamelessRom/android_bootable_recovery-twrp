@@ -186,6 +186,10 @@ exit:
     return result;
 }
 
+int res_create_display_surface(const char* name, gr_surface* pSurface) {
+    return res_create_surface(name, pSurface);
+}
+
 static int open_png(const char* name, png_structp* png_ptr, png_infop* info_ptr,
                     png_uint_32* width, png_uint_32* height, png_byte* channels) {
     char resPath[256];
