@@ -3896,7 +3896,7 @@
 			<object type="text" color="%text_color%">
 				<font resource="font" />
 				<placement x="%center_x%" y="%row3_text_y%" placement="5"/>
-				<text>Install SuperSU now?</text>
+				<text>Install SuperSU 2.35 now?</text>
 			</object>
 
 			<object type="text" color="%highlight_color%">
