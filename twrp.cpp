@@ -340,17 +340,6 @@ int main(int argc, char **argv) {
 			rename("/system/recovery-from-boot.p", "/system/recovery-from-boot.bak");
 			gui_print("Renamed stock recovery file in /system to prevent\nthe stock ROM from replacing TWRP.\n");
 		}
-		if (TWFunc::Path_Exists("/supersu/su") && !TWFunc::Path_Exists("/system/bin/su") && !TWFunc::Path_Exists("/system/xbin/su") && !TWFunc::Path_Exists("/system/bin/.ext/.su")) {
-			// Device doesn't have su installed
-			DataManager::SetValue("tw_busy", 1);
-			if (gui_startPage("installsu") != 0) {
-				LOGERR("Failed to start SuperSU install page.\n");
-			}
-		} else if (TWFunc::Check_su_Perms() > 0) {
-			// su perms are set incorrectly
-			LOGINFO("Root permissions appear to be lost... fixing. (This will always happen on 4.3+ ROMs with SELinux.\n");
-			TWFunc::Fix_su_Perms();
-		}
 		sync();
 		PartitionManager.UnMount_By_Path("/system", false);
 	}

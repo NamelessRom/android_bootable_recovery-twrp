@@ -1158,19 +1158,6 @@ main(int argc, char **argv) {
 			rename("/system/recovery-from-boot.p", "/system/recovery-from-boot.bak");
 			ui_print("Renamed stock recovery file in /system to prevent\nthe stock ROM from replacing TWRP.\n");
 		}
-		if (TWFunc::Path_Exists("/supersu/su") && !TWFunc::Path_Exists("/system/bin/su") && !TWFunc::Path_Exists("/system/xbin/su") && !TWFunc::Path_Exists("/system/bin/.ext/.su")) {
-			// Device doesn't have su installed
-			DataManager_SetIntValue("tw_busy", 1);
-			if (gui_startPage("installsu") != 0) {
-				LOGE("Failed to start decrypt GUI page.\n");
-			}
-		} else if (TWFunc::Check_su_Perms() > 0) {
-			// su perms are set incorrectly
-			DataManager_SetIntValue("tw_busy", 1);
-			if (gui_startPage("fixsu") != 0) {
-				LOGE("Failed to start decrypt GUI page.\n");
-			}
-		}
 		sync();
 		PartitionManager.UnMount_By_Path("/system", false);
 	}
