@@ -112,14 +112,15 @@ static int get_framebuffer(GGLSurface *fb)
       vi.transp.offset  = 0;
       vi.transp.length  = 8;
     } else if (PIXEL_FORMAT == GGL_PIXEL_FORMAT_RGBX_8888) {
-      vi.red.offset     = 24;
-      vi.red.length     = 8;
-      vi.green.offset   = 16;
-      vi.green.length   = 8;
-      vi.blue.offset    = 8;
-      vi.blue.length    = 8;
-      vi.transp.offset  = 0;
-      vi.transp.length  = 8;
+      if(vi.red.offset != 0 ||
+         vi.green.offset != 8 ||
+         vi.blue.offset != 16 ||
+         vi.transp.offset != 24) {
+         vi.red.offset     = 24;
+         vi.green.offset   = 16;
+         vi.blue.offset    = 8;
+         vi.transp.offset  = 0;
+      }
     } else { /* RGB565*/
       vi.red.offset     = 11;
       vi.red.length     = 5;
