@@ -148,6 +148,8 @@ ifeq ($(TW_EXCLUDE_MTP),)
     LOCAL_SHARED_LIBRARIES += libtwrpmtp
     LOCAL_CFLAGS += -DTW_HAS_MTP
 endif
+# *** HACK: disable screensaver globally until fixed
+TW_NO_SCREEN_TIMEOUT := true
 ifneq ($(TW_NO_SCREEN_TIMEOUT),)
     LOCAL_CFLAGS += -DTW_NO_SCREEN_TIMEOUT
 endif
