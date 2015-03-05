@@ -472,6 +472,8 @@ int gr_textEx(int x, int y, const char *s, void* pFont)
         }
     }
 
+    gl->disable(gl, GGL_TEXTURE_2D);
+
     return x;
 }
 
@@ -513,6 +515,8 @@ int gr_textExW(int x, int y, const char *s, void* pFont, int max_width)
 			}
         }
     }
+
+    gl->disable(gl, GGL_TEXTURE_2D);
 
     return x;
 }
@@ -561,6 +565,8 @@ int gr_textExWH(int x, int y, const char *s, void* pFont, int max_width, int max
         }
     }
 
+    gl->disable(gl, GGL_TEXTURE_2D);
+
     return x;
 }
 
@@ -585,7 +591,6 @@ void gr_fill(int x, int y, int w, int h)
     if(gr_is_curr_clr_opaque)
         gl->disable(gl, GGL_BLEND);
 
-    gl->disable(gl, GGL_TEXTURE_2D);
     gl->recti(gl, x, y, x + w, y + h);
 
     if(gr_is_curr_clr_opaque)
@@ -655,6 +660,7 @@ void gr_blit(gr_surface source, int sx, int sy, int w, int h, int dx, int dy) {
     gl->enable(gl, GGL_TEXTURE_2D);
     gl->texCoord2i(gl, sx - dx, sy - dy);
     gl->recti(gl, dx, dy, dx + w, dy + h);
+    gl->disable(gl, GGL_TEXTURE_2D);
 
     if(surface->format == GGL_PIXEL_FORMAT_RGBX_8888)
         gl->enable(gl, GGL_BLEND);
