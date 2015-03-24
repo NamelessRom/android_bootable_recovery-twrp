@@ -257,7 +257,7 @@ void ScreenRecoveryUI::draw_screen_locked()
         for (int ty = gr_fb_height() - char_height, count = 0;
              ty > y+2 && count < text_rows;
              ty -= char_height, ++count) {
-            gr_text(4, ty, text[row], 0);
+            gr_text(0, ty, text[row], 0);
             --row;
             if (row < 0) row = text_rows-1;
         }
