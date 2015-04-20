@@ -23,6 +23,7 @@ ifeq ($(TARGET_USERIMAGES_USE_EXT4), true)
 LOCAL_CFLAGS += -DUSE_EXT4
 LOCAL_CFLAGS += -Wno-unused-parameter
 LOCAL_C_INCLUDES += system/extras/ext4_utils
+LOCAL_C_INCLUDES += external/lz4/lib
 LOCAL_STATIC_LIBRARIES += \
     libext4_utils \
     libz
@@ -46,6 +47,7 @@ LOCAL_STATIC_LIBRARIES += libflashutils libmmcutils libbmlutils
 LOCAL_STATIC_LIBRARIES += libmincrypttwrp libbz
 LOCAL_STATIC_LIBRARIES += libcutils liblog libstdc++ libc
 LOCAL_STATIC_LIBRARIES += libselinux
+LOCAL_STATIC_LIBRARIES += liblz4-static
 tune2fs_static_libraries := \
  libext2_com_err \
  libext2_blkid \
