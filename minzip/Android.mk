@@ -37,15 +37,15 @@ LOCAL_C_INCLUDES += \
 	external/zlib \
 	external/safe-iop/include
 
+LOCAL_MODULE := libminzip
+
+LOCAL_CFLAGS += -Wall
+LOCAL_STATIC_LIBRARIES := libz
+
 ifeq ($(TWHAVE_SELINUX),true)
 LOCAL_C_INCLUDES += external/libselinux/include
 LOCAL_STATIC_LIBRARIES += libselinux
 LOCAL_CFLAGS += -DHAVE_SELINUX
 endif
-
-LOCAL_MODULE := libminzip
-
-LOCAL_CFLAGS += -Wall
-LOCAL_STATIC_LIBRARIES := libz
 
 include $(BUILD_STATIC_LIBRARY)
