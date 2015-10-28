@@ -45,6 +45,7 @@
 #include "bootloader.h"
 #include "cutils/properties.h"
 #include "cutils/android_reboot.h"
+#include "gui/gui.hpp"
 #include <sys/reboot.h>
 #endif // ndef BUILD_TWRPTAR_MAIN
 #ifndef TW_EXCLUDE_ENCRYPTED_BACKUPS
@@ -122,12 +123,12 @@ int TWFunc::Wait_For_Child(pid_t pid, int *status, string Child_Name) {
 	rc_pid = waitpid(pid, status, 0);
 	if (rc_pid > 0) {
 		if (WIFSIGNALED(*status)) {
-			LOGERR("%s process ended with signal: %d\n", Child_Name.c_str(), WTERMSIG(*status)); // Seg fault or some other non-graceful termination
+			gui_msg(Msg(msg::kError, "pid_signal={1} process ended with signal: {2}")(Child_Name)(WTERMSIG(*status))); // Seg fault or some other non-graceful termination
 			return -1;
 		} else if (WEXITSTATUS(*status) == 0) {
 			LOGINFO("%s process ended with RC=%d\n", Child_Name.c_str(), WEXITSTATUS(*status)); // Success
 		} else {
-			LOGERR("%s process ended with ERROR=%d\n", Child_Name.c_str(), WEXITSTATUS(*status)); // Graceful exit, but there was an error
+			gui_msg(Msg(msg::kError, "pid_error={1} process ended with ERROR: {2}")(Child_Name)(WEXITSTATUS(*status))); // Graceful exit, but there was an error
 			return -1;
 		}
 	} else { // no PID returned
@@ -207,13 +208,13 @@ int TWFunc::Try_Decrypting_File(string fn, string password) {
 
 	f = fopen(fn.c_str(), "rb");
 	if (f == NULL) {
-		LOGERR("Failed to open '%s' to try decrypt\n", fn.c_str());
+		LOGERR("Failed to open '%s' to try decrypt: %s\n", fn.c_str(), strerror(errno));
 		oaes_free(&ctx);
 		return -1;
 	}
 	read_len = fread(buffer, sizeof(uint8_t), 4096, f);
 	if (read_len <= 0) {
-		LOGERR("Read size during try decrypt failed\n");
+		LOGERR("Read size during try decrypt failed: %s\n", strerror(errno));
 		fclose(f);
 		oaes_free(&ctx);
 		return -1;
@@ -356,7 +357,7 @@ int TWFunc::Recursive_Mkdir(string Path) {
 		wholePath = pathCpy.substr(0, pos);
 		if (!TWFunc::Path_Exists(wholePath)) {
 			if (mkdir(wholePath.c_str(), 0777)) {
-				LOGERR("Unable to create folder: %s  (errno=%d)\n", wholePath.c_str(), errno);
+				gui_msg(Msg(msg::kError, "create_folder_strerr=Can not create '{1}' folder ({2})")(wholePath)(strerror(errno)));
 				return false;
 			} else {
 				tw_set_default_metadata(wholePath.c_str());
@@ -515,10 +516,10 @@ void TWFunc::check_and_run_script(const char* script_file, const char* display_n
 	// Check for and run startup script if script exists
 	struct stat st;
 	if (stat(script_file, &st) == 0) {
-		gui_print("Running %s script...\n", display_name);
+		gui_msg(Msg("run_script=Running {1} script...")(display_name));
 		chmod(script_file, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
 		TWFunc::Exec_Cmd(script_file);
-		gui_print("\nFinished running %s script.\n", display_name);
+		gui_msg("done=Done.");
 	}
 }
 
@@ -528,7 +529,7 @@ int TWFunc::removeDir(const string path, bool skipParent) {
 	string new_path;
 
 	if (d == NULL) {
-		LOGERR("Error opening dir: '%s'\n", path.c_str());
+		gui_msg(Msg(msg::kError, "error_opening_strerr=Error opening: '{1}' ({2})")(path)(strerror(errno)));
 		return -1;
 	}
 
@@ -679,7 +680,7 @@ bool TWFunc::Try_Decrypting_Backup(string Restore_Path, string Password) {
 	Restore_Path += "/";
 	d = opendir(Restore_Path.c_str());
 	if (d == NULL) {
-		LOGERR("Error opening '%s'\n", Restore_Path.c_str());
+		gui_msg(Msg(msg::kError, "error_opening_strerr=Error opening: '{1}' ({2})")(Restore_Path)(strerror(errno)));
 		return false;
 	}
 
@@ -979,7 +980,7 @@ void TWFunc::Disable_Stock_Recovery_Replace(void) {
 		// Disable flashing of stock recovery
 		if (TWFunc::Path_Exists("/system/recovery-from-boot.p")) {
 			rename("/system/recovery-from-boot.p", "/system/recovery-from-boot.bak");
-			gui_print("Renamed stock recovery file in /system to prevent\nthe stock ROM from replacing TWRP.\n");
+			gui_msg("rename_stock=Renamed stock recovery file in /system to prevent the stock ROM from replacing TWRP.");
 			sync();
 		}
 		PartitionManager.UnMount_By_Path("/system", false);
