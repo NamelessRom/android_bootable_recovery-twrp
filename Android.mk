@@ -12,107 +12,71 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+ifeq ($(call my-dir),$(call project-path-for,recovery))
+
 LOCAL_PATH := $(call my-dir)
 
-ifdef project-path-for
-    ifeq ($(LOCAL_PATH),$(call project-path-for,recovery))
-        PROJECT_PATH_AGREES := true
-        BOARD_SEPOLICY_DIRS += $(call project-path-for,recovery)/sepolicy
-    endif
-else
-    ifeq ($(LOCAL_PATH),bootable/recovery)
-        PROJECT_PATH_AGREES := true
-        BOARD_SEPOLICY_DIRS += bootable/recovery/sepolicy
-    endif
-endif
-
-ifeq ($(PROJECT_PATH_AGREES),true)
+BOARD_SEPOLICY_DIRS += $(call project-path-for,recovery)/sepolicy
 
 include $(CLEAR_VARS)
-
-TWRES_PATH := /twres/
-TWHTCD_PATH := $(TWRES_PATH)htcd/
 
 TARGET_RECOVERY_GUI := true
 
 LOCAL_SRC_FILES := \
-    twrp.cpp \
-    fixPermissions.cpp \
-    twrpTar.cpp \
-    twrpDU.cpp \
-    twrpDigest.cpp \
+    data.cpp \
     digest/md5.c \
     find_file.cpp \
-    infomanager.cpp
-
-LOCAL_SRC_FILES += \
-    data.cpp \
+    fixPermissions.cpp \
+    infomanager.cpp \
+    openrecoveryscript.cpp \
     partition.cpp \
     partitionmanager.cpp \
+    tarWrite.c \
     twinstall.cpp \
     twrp-functions.cpp \
-    openrecoveryscript.cpp \
-    tarWrite.c
+    twrp.cpp \
+    twrpDigest.cpp \
+    twrpDU.cpp \
+    twrpTar.cpp
 
 ifneq ($(TARGET_RECOVERY_REBOOT_SRC),)
-  LOCAL_SRC_FILES += $(TARGET_RECOVERY_REBOOT_SRC)
+    LOCAL_SRC_FILES += $(TARGET_RECOVERY_REBOOT_SRC)
 endif
 
 LOCAL_MODULE := recovery
-
-#LOCAL_FORCE_STATIC_EXECUTABLE := true
-
-#ifeq ($(HOST_OS),linux)
-#LOCAL_REQUIRED_MODULES := mkfs.f2fs
-#endif
 
 RECOVERY_API_VERSION := 3
 RECOVERY_FSTAB_VERSION := 2
 LOCAL_CFLAGS += -DRECOVERY_API_VERSION=$(RECOVERY_API_VERSION)
 LOCAL_CFLAGS += -Wno-unused-parameter
 
-#LOCAL_STATIC_LIBRARIES := \
-#    libext4_utils_static \
-#    libsparse_static \
-#    libminzip \
-#    libz \
-#    libmtdutils \
-#    libmincrypt \
-#    libminadbd \
-#    libminui \
-#    libpixelflinger_static \
-#    libpng \
-#    libfs_mgr \
-#    libcutils \
-#    liblog \
-#    libselinux \
-#    libstdc++ \
-#    libm \
-#    libc
-
 LOCAL_C_INCLUDES += \
-    system/vold \
-    system/extras/ext4_utils \
+    $(LOCAL_PATH)/libmincrypt/includes \
+    bionic \
+    external/libselinux/include \
+    external/openssl/include \
     system/core/adb \
+    system/extras/ext4_utils \
+    system/vold
 
-LOCAL_C_INCLUDES += bionic external/stlport/stlport external/openssl/include $(LOCAL_PATH)/libmincrypt/includes
-
-LOCAL_STATIC_LIBRARIES :=
-LOCAL_SHARED_LIBRARIES :=
-
-LOCAL_STATIC_LIBRARIES += libguitwrp
-LOCAL_SHARED_LIBRARIES += libz libc libcutils libstdc++ libtar libblkid libminuitwrp libminadbd libmtdutils libminzip libaosprecovery
-LOCAL_SHARED_LIBRARIES += libcrecovery
-
-ifeq (,$(filter $(PLATFORM_SDK_VERSION), 23))
-    LOCAL_SHARED_LIBRARIES += libstlport
-else
-    LOCAL_SHARED_LIBRARIES += libc++
-endif
-
-ifneq ($(wildcard system/core/libsparse/Android.mk),)
-LOCAL_SHARED_LIBRARIES += libsparse
-endif
+LOCAL_STATIC_LIBRARIES := libguitwrp
+LOCAL_SHARED_LIBRARIES := \
+    libaosprecovery \
+    libblkid \
+    libc \
+    libc++ \
+    libcrecovery \
+    libcutils \
+    libext4_utils \
+    libminadbd \
+    libminuitwrp \
+    libminzip \
+    libmtdutils \
+    libselinux \
+    libsparse \
+    libstdc++ \
+    libtar \
+    libz
 
 ifeq ($(TW_OEM_BUILD),true)
     LOCAL_CFLAGS += -DTW_OEM_BUILD
@@ -121,45 +85,27 @@ ifeq ($(TW_OEM_BUILD),true)
     TW_EXCLUDE_SUPERSU := true
     TW_EXCLUDE_MTP := true
 endif
-ifeq ($(TARGET_USERIMAGES_USE_EXT4), true)
-    LOCAL_CFLAGS += -DUSE_EXT4
-    LOCAL_C_INCLUDES += system/extras/ext4_utils
-    LOCAL_SHARED_LIBRARIES += libext4_utils
+
+LOCAL_CFLAGS += \
+    -DHAVE_SELINUX \
+    -g \
+    -DUSE_EXT4 \
+    -DTW_USE_NEW_MINADBD \
+    -DHAVE_CAPABILITIES
+
+TWRES_PATH := /twres/
+TWHTCD_PATH := $(TWRES_PATH)htcd/
+LOCAL_CFLAGS += \
+    -DTWRES=\"$(TWRES_PATH)\" \
+    -DTWHTCD_PATH=\"$(TWHTCD_PATH)\"
+
+ifneq ($(TARGET_USERIMAGES_USE_EXT4), true)
     ifneq ($(wildcard external/lz4/Android.mk),)
-        #LOCAL_STATIC_LIBRARIES += liblz4-static
-    endif
-endif
-ifneq ($(wildcard external/libselinux/Android.mk),)
-    TWHAVE_SELINUX := true
-endif
-ifeq ($(TWHAVE_SELINUX), true)
-  #LOCAL_C_INCLUDES += external/libselinux/include
-  #LOCAL_STATIC_LIBRARIES += libselinux
-  #LOCAL_CFLAGS += -DHAVE_SELINUX -g
-endif # HAVE_SELINUX
-ifeq ($(TWHAVE_SELINUX), true)
-    LOCAL_C_INCLUDES += external/libselinux/include
-    LOCAL_SHARED_LIBRARIES += libselinux
-    LOCAL_CFLAGS += -DHAVE_SELINUX -g
-    ifneq ($(TARGET_USERIMAGES_USE_EXT4), true)
-        LOCAL_CFLAGS += -DUSE_EXT4
-        LOCAL_C_INCLUDES += system/extras/ext4_utils
-        LOCAL_SHARED_LIBRARIES += libext4_utils
-        ifneq ($(wildcard external/lz4/Android.mk),)
-            LOCAL_STATIC_LIBRARIES += liblz4-static
-        endif
+        LOCAL_STATIC_LIBRARIES += liblz4-static
     endif
 endif
 
 LOCAL_MODULE_PATH := $(TARGET_RECOVERY_ROOT_OUT)/sbin
-
-#ifeq ($(TARGET_RECOVERY_UI_LIB),)
-#  LOCAL_SRC_FILES += default_device.cpp
-#else
-#  LOCAL_STATIC_LIBRARIES += $(TARGET_RECOVERY_UI_LIB)
-#endif
-
-LOCAL_C_INCLUDES += system/extras/ext4_utils
 
 #TWRP Build Flags
 ifeq ($(TW_EXCLUDE_MTP),)
@@ -173,40 +119,40 @@ ifeq ($(BOARD_HAS_NO_REAL_SDCARD), true)
     LOCAL_CFLAGS += -DBOARD_HAS_NO_REAL_SDCARD
 endif
 ifneq ($(SP1_NAME),)
-	LOCAL_CFLAGS += -DSP1_NAME=$(SP1_NAME) -DSP1_BACKUP_METHOD=$(SP1_BACKUP_METHOD) -DSP1_MOUNTABLE=$(SP1_MOUNTABLE)
+    LOCAL_CFLAGS += -DSP1_NAME=$(SP1_NAME) -DSP1_BACKUP_METHOD=$(SP1_BACKUP_METHOD) -DSP1_MOUNTABLE=$(SP1_MOUNTABLE)
 endif
 ifneq ($(SP1_DISPLAY_NAME),)
-	LOCAL_CFLAGS += -DSP1_DISPLAY_NAME=$(SP1_DISPLAY_NAME)
+    LOCAL_CFLAGS += -DSP1_DISPLAY_NAME=$(SP1_DISPLAY_NAME)
 endif
 ifneq ($(SP2_NAME),)
-	LOCAL_CFLAGS += -DSP2_NAME=$(SP2_NAME) -DSP2_BACKUP_METHOD=$(SP2_BACKUP_METHOD) -DSP2_MOUNTABLE=$(SP2_MOUNTABLE)
+    LOCAL_CFLAGS += -DSP2_NAME=$(SP2_NAME) -DSP2_BACKUP_METHOD=$(SP2_BACKUP_METHOD) -DSP2_MOUNTABLE=$(SP2_MOUNTABLE)
 endif
 ifneq ($(SP2_DISPLAY_NAME),)
-	LOCAL_CFLAGS += -DSP2_DISPLAY_NAME=$(SP2_DISPLAY_NAME)
+    LOCAL_CFLAGS += -DSP2_DISPLAY_NAME=$(SP2_DISPLAY_NAME)
 endif
 ifneq ($(SP3_NAME),)
-	LOCAL_CFLAGS += -DSP3_NAME=$(SP3_NAME) -DSP3_BACKUP_METHOD=$(SP3_BACKUP_METHOD) -DSP3_MOUNTABLE=$(SP3_MOUNTABLE)
+    LOCAL_CFLAGS += -DSP3_NAME=$(SP3_NAME) -DSP3_BACKUP_METHOD=$(SP3_BACKUP_METHOD) -DSP3_MOUNTABLE=$(SP3_MOUNTABLE)
 endif
 ifneq ($(SP3_DISPLAY_NAME),)
-	LOCAL_CFLAGS += -DSP3_DISPLAY_NAME=$(SP3_DISPLAY_NAME)
+    LOCAL_CFLAGS += -DSP3_DISPLAY_NAME=$(SP3_DISPLAY_NAME)
 endif
 ifneq ($(RECOVERY_SDCARD_ON_DATA),)
-	LOCAL_CFLAGS += -DRECOVERY_SDCARD_ON_DATA
+    LOCAL_CFLAGS += -DRECOVERY_SDCARD_ON_DATA
 endif
 ifneq ($(TW_INCLUDE_DUMLOCK),)
-	LOCAL_CFLAGS += -DTW_INCLUDE_DUMLOCK
+    LOCAL_CFLAGS += -DTW_INCLUDE_DUMLOCK
 endif
 ifneq ($(TW_INTERNAL_STORAGE_PATH),)
-	LOCAL_CFLAGS += -DTW_INTERNAL_STORAGE_PATH=$(TW_INTERNAL_STORAGE_PATH)
+    LOCAL_CFLAGS += -DTW_INTERNAL_STORAGE_PATH=$(TW_INTERNAL_STORAGE_PATH)
 endif
 ifneq ($(TW_INTERNAL_STORAGE_MOUNT_POINT),)
-	LOCAL_CFLAGS += -DTW_INTERNAL_STORAGE_MOUNT_POINT=$(TW_INTERNAL_STORAGE_MOUNT_POINT)
+    LOCAL_CFLAGS += -DTW_INTERNAL_STORAGE_MOUNT_POINT=$(TW_INTERNAL_STORAGE_MOUNT_POINT)
 endif
 ifneq ($(TW_EXTERNAL_STORAGE_PATH),)
-	LOCAL_CFLAGS += -DTW_EXTERNAL_STORAGE_PATH=$(TW_EXTERNAL_STORAGE_PATH)
+    LOCAL_CFLAGS += -DTW_EXTERNAL_STORAGE_PATH=$(TW_EXTERNAL_STORAGE_PATH)
 endif
 ifneq ($(TW_EXTERNAL_STORAGE_MOUNT_POINT),)
-	LOCAL_CFLAGS += -DTW_EXTERNAL_STORAGE_MOUNT_POINT=$(TW_EXTERNAL_STORAGE_MOUNT_POINT)
+    LOCAL_CFLAGS += -DTW_EXTERNAL_STORAGE_MOUNT_POINT=$(TW_EXTERNAL_STORAGE_MOUNT_POINT)
 endif
 ifeq ($(TW_HAS_NO_RECOVERY_PARTITION), true)
     LOCAL_CFLAGS += -DTW_HAS_NO_RECOVERY_PARTITION
@@ -227,7 +173,7 @@ ifeq ($(TW_NO_CPU_TEMP), true)
     LOCAL_CFLAGS += -DTW_NO_CPU_TEMP
 endif
 ifneq ($(TW_CUSTOM_POWER_BUTTON),)
-	LOCAL_CFLAGS += -DTW_CUSTOM_POWER_BUTTON=$(TW_CUSTOM_POWER_BUTTON)
+    LOCAL_CFLAGS += -DTW_CUSTOM_POWER_BUTTON=$(TW_CUSTOM_POWER_BUTTON)
 endif
 ifeq ($(TW_ALWAYS_RMRF), true)
     LOCAL_CFLAGS += -DTW_ALWAYS_RMRF
@@ -253,9 +199,6 @@ endif
 ifneq ($(BOARD_UMS_LUNFILE),)
     LOCAL_CFLAGS += -DCUSTOM_LUN_FILE=\"$(BOARD_UMS_LUNFILE)\"
 endif
-#ifeq ($(TW_FLASH_FROM_STORAGE), true) Making this the default behavior
-    LOCAL_CFLAGS += -DTW_FLASH_FROM_STORAGE
-#endif
 ifeq ($(TW_HAS_DOWNLOAD_MODE), true)
     LOCAL_CFLAGS += -DTW_HAS_DOWNLOAD_MODE
 endif
@@ -271,12 +214,6 @@ endif
 ifeq ($(TW_NO_EXFAT_FUSE), true)
     LOCAL_CFLAGS += -DTW_NO_EXFAT_FUSE
 endif
-ifeq ($(TW_INCLUDE_JB_CRYPTO), true)
-    TW_INCLUDE_CRYPTO := true
-endif
-ifeq ($(TW_INCLUDE_L_CRYPTO), true)
-    TW_INCLUDE_CRYPTO := true
-endif
 ifeq ($(TW_INCLUDE_CRYPTO), true)
     LOCAL_CFLAGS += -DTW_INCLUDE_CRYPTO
     LOCAL_SHARED_LIBRARIES += libcryptfslollipop
@@ -286,19 +223,19 @@ ifeq ($(TW_USE_MODEL_HARDWARE_ID_FOR_DEVICE_ID), true)
     LOCAL_CFLAGS += -DTW_USE_MODEL_HARDWARE_ID_FOR_DEVICE_ID
 endif
 ifneq ($(TW_BRIGHTNESS_PATH),)
-	LOCAL_CFLAGS += -DTW_BRIGHTNESS_PATH=$(TW_BRIGHTNESS_PATH)
+    LOCAL_CFLAGS += -DTW_BRIGHTNESS_PATH=$(TW_BRIGHTNESS_PATH)
 endif
 ifneq ($(TW_SECONDARY_BRIGHTNESS_PATH),)
-	LOCAL_CFLAGS += -DTW_SECONDARY_BRIGHTNESS_PATH=$(TW_SECONDARY_BRIGHTNESS_PATH)
+    LOCAL_CFLAGS += -DTW_SECONDARY_BRIGHTNESS_PATH=$(TW_SECONDARY_BRIGHTNESS_PATH)
 endif
 ifneq ($(TW_MAX_BRIGHTNESS),)
-	LOCAL_CFLAGS += -DTW_MAX_BRIGHTNESS=$(TW_MAX_BRIGHTNESS)
+    LOCAL_CFLAGS += -DTW_MAX_BRIGHTNESS=$(TW_MAX_BRIGHTNESS)
 endif
 ifneq ($(TW_CUSTOM_BATTERY_PATH),)
-	LOCAL_CFLAGS += -DTW_CUSTOM_BATTERY_PATH=$(TW_CUSTOM_BATTERY_PATH)
+    LOCAL_CFLAGS += -DTW_CUSTOM_BATTERY_PATH=$(TW_CUSTOM_BATTERY_PATH)
 endif
 ifneq ($(TW_CUSTOM_CPU_TEMP_PATH),)
-	LOCAL_CFLAGS += -DTW_CUSTOM_CPU_TEMP_PATH=$(TW_CUSTOM_CPU_TEMP_PATH)
+    LOCAL_CFLAGS += -DTW_CUSTOM_CPU_TEMP_PATH=$(TW_CUSTOM_CPU_TEMP_PATH)
 endif
 ifneq ($(TW_EXCLUDE_ENCRYPTED_BACKUPS), true)
     LOCAL_SHARED_LIBRARIES += libopenaes
@@ -306,40 +243,34 @@ else
     LOCAL_CFLAGS += -DTW_EXCLUDE_ENCRYPTED_BACKUPS
 endif
 ifeq ($(TARGET_RECOVERY_QCOM_RTC_FIX),)
-  ifeq ($(TARGET_CPU_VARIANT),krait)
-    LOCAL_CFLAGS += -DQCOM_RTC_FIX
-  endif
+    ifeq ($(TARGET_CPU_VARIANT),krait)
+        LOCAL_CFLAGS += -DQCOM_RTC_FIX
+    endif
 else ifeq ($(TARGET_RECOVERY_QCOM_RTC_FIX),true)
     LOCAL_CFLAGS += -DQCOM_RTC_FIX
 endif
 ifneq ($(TW_NO_LEGACY_PROPS),)
-	LOCAL_CFLAGS += -DTW_NO_LEGACY_PROPS
-endif
-ifneq ($(wildcard bionic/libc/include/sys/capability.h),)
-    LOCAL_CFLAGS += -DHAVE_CAPABILITIES
+    LOCAL_CFLAGS += -DTW_NO_LEGACY_PROPS
 endif
 ifneq ($(TARGET_RECOVERY_INITRC),)
     TW_EXCLUDE_DEFAULT_USB_INIT := true
-endif
-ifeq ($(shell test $(PLATFORM_SDK_VERSION) -gt 22; echo $$?),0)
-    LOCAL_CFLAGS += -DTW_USE_NEW_MINADBD
 endif
 
 LOCAL_ADDITIONAL_DEPENDENCIES := \
     dump_image \
     erase_image \
-    flash_image \
+    fatlabel \
     fix_permissions.sh \
+    flash_image \
+    fsck.fat \
     mke2fs.conf \
+    mkfs.fat \
+    permissive.sh \
     pigz \
     teamwin \
     toolbox_symlinks \
     twrp \
-    unpigz_symlink \
-    fsck.fat \
-    fatlabel \
-    mkfs.fat \
-    permissive.sh
+    unpigz_symlink
 
 ifneq ($(TARGET_ARCH), arm64)
     ifneq ($(TARGET_ARCH), x86_64)
@@ -393,17 +324,11 @@ endif
 ifneq ($(TW_EXCLUDE_DEFAULT_USB_INIT), true)
     LOCAL_ADDITIONAL_DEPENDENCIES += init.recovery.usb.rc
 endif
-# Allow devices to specify device-specific recovery dependencies
 ifneq ($(TARGET_RECOVERY_DEVICE_MODULES),)
     LOCAL_ADDITIONAL_DEPENDENCIES += $(TARGET_RECOVERY_DEVICE_MODULES)
 endif
-LOCAL_CFLAGS += -DTWRES=\"$(TWRES_PATH)\"
-LOCAL_CFLAGS += -DTWHTCD_PATH=\"$(TWHTCD_PATH)\"
 ifeq ($(TW_INCLUDE_NTFS_3G),true)
-    LOCAL_ADDITIONAL_DEPENDENCIES += \
-        ntfs-3g \
-        ntfsfix \
-        mkntfs
+    LOCAL_ADDITIONAL_DEPENDENCIES += ntfs-3g  ntfsfix  mkntfs
 endif
 
 include $(BUILD_EXECUTABLE)
@@ -413,14 +338,6 @@ include $(CLEAR_VARS)
 # Create busybox symlinks... gzip and gunzip are excluded because those need to link to pigz instead
 BUSYBOX_LINKS := $(shell cat external/busybox/busybox-full.links)
 exclude := tune2fs mke2fs mkdosfs mkfs.vfat gzip gunzip
-
-# If busybox does not have restorecon, assume it does not have SELinux support.
-# Then, let toolbox provide 'ls' so -Z is available to list SELinux contexts.
-ifeq ($(TWHAVE_SELINUX), true)
-	ifeq ($(filter restorecon, $(notdir $(BUSYBOX_LINKS))),)
-		exclude += ls
-	endif
-endif
 
 RECOVERY_BUSYBOX_TOOLS := $(filter-out $(exclude), $(notdir $(BUSYBOX_LINKS)))
 RECOVERY_BUSYBOX_SYMLINKS := $(addprefix $(TARGET_RECOVERY_ROOT_OUT)/sbin/, $(RECOVERY_BUSYBOX_TOOLS))
@@ -435,9 +352,6 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := busybox_symlinks
 LOCAL_MODULE_TAGS := optional
 LOCAL_ADDITIONAL_DEPENDENCIES := $(RECOVERY_BUSYBOX_SYMLINKS)
-ifneq (,$(filter $(PLATFORM_SDK_VERSION),16 17 18))
-ALL_DEFAULT_INSTALLED_MODULES += $(RECOVERY_BUSYBOX_SYMLINKS)
-endif
 include $(BUILD_PHONY_PACKAGE)
 RECOVERY_BUSYBOX_SYMLINKS :=
 endif # !TW_USE_TOOLBOX
@@ -510,17 +424,10 @@ ifeq ($(wildcard system/core/uncrypt/Android.mk),)
     include $(commands_recovery_local_path)/uncrypt/Android.mk
 endif
 
-ifeq ($(shell test $(PLATFORM_SDK_VERSION) -gt 22; echo $$?),0)
-    include $(commands_recovery_local_path)/minadbd/Android.mk \
-        $(commands_recovery_local_path)/minui/Android.mk
-else
-    TARGET_GLOBAL_CFLAGS += -DTW_USE_OLD_MINUI_H
-    include $(commands_recovery_local_path)/minadbd.old/Android.mk \
-        $(commands_recovery_local_path)/minui.old/Android.mk
-endif
-
 #includes for TWRP
 include $(commands_recovery_local_path)/injecttwrp/Android.mk \
+    $(commands_recovery_local_path)/minadbd/Android.mk \
+    $(commands_recovery_local_path)/minui/Android.mk \
     $(commands_recovery_local_path)/htcdumlock/Android.mk \
     $(commands_recovery_local_path)/gui/Android.mk \
     $(commands_recovery_local_path)/mmcutils/Android.mk \
@@ -548,9 +455,7 @@ ifeq ($(TW_INCLUDE_CRYPTO), true)
     include $(commands_recovery_local_path)/crypto/lollipop/Android.mk
     include $(commands_recovery_local_path)/crypto/scrypt/Android.mk
 endif
-ifeq ($(BUILD_ID), GINGERBREAD)
-    TW_NO_EXFAT := true
-endif
+
 ifneq ($(TW_NO_EXFAT), true)
     include $(commands_recovery_local_path)/exfat/mkfs/Android.mk \
             $(commands_recovery_local_path)/fuse/Android.mk \

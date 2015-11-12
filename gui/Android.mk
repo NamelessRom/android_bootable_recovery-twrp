@@ -53,9 +53,7 @@ endif
 ifneq ($(TW_NO_SCREEN_TIMEOUT),)
     LOCAL_CFLAGS += -DTW_NO_SCREEN_TIMEOUT
 endif
-ifeq ($(HAVE_SELINUX), true)
-    LOCAL_CFLAGS += -DHAVE_SELINUX
-endif
+LOCAL_CFLAGS += -DHAVE_SELINUX
 ifeq ($(TW_OEM_BUILD), true)
     LOCAL_CFLAGS += -DTW_OEM_BUILD
 endif
@@ -69,7 +67,7 @@ ifeq ($(TW_ROUND_SCREEN), true)
     LOCAL_CFLAGS += -DTW_ROUND_SCREEN
 endif
 
-LOCAL_C_INCLUDES += bionic external/stlport/stlport system/core/libpixelflinger/include
+LOCAL_C_INCLUDES += bionic system/core/libpixelflinger/include
 LOCAL_CFLAGS += -DTWRES=\"$(TWRES_PATH)\"
 
 include $(BUILD_STATIC_LIBRARY)

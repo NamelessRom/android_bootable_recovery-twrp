@@ -7,7 +7,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := libtwrpmtp
 LOCAL_MODULE_TAGS := optional
 LOCAL_CFLAGS = -D_FILE_OFFSET_BITS=64 -DMTP_DEVICE -DMTP_HOST -fno-strict-aliasing
-LOCAL_C_INCLUDES += $(LOCAL_PATH) bionic external/stlport/stlport frameworks/base/include system/core/include bionic/libc/private/
+LOCAL_C_INCLUDES += $(LOCAL_PATH) bionic frameworks/base/include system/core/include bionic/libc/private/
 LOCAL_SRC_FILES = \
     btree.cpp \
     MtpDataPacket.cpp \
@@ -29,13 +29,7 @@ LOCAL_SRC_FILES = \
     twrpMtp.cpp \
     mtp_MtpDatabase.cpp \
     node.cpp
-LOCAL_SHARED_LIBRARIES += libz libc libusbhost libstdc++ libdl libcutils libutils libaosprecovery
-
-ifeq (,$(filter $(PLATFORM_SDK_VERSION), 23))
-    LOCAL_SHARED_LIBRARIES += libstlport
-else
-    LOCAL_SHARED_LIBRARIES += libc++
-endif
+LOCAL_SHARED_LIBRARIES += libz libc libusbhost libstdc++ libc++ libdl libcutils libutils libaosprecovery
 
 ifneq ($(TW_MTP_DEVICE),)
 	LOCAL_CFLAGS += -DUSB_MTP_DEVICE=$(TW_MTP_DEVICE)
