@@ -265,8 +265,10 @@ LOCAL_ADDITIONAL_DEPENDENCIES := \
     permissive.sh \
     pigz \
     teamwin \
-    toolbox_symlinks \
-    twrp
+    toolbox \
+    toybox_recovery \
+    twrp \
+    utility_symlinks
 
 ifneq ($(TARGET_ARCH), arm64)
     ifneq ($(TARGET_ARCH), x86_64)
@@ -276,13 +278,6 @@ ifneq ($(TARGET_ARCH), arm64)
     endif
 else
     LOCAL_LDFLAGS += -Wl,-dynamic-linker,/sbin/linker64
-endif
-ifneq ($(TW_USE_TOOLBOX), true)
-    LOCAL_ADDITIONAL_DEPENDENCIES += busybox_symlinks
-else
-    ifneq ($(wildcard external/toybox/Android.mk),)
-        LOCAL_ADDITIONAL_DEPENDENCIES += toybox_symlinks
-    endif
 endif
 ifeq ($(BOARD_HAS_NO_REAL_SDCARD),)
     LOCAL_ADDITIONAL_DEPENDENCIES += parted
@@ -319,29 +314,6 @@ ifneq ($(TARGET_RECOVERY_DEVICE_MODULES),)
 endif
 
 include $(BUILD_EXECUTABLE)
-
-ifneq ($(TW_USE_TOOLBOX), true)
-include $(CLEAR_VARS)
-# Create busybox symlinks... gzip and gunzip are excluded because those need to link to pigz instead
-BUSYBOX_LINKS := $(shell cat external/busybox/busybox-full.links)
-exclude := tune2fs mke2fs mkdosfs mkfs.vfat gzip gunzip
-
-RECOVERY_BUSYBOX_TOOLS := $(filter-out $(exclude), $(notdir $(BUSYBOX_LINKS)))
-RECOVERY_BUSYBOX_SYMLINKS := $(addprefix $(TARGET_RECOVERY_ROOT_OUT)/sbin/, $(RECOVERY_BUSYBOX_TOOLS))
-$(RECOVERY_BUSYBOX_SYMLINKS): BUSYBOX_BINARY := busybox
-$(RECOVERY_BUSYBOX_SYMLINKS): $(LOCAL_INSTALLED_MODULE)
-	@echo "Symlink: $@ -> $(BUSYBOX_BINARY)"
-	@mkdir -p $(dir $@)
-	@rm -rf $@
-	$(hide) ln -sf $(BUSYBOX_BINARY) $@
-
-include $(CLEAR_VARS)
-LOCAL_MODULE := busybox_symlinks
-LOCAL_MODULE_TAGS := optional
-LOCAL_ADDITIONAL_DEPENDENCIES := $(RECOVERY_BUSYBOX_SYMLINKS)
-include $(BUILD_PHONY_PACKAGE)
-RECOVERY_BUSYBOX_SYMLINKS :=
-endif # !TW_USE_TOOLBOX
 
 # All the APIs for testing
 include $(CLEAR_VARS)
@@ -427,14 +399,13 @@ include $(commands_recovery_local_path)/injecttwrp/Android.mk \
     $(commands_recovery_local_path)/libblkid/Android.mk \
     $(commands_recovery_local_path)/minuitwrp/Android.mk \
     $(commands_recovery_local_path)/openaes/Android.mk \
-    $(commands_recovery_local_path)/toolbox/Android.mk \
     $(commands_recovery_local_path)/libmincrypt/Android.mk \
     $(commands_recovery_local_path)/twrpTarMain/Android.mk \
     $(commands_recovery_local_path)/mtp/Android.mk \
     $(commands_recovery_local_path)/minzip/Android.mk \
     $(commands_recovery_local_path)/dosfstools/Android.mk \
     $(commands_recovery_local_path)/etc/Android.mk \
-    $(commands_recovery_local_path)/toybox/Android.mk \
+    $(commands_recovery_local_path)/toolboxes/Android.mk \
     $(commands_recovery_local_path)/libpixelflinger/Android.mk \
     $(commands_recovery_local_path)/fstools/Android.mk
 
