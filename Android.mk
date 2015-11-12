@@ -267,8 +267,7 @@ LOCAL_ADDITIONAL_DEPENDENCIES := \
     pigz \
     teamwin \
     toolbox_symlinks \
-    twrp \
-    unpigz_symlink
+    twrp
 
 ifneq ($(TARGET_ARCH), arm64)
     ifneq ($(TARGET_ARCH), x86_64)
@@ -424,7 +423,6 @@ include $(commands_recovery_local_path)/injecttwrp/Android.mk \
     $(commands_recovery_local_path)/prebuilt/Android.mk \
     $(commands_recovery_local_path)/mtdutils/Android.mk \
     $(commands_recovery_local_path)/flashutils/Android.mk \
-    $(commands_recovery_local_path)/pigz/Android.mk \
     $(commands_recovery_local_path)/libtar/Android.mk \
     $(commands_recovery_local_path)/libcrecovery/Android.mk \
     $(commands_recovery_local_path)/libblkid/Android.mk \
