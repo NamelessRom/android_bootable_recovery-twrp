@@ -90,7 +90,6 @@ LOCAL_CFLAGS += \
     -DHAVE_SELINUX \
     -g \
     -DUSE_EXT4 \
-    -DTW_USE_NEW_MINADBD \
     -DHAVE_CAPABILITIES
 
 TWRES_PATH := /twres/
