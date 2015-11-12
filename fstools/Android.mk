@@ -6,6 +6,7 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 LOCAL_MODULE := fstools
 LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE_CLASS := RECOVERY_EXECUTABLES
 LOCAL_MODULE_PATH := $(TARGET_RECOVERY_ROOT_OUT)/sbin
 LOCAL_SRC_FILES := fstools.cpp
 LOCAL_FORCE_STATIC_EXECUTABLE := true
@@ -55,4 +56,3 @@ FSTOOLS_LINKS := \
 LOCAL_POST_INSTALL_CMD := \
     $(hide) $(foreach t,$(FSTOOLS_LINKS),ln -sf fstools $(TARGET_RECOVERY_ROOT_OUT)/sbin/$(t);)
 include $(BUILD_EXECUTABLE)
-

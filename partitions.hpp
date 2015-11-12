@@ -102,13 +102,13 @@ private:
 	bool Find_Partition_Size();                                               // Finds the partition size from /proc/partitions
 	unsigned long long Get_Size_Via_du(string Path, bool Display_Error);      // Uses du to get sizes
 	bool Wipe_EXT23(string File_System);                                      // Formats as ext3 or ext2
-	bool Wipe_EXT4();                                                         // Formats using ext4, uses make_ext4fs when present
+	bool Wipe_EXT4();                                                         // Formats using ext4, uses mkfs.ext4 when present
 	bool Wipe_FAT();                                                          // Formats as FAT if mkfs.fat exits otherwise rm -rf wipe
 	bool Wipe_EXFAT();                                                        // Formats as EXFAT
 	bool Wipe_MTD();                                                          // Formats as yaffs2 for MTD memory types
 	bool Wipe_RMRF();                                                         // Uses rm -rf to wipe
 	bool Wipe_F2FS();                                                         // Uses mkfs.f2fs to wipe
-	bool Wipe_NTFS();                                                         // Uses mkntfs to wipe
+	bool Wipe_NTFS();                                                         // Uses mkfs.ntfs to wipe
 	bool Wipe_Data_Without_Wiping_Media();                                    // Uses rm -rf to wipe but does not wipe /data/media
 	bool Backup_Tar(string backup_folder, const unsigned long long *overall_size, const unsigned long long *other_backups_size, pid_t &tar_fork_pid); // Backs up using tar for file systems
 	bool Backup_DD(string backup_folder);                                     // Backs up using dd for emmc memory types
@@ -143,7 +143,7 @@ private:
 	string Alternate_Block_Device;                                            // Alternate block device (e.g. /dev/block/mmcblk1)
 	string Decrypted_Block_Device;                                            // Decrypted block device available after decryption
 	bool Removable;                                                           // Indicates if this partition is removable -- affects how often we check overall size, if present, etc.
-	int Length;                                                               // Used by make_ext4fs to leave free space at the end of the partition block for things like a crypto footer
+	int Length;                                                               // Used by mkfs.ext4 to leave free space at the end of the partition block for things like a crypto footer
 	unsigned long long Size;                                                  // Overall size of the partition
 	unsigned long long Used;                                                  // Overall used space
 	unsigned long long Free;                                                  // Overall free space
