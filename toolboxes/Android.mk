@@ -71,11 +71,16 @@ BUSYBOX_LINKS := $(shell cat external/busybox/busybox-full.links)
 #  dosfstools provides equivalents of mkdosfs mkfs.vfat
 BUSYBOX_EXCLUDE := tune2fs mke2fs mkdosfs mkfs.vfat gzip gunzip
 
+# Override:
+#  mount is needed for TWRP's old-school fstab
+BUSYBOX_OVERRIDE := mount
+
 BUSYBOX_TOOLS := $(filter-out $(BUSYBOX_EXCLUDE), $(notdir $(BUSYBOX_LINKS)))
 
 else
 
 BUSYBOX_TOOLS :=
+BUSYBOX_OVERRIDE :=
 
 endif
 
@@ -119,6 +124,7 @@ include $(CLEAR_VARS)
 utility_symlinks: $(TOYBOX_INSTLIST)
 utility_symlinks: TOYBOX_TOOLS=$(shell $(TOYBOX_INSTLIST))
 utility_symlinks: BUSYBOX_TOOLS_INSTALLED=$(filter-out $(TOYBOX_TOOLS), $(BUSYBOX_TOOLS))
+utility_symlinks: BUSYBOX_TOOLS_INSTALLED+=$(BUSYBOX_OVERRIDE)
 utility_symlinks: TOOLBOX_TOOLS_INSTALLED=$(filter-out $(TOYBOX_TOOLS) $(BUSYBOX_TOOLS_INSTALLED), $(BSD_TOOLS) $(TOOLBOX_TOOLS))
 utility_symlinks:
 	@mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/sbin
