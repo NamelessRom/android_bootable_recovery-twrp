@@ -82,7 +82,6 @@ ifeq ($(TW_OEM_BUILD),true)
     LOCAL_CFLAGS += -DTW_OEM_BUILD
     BOARD_HAS_NO_REAL_SDCARD := true
     TW_USE_TOOLBOX := true
-    TW_EXCLUDE_SUPERSU := true
     TW_EXCLUDE_MTP := true
 endif
 
@@ -289,10 +288,6 @@ ifeq ($(TW_INCLUDE_DUMLOCK), true)
     LOCAL_ADDITIONAL_DEPENDENCIES += \
         htcdumlock htcdumlocksys flash_imagesys dump_imagesys libbmlutils.so \
         libflashutils.so libmmcutils.so libmtdutils.so HTCDumlock.apk
-endif
-ifneq ($(TW_EXCLUDE_SUPERSU), true)
-    LOCAL_ADDITIONAL_DEPENDENCIES += \
-        su install-recovery.sh 99SuperSUDaemon Superuser.apk
 endif
 ifeq ($(TW_INCLUDE_FB2PNG), true)
     LOCAL_ADDITIONAL_DEPENDENCIES += fb2png
