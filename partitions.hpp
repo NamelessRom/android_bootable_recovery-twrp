@@ -113,6 +113,8 @@ public:
 	bool Flash_Image(string Filename);                                        // Flashes an image to the partition
 	void Change_Mount_Read_Only(bool new_value);                              // Changes Mount_Read_Only to new_value
 	int Check_Lifetime_Writes();
+	int Decrypt_Adopted();
+	void Revert_Adopted();
 
 public:
 	string Current_File_System;                                               // Current file system
@@ -121,6 +123,7 @@ public:
 	bool Is_Present;                                                          // Indicates if the partition is currently present as a block device
 	string Crypto_Key_Location;                                               // Location of the crypto key used for decrypting encrypted data partitions
 	unsigned int MTP_Storage_ID;
+	string Adopted_GUID;
 
 protected:
 	bool Has_Data_Media;                                                      // Indicates presence of /data/media, may affect wiping and backup methods
@@ -151,6 +154,7 @@ private:
 	bool Wipe_F2FS();                                                         // Uses mkfs.f2fs to wipe
 	bool Wipe_NTFS();                                                         // Uses mkntfs to wipe
 	bool Wipe_Data_Without_Wiping_Media();                                    // Uses rm -rf to wipe but does not wipe /data/media
+	bool Wipe_Data_Without_Wiping_Media_Func(const string& parent);           // Uses rm -rf to wipe but does not wipe /data/media
 	bool Backup_Tar(string backup_folder, const unsigned long long *overall_size, const unsigned long long *other_backups_size, pid_t &tar_fork_pid); // Backs up using tar for file systems
 	bool Backup_DD(string backup_folder);                                     // Backs up using dd for emmc memory types
 	bool Backup_Dump_Image(string backup_folder);                             // Backs up using dump_image for MTD memory types
@@ -213,6 +217,7 @@ private:
 	bool Retain_Layout_Version;                                               // Retains the .layout_version file during a wipe (needed on devices like Sony Xperia T where /data and /data/media are separate partitions)
 	bool Can_Flash_Img;                                                       // Indicates if this partition can have images flashed to it via the GUI
 	bool Mount_Read_Only;                                                     // Only mount this partition as read-only
+	bool Is_Adopted_Storage;                                                  // Indicates that this partition is for adopted storage (android_expand)
 
 friend class TWPartitionManager;
 friend class DataManager;
@@ -277,6 +282,7 @@ public:
 	void Translate_Partition(const char* path, const char* resource_name, const char* default_value);
 	void Translate_Partition(const char* path, const char* resource_name, const char* default_value, const char* storage_resource_name, const char* storage_default_value);
 	void Translate_Partition_Display_Names();                                 // Updates display names based on translations
+	void Decrypt_Adopted();
 
 	TWAtomicInt stop_backup;
 
@@ -290,7 +296,7 @@ private:
 	string Regenerate_Mount_Flags(TWPartition* Part);	  // Regenerates string representation of fstab flags
 	TWPartition* Find_Partition_By_MTP_Storage_ID(unsigned int Storage_ID);   // Returns a pointer to a partition based on MTP Storage ID
 	bool Add_Remove_MTP_Storage(TWPartition* Part, int message_type);         // Adds or removes an MTP Storage partition
-	TWPartition* Find_Next_Storage(string Path, string Exclude);
+	TWPartition* Find_Next_Storage(string Path, bool Exclude_Data_Media);
 	int Open_Lun_File(string Partition_Path, string Lun_File);
 	pid_t mtppid;
 	bool mtp_was_enabled;
