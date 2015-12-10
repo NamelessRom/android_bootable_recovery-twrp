@@ -318,6 +318,11 @@ endif
 ifeq ($(TW_INCLUDE_NTFS_3G),true)
     LOCAL_ADDITIONAL_DEPENDENCIES += ntfs-3g  ntfsfix  mkntfs
 endif
+ifeq ($(TARGET_USERIMAGES_USE_F2FS), true)
+    LOCAL_ADDITIONAL_DEPENDENCIES += \
+        fsck.f2fs \
+        mkfs.f2fs
+endif
 
 include $(BUILD_EXECUTABLE)
 
