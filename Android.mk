@@ -209,6 +209,9 @@ endif
 ifeq ($(TW_FORCE_CPUINFO_FOR_DEVICE_ID), true)
     LOCAL_CFLAGS += -DTW_FORCE_CPUINFO_FOR_DEVICE_ID
 endif
+ifeq ($(TW_NO_EXFAT_FUSE), true)
+    LOCAL_CFLAGS += -DTW_NO_EXFAT_FUSE
+endif
 ifeq ($(TW_INCLUDE_CRYPTO), true)
     LOCAL_CFLAGS += -DTW_INCLUDE_CRYPTO
     LOCAL_SHARED_LIBRARIES += libcryptfslollipop
@@ -258,7 +261,6 @@ LOCAL_ADDITIONAL_DEPENDENCIES := \
     fix_permissions.sh \
     flash_image \
     fsck.fat \
-    fstools \
     mke2fs.conf \
     mkfs.fat \
     permissive.sh \
@@ -278,6 +280,9 @@ ifneq ($(TARGET_ARCH), arm64)
 else
     LOCAL_LDFLAGS += -Wl,-dynamic-linker,/sbin/linker64
 endif
+ifneq ($(TW_NO_EXFAT), true)
+    LOCAL_ADDITIONAL_DEPENDENCIES += mkexfatfs
+endif
 ifeq ($(BOARD_HAS_NO_REAL_SDCARD),)
     LOCAL_ADDITIONAL_DEPENDENCIES += parted
 endif
@@ -288,6 +293,9 @@ ifeq ($(TW_INCLUDE_DUMLOCK), true)
     LOCAL_ADDITIONAL_DEPENDENCIES += \
         htcdumlock htcdumlocksys flash_imagesys dump_imagesys libbmlutils.so \
         libflashutils.so libmmcutils.so libmtdutils.so HTCDumlock.apk
+endif
+ifneq ($(TW_NO_EXFAT_FUSE), true)
+    LOCAL_ADDITIONAL_DEPENDENCIES += exfat-fuse
 endif
 ifeq ($(TW_INCLUDE_FB2PNG), true)
     LOCAL_ADDITIONAL_DEPENDENCIES += fb2png
@@ -306,6 +314,9 @@ ifneq ($(TW_EXCLUDE_DEFAULT_USB_INIT), true)
 endif
 ifneq ($(TARGET_RECOVERY_DEVICE_MODULES),)
     LOCAL_ADDITIONAL_DEPENDENCIES += $(TARGET_RECOVERY_DEVICE_MODULES)
+endif
+ifeq ($(TW_INCLUDE_NTFS_3G),true)
+    LOCAL_ADDITIONAL_DEPENDENCIES += ntfs-3g  ntfsfix  mkntfs
 endif
 
 include $(BUILD_EXECUTABLE)
@@ -401,14 +412,21 @@ include $(commands_recovery_local_path)/injecttwrp/Android.mk \
     $(commands_recovery_local_path)/dosfstools/Android.mk \
     $(commands_recovery_local_path)/etc/Android.mk \
     $(commands_recovery_local_path)/toolboxes/Android.mk \
-    $(commands_recovery_local_path)/libpixelflinger/Android.mk \
-    $(commands_recovery_local_path)/fstools/Android.mk
+    $(commands_recovery_local_path)/libpixelflinger/Android.mk
 
 ifeq ($(TW_INCLUDE_CRYPTO), true)
     include $(commands_recovery_local_path)/crypto/lollipop/Android.mk
     include $(commands_recovery_local_path)/crypto/scrypt/Android.mk
 endif
 
+ifneq ($(TW_NO_EXFAT), true)
+    include $(commands_recovery_local_path)/exfat/mkfs/Android.mk \
+            $(commands_recovery_local_path)/fuse/Android.mk \
+            $(commands_recovery_local_path)/exfat/libexfat/Android.mk
+endif
+ifneq ($(TW_NO_EXFAT_FUSE), true)
+    include $(commands_recovery_local_path)/exfat/exfat-fuse/Android.mk
+endif
 ifneq ($(TW_OEM_BUILD),true)
     include $(commands_recovery_local_path)/orscmd/Android.mk
 endif
