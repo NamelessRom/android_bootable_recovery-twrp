@@ -968,17 +968,17 @@ bool TWPartition::Mount(bool Display_Error) {
 
 	// Check the current file system before mounting
 	Check_FS_Type();
-	if (Current_File_System == "exfat" && TWFunc::Path_Exists("/sbin/exfat-fuse")) {
-		string cmd = "/sbin/exfat-fuse -o big_writes,max_read=131072,max_write=131072 " + Actual_Block_Device + " " + Mount_Point;
+	if (Current_File_System == "exfat" && TWFunc::Path_Exists("/sbin/mount.exfat")) {
+		string cmd = "/sbin/mount.exfat -o big_writes,max_read=131072,max_write=131072 " + Actual_Block_Device + " " + Mount_Point;
 		LOGINFO("cmd: %s\n", cmd.c_str());
 		string result;
 		if (TWFunc::Exec_Cmd(cmd, result) != 0) {
-			LOGINFO("exfat-fuse failed to mount with result '%s', trying vfat\n", result.c_str());
+			LOGINFO("mount.exfat failed to mount with result '%s', trying vfat\n", result.c_str());
 			Current_File_System = "vfat";
 		} else {
 #ifdef TW_NO_EXFAT_FUSE
 			UnMount(false);
-			// We'll let the kernel handle it but using exfat-fuse to detect if the file system is actually exfat
+			// We'll let the kernel handle it but using mount.exfat to detect if the file system is actually exfat
 			// Some kernels let us mount vfat as exfat which doesn't work out too well
 #else
 			exfat_mounted = 1;
@@ -1753,13 +1753,13 @@ bool TWPartition::Wipe_FAT() {
 bool TWPartition::Wipe_EXFAT() {
 	string command;
 
-	if (TWFunc::Path_Exists("/sbin/mkexfatfs")) {
+	if (TWFunc::Path_Exists("/sbin/mkfs.exfat")) {
 		if (!UnMount(true))
 			return false;
 
-		gui_print("Formatting %s using mkexfatfs...\n", Display_Name.c_str());
+		gui_print("Formatting %s using mkfs.exfat...\n", Display_Name.c_str());
 		Find_Actual_Block_Device();
-		command = "mkexfatfs " + Actual_Block_Device;
+		command = "mkfs.exfat " + Actual_Block_Device;
 		if (TWFunc::Exec_Cmd(command) == 0) {
 			Recreate_AndSec_Folder();
 			gui_print("Done.\n");

@@ -281,7 +281,7 @@ else
     LOCAL_LDFLAGS += -Wl,-dynamic-linker,/sbin/linker64
 endif
 ifneq ($(TW_NO_EXFAT), true)
-    LOCAL_ADDITIONAL_DEPENDENCIES += mkexfatfs
+    LOCAL_ADDITIONAL_DEPENDENCIES += mkfs.exfat fsck.exfat
 endif
 ifeq ($(BOARD_HAS_NO_REAL_SDCARD),)
     LOCAL_ADDITIONAL_DEPENDENCIES += parted
@@ -295,7 +295,7 @@ ifeq ($(TW_INCLUDE_DUMLOCK), true)
         libflashutils.so libmmcutils.so libmtdutils.so HTCDumlock.apk
 endif
 ifneq ($(TW_NO_EXFAT_FUSE), true)
-    LOCAL_ADDITIONAL_DEPENDENCIES += exfat-fuse
+    LOCAL_ADDITIONAL_DEPENDENCIES += mount.exfat
 endif
 ifeq ($(TW_INCLUDE_FB2PNG), true)
     LOCAL_ADDITIONAL_DEPENDENCIES += fb2png
@@ -417,14 +417,6 @@ include $(commands_recovery_local_path)/injecttwrp/Android.mk \
 ifeq ($(TW_INCLUDE_CRYPTO), true)
     include $(commands_recovery_local_path)/crypto/lollipop/Android.mk
     include $(commands_recovery_local_path)/crypto/scrypt/Android.mk
-endif
-
-ifneq ($(TW_NO_EXFAT), true)
-    include $(commands_recovery_local_path)/exfat/mkfs/Android.mk \
-            $(commands_recovery_local_path)/fuse/Android.mk
-endif
-ifneq ($(TW_NO_EXFAT_FUSE), true)
-    include $(commands_recovery_local_path)/exfat/exfat-fuse/Android.mk
 endif
 ifneq ($(TW_OEM_BUILD),true)
     include $(commands_recovery_local_path)/orscmd/Android.mk

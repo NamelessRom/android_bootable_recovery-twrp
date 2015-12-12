@@ -295,7 +295,7 @@ int MtpStorage::readDir(const std::string& path, Tree* tree)
 	}
 	// TODO: for refreshing dirs: capture old entries here
 	while ((de = readdir(d)) != NULL) {
-		// Because exfat-fuse causes issues with dirent, we will use stat
+		// Because mount.exfat causes issues with dirent, we will use stat
 		// for some things that dirent should be able to do
 		std::string item = path + "/" + de->d_name;
 		struct stat st;
