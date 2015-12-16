@@ -148,9 +148,9 @@ ifeq ($(TW_NO_FSTOOLS), true)
         RELINK_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/fsck.f2fs
     endif
     ifeq ($(TW_INCLUDE_NTFS_3G),true)
-        RELINK_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/ntfs-3g
-        RELINK_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/ntfsfix
-        RELINK_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/mkntfs
+        RELINK_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/mount.ntfs
+        RELINK_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/fsck.ntfs
+        RELINK_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/mkfs.ntfs
     endif
 endif
 ifneq ($(wildcard system/core/reboot/Android.mk),)

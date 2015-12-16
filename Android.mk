@@ -292,7 +292,7 @@ else
         LOCAL_ADDITIONAL_DEPENDENCIES += mount.exfat
     endif
     ifeq ($(TW_INCLUDE_NTFS_3G),true)
-        LOCAL_ADDITIONAL_DEPENDENCIES += ntfs-3g  ntfsfix  mkntfs
+        LOCAL_ADDITIONAL_DEPENDENCIES += mount.ntfs  fsck.ntfs  mkfs.ntfs
     endif
     ifeq ($(TARGET_USERIMAGES_USE_F2FS), true)
         LOCAL_ADDITIONAL_DEPENDENCIES += \

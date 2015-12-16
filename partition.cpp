@@ -1013,17 +1013,17 @@ bool TWPartition::Mount(bool Display_Error) {
 		}
 	}
 
-	if (Current_File_System == "ntfs" && TWFunc::Path_Exists("/sbin/ntfs-3g")) {
+	if (Current_File_System == "ntfs" && TWFunc::Path_Exists("/sbin/mount.ntfs")) {
 		string cmd;
 		if (Mount_Read_Only)
-			cmd = "/sbin/ntfs-3g -o ro " + Actual_Block_Device + " " + Mount_Point;
+			cmd = "/sbin/mount.ntfs -o ro " + Actual_Block_Device + " " + Mount_Point;
 		else
-			cmd = "/sbin/ntfs-3g " + Actual_Block_Device + " " + Mount_Point;
+			cmd = "/sbin/mount.ntfs " + Actual_Block_Device + " " + Mount_Point;
 		LOGINFO("cmd: '%s'\n", cmd.c_str());
 		if (TWFunc::Exec_Cmd(cmd) == 0) {
 			return true;
 		} else {
-			LOGINFO("ntfs-3g failed to mount, trying regular mount method.\n");
+			LOGINFO("mount.ntfs failed to mount, trying regular mount method.\n");
 		}
 	}
 
@@ -1250,7 +1250,7 @@ bool TWPartition::Can_Repair() {
 		return true;
 	else if (Current_File_System == "f2fs" && TWFunc::Path_Exists("/sbin/fsck.f2fs"))
 		return true;
-	else if (Current_File_System == "ntfs" && TWFunc::Path_Exists("/sbin/ntfsfix"))
+	else if (Current_File_System == "ntfs" && TWFunc::Path_Exists("/sbin/fsck.ntfs"))
 		return true;
 	return false;
 }
@@ -1335,15 +1335,15 @@ bool TWPartition::Repair() {
 		}
 	}
 	if (Current_File_System == "ntfs") {
-		if (!TWFunc::Path_Exists("/sbin/ntfsfix")) {
+		if (!TWFunc::Path_Exists("/sbin/fsck.ntfs")) {
 			gui_msg(Msg(msg::kError, "repair_not_exist={1} does not exist! Cannot repair!")("ntfsfix"));
 			return false;
 		}
 		if (!UnMount(true))
 			return false;
-		gui_msg(Msg("reparing=Repairing {1} using {2}...")(Display_Name)("ntfsfix"));
+		gui_msg(Msg("reparing=Repairing {1} using {2}...")(Display_Name)("fsck.ntfs"));
 		Find_Actual_Block_Device();
-		command = "/sbin/ntfsfix " + Actual_Block_Device;
+		command = "/sbin/fsck.ntfs " + Actual_Block_Device;
 		LOGINFO("Repair command: %s\n", command.c_str());
 		if (TWFunc::Exec_Cmd(command) == 0) {
 			gui_msg("done=Done.");
@@ -1878,13 +1878,13 @@ bool TWPartition::Wipe_F2FS() {
 bool TWPartition::Wipe_NTFS() {
 	string command;
 
-	if (TWFunc::Path_Exists("/sbin/mkntfs")) {
+	if (TWFunc::Path_Exists("/sbin/mkfs.ntfs")) {
 		if (!UnMount(true))
 			return false;
 
-		gui_msg(Msg("formating_using=Formatting {1} using {2}...")(Display_Name)("mkntfs"));
+		gui_msg(Msg("formating_using=Formatting {1} using {2}...")(Display_Name)("mkfs.ntfs"));
 		Find_Actual_Block_Device();
-		command = "mkntfs " + Actual_Block_Device;
+		command = "mkfs.ntfs " + Actual_Block_Device;
 		if (TWFunc::Exec_Cmd(command) == 0) {
 			Recreate_AndSec_Folder();
 			gui_msg("done=Done.");
