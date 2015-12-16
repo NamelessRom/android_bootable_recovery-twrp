@@ -261,12 +261,25 @@ ifneq ($(TARGET_ARCH), arm64)
 else
     LOCAL_LDFLAGS += -Wl,-dynamic-linker,/sbin/linker64
 endif
-ifneq ($(TW_NO_EXFAT), true)
-    LOCAL_ADDITIONAL_DEPENDENCIES += mkfs.exfat fsck.exfat
+ifneq ($(TW_NO_FSTOOLS), true)
+    LOCAL_ADDITIONAL_DEPENDENCIES += fstools
+else
+    ifneq ($(TW_NO_EXFAT), true)
+        LOCAL_ADDITIONAL_DEPENDENCIES += mkfs.exfat fsck.exfat
+    endif
     ifneq ($(TW_NO_EXFAT_FUSE), true)
         LOCAL_ADDITIONAL_DEPENDENCIES += mount.exfat
     endif
+    ifeq ($(TW_INCLUDE_NTFS_3G),true)
+        LOCAL_ADDITIONAL_DEPENDENCIES += mount.ntfs  fsck.ntfs  mkfs.ntfs
+    endif
+    ifeq ($(TARGET_USERIMAGES_USE_F2FS), true)
+        LOCAL_ADDITIONAL_DEPENDENCIES += \
+            fsck.f2fs \
+            mkfs.f2fs
+    endif
 endif
+
 ifeq ($(BOARD_HAS_NO_REAL_SDCARD),)
     LOCAL_ADDITIONAL_DEPENDENCIES += sgdisk
 endif
@@ -290,17 +303,6 @@ ifneq ($(TW_EXCLUDE_DEFAULT_USB_INIT), true)
 endif
 ifneq ($(TARGET_RECOVERY_DEVICE_MODULES),)
     LOCAL_ADDITIONAL_DEPENDENCIES += $(TARGET_RECOVERY_DEVICE_MODULES)
-endif
-ifeq ($(TW_INCLUDE_NTFS_3G),true)
-    LOCAL_ADDITIONAL_DEPENDENCIES += \
-        mount.ntfs \
-        fsck.ntfs \
-        mkfs.ntfs
-endif
-ifeq ($(TARGET_USERIMAGES_USE_F2FS), true)
-    LOCAL_ADDITIONAL_DEPENDENCIES += \
-        fsck.f2fs \
-        mkfs.f2fs
 endif
 
 include $(BUILD_EXECUTABLE)
@@ -402,6 +404,7 @@ include $(commands_recovery_local_path)/injecttwrp/Android.mk \
     $(commands_recovery_local_path)/mtp/Android.mk \
     $(commands_recovery_local_path)/minzip/Android.mk \
     $(commands_recovery_local_path)/dosfstools/Android.mk \
+    $(commands_recovery_local_path)/fstools/Android.mk \
     $(commands_recovery_local_path)/etc/Android.mk \
     $(commands_recovery_local_path)/toolboxes/Android.mk \
     $(commands_recovery_local_path)/toolboxes/mt/Android.mk \
