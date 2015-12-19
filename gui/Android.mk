@@ -66,6 +66,9 @@ endif
 ifeq ($(TW_ROUND_SCREEN), true)
     LOCAL_CFLAGS += -DTW_ROUND_SCREEN
 endif
+ifneq ($(TW_REDUCED_GRAPHICS), true)
+    LOCAL_CFLAGS += -DINCLUDE_JPEG_GRAPHICS
+endif
 
 LOCAL_C_INCLUDES += bionic system/core/libpixelflinger/include
 LOCAL_CFLAGS += -DTWRES=\"$(TWRES_PATH)\"
