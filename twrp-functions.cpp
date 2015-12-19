@@ -822,6 +822,27 @@ void TWFunc::Fixup_Time_On_Boot()
 	if(!PartitionManager.Mount_By_Path("/data", false))
 		return;
 
+	// First try to read offset from persist.sys.timeadjust property
+	// which is used by Sony's timekeep (unit here: seconds).
+	ats_path = "/data/property/persist.sys.timeadjust";
+	f = fopen(ats_path.c_str(), "r");
+	if(!f)
+	{
+		LOGINFO("TWFunc::Fixup_Time: failed to open file %s\n", ats_path.c_str());
+		goto read_from_ats;
+	}
+
+	if(fscanf(f, "%I64u", &offset) != 1)
+	{
+		LOGINFO("TWFunc::Fixup_Time: failed load uint64 from file %s\n", ats_path.c_str());
+		fclose(f);
+		goto read_from_ats;
+	}
+	fclose(f);
+	offset *= 1000; // here the unit is seconds
+	goto set_offset;
+
+ read_from_ats:
 	// Prefer ats_2, it seems to be the one we want according to logcat on hammerhead
 	// - it is the one for ATS_TOD (time of day?).
 	// However, I never saw a device where the offset differs between ats files.
@@ -864,6 +885,7 @@ void TWFunc::Fixup_Time_On_Boot()
 	}
 	fclose(f);
 
+ set_offset:
 	LOGINFO("TWFunc::Fixup_Time: Setting time offset from file %s, offset %llu\n", ats_path.c_str(), offset);
 
 	gettimeofday(&tv, NULL);
