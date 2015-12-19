@@ -3868,13 +3868,6 @@
 			</button>
 
 			<button style="main_button">
-				<condition var1="tw_show_dumlock" var2="1"/>
-				<placement x="%col1_x_left%" y="%row11_y%"/>
-				<text>HTC Dumlock</text>
-				<action function="page">htcdumlock</action>
-			</button>
-
-			<button style="main_button">
 				<condition var1="tw_has_injecttwrp" var2="1"/>
 				<placement x="%col1_x_right%" y="%row11_y%"/>
 				<text>Inject TWRP</text>
@@ -4144,69 +4137,6 @@
 					<action function="page">action_page</action>
 				</actions>
 			</slider>
-
-			<action>
-				<touch key="home"/>
-				<action function="page">main</action>
-			</action>
-
-			<action>
-				<touch key="back"/>
-				<action function="page">advanced</action>
-			</action>
-		</page>
-
-		<page name="htcdumlock">
-			<template name="page"/>
-
-			<template name="statusbar"/>
-
-			<text style="text_m">
-				<placement x="%col1_x_left%" y="%row1_header_y%"/>
-				<text>Advanced &gt; HTC Dumlock</text>
-			</text>
-
-			<button style="main_button_full_width">
-				<placement x="%indent%" y="%row1_y%"/>
-				<text>Restore Original Boot</text>
-				<actions>
-					<action function="set">tw_back=htcdumlock</action>
-					<action function="set">tw_action=htcdumlockrestoreboot</action>
-					<action function="set">tw_text1=Restore original boot image?</action>
-					<action function="set">tw_action_text1=Restoring Original Boot...</action>
-					<action function="set">tw_complete_text1=Restore Original Boot Complete</action>
-					<action function="set">tw_slider_text=   Confirm</action>
-					<action function="page">confirm_action</action>
-				</actions>
-			</button>
-
-			<button style="main_button_full_width">
-				<placement x="%indent%" y="%row6_y%"/>
-				<text>Reflash Recovery</text>
-				<actions>
-					<action function="set">tw_back=htcdumlock</action>
-					<action function="set">tw_action=htcdumlockreflashrecovery</action>
-					<action function="set">tw_text1=Reflash recovery to boot?</action>
-					<action function="set">tw_action_text1=Flashing recovery to boot...</action>
-					<action function="set">tw_complete_text1=Recovery Flash to Boot Complete</action>
-					<action function="set">tw_slider_text=   Confirm</action>
-					<action function="page">confirm_action</action>
-				</actions>
-			</button>
-
-			<button style="main_button_full_width">
-				<placement x="%indent%" y="%row11_y%"/>
-				<text>Install HTC Dumlock</text>
-				<actions>
-					<action function="set">tw_back=htcdumlock</action>
-					<action function="set">tw_action=installhtcdumlock</action>
-					<action function="set">tw_text1=Install HTC dumlock files to ROM?</action>
-					<action function="set">tw_action_text1=Installing HTC Dumlock...</action>
-					<action function="set">tw_complete_text1=HTC Dumlock Install Complete</action>
-					<action function="set">tw_slider_text=   Confirm</action>
-					<action function="page">confirm_action</action>
-				</actions>
-			</button>
 
 			<action>
 				<touch key="home"/>

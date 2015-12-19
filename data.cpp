@@ -656,13 +656,6 @@ void DataManager::SetDefaultValues()
 	mConstValues.insert(make_pair(TW_ALLOW_PARTITION_SDCARD, "1"));
 #endif
 
-#ifdef TW_INCLUDE_DUMLOCK
-	printf("TW_INCLUDE_DUMLOCK := true\n");
-	mConstValues.insert(make_pair(TW_SHOW_DUMLOCK, "1"));
-#else
-	mConstValues.insert(make_pair(TW_SHOW_DUMLOCK, "0"));
-#endif
-
 	str = GetCurrentStoragePath();
 	SetValue(TW_ZIP_LOCATION_VAR, str.c_str(), 1);
 	str += "/TWRP/BACKUPS/";

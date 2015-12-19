@@ -53,9 +53,6 @@ public:
 	static vector<string> split_string(const string &in, char del, bool skip_empty);
 
 #ifndef BUILD_TWRPTAR_MAIN
-	static void install_htc_dumlock(void);                                      // Installs HTC Dumlock
-	static void htc_dumlock_restore_original_boot(void);                        // Restores the backup of boot from HTC Dumlock
-	static void htc_dumlock_reflash_recovery_to_boot(void);                     // Reflashes the current recovery to boot
 	static int Recursive_Mkdir(string Path);                                    // Recursively makes the entire path
 	static void GUI_Operation_Text(string Read_Value, string Default_Text);     // Updates text for display in the GUI, e.g. Backing up %partition name%
 	static void GUI_Operation_Text(string Read_Value, string Partition_Name, string Default_Text); // Same as above but includes partition name
