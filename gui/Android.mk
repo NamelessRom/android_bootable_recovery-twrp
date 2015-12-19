@@ -82,11 +82,6 @@ TWRP_RES := $(commands_recovery_local_path)/gui/devices/common/res/*
 # enable this to use new themes:
 TWRP_NEW_THEME := true
 
-# TODO: When new theme is finalized, create low-graphics variant
-ifeq ($(TWRP_NEW_THEME), true)
-	TW_REDUCED_GRAPHICS :=
-endif
-
 ifeq ($(TW_CUSTOM_THEME),)
     ifeq ($(TW_THEME),)
         # This converts the old DEVICE_RESOLUTION flag to the new TW_THEME flag
@@ -111,6 +106,7 @@ ifeq ($(TWRP_NEW_THEME),true)
     TWRP_THEME_LOC := $(commands_recovery_local_path)/gui/theme/$(TW_THEME)
     TWRP_RES := $(commands_recovery_local_path)/gui/theme/common/fonts
     TWRP_RES += $(commands_recovery_local_path)/gui/theme/common/$(word 1,$(subst _, ,$(TW_THEME))).xml
+    TWRP_CURTAIN_LOC := $(commands_recovery_local_path)/gui/theme/alt-images/curtain/$(TW_THEME)
 # for future copying of used include xmls and fonts:
 # UI_XML := $(TWRP_THEME_LOC)/ui.xml
 # TWRP_INCLUDE_XMLS := $(shell xmllint --xpath '/recovery/include/xmlfile/@name' $(UI_XML)|sed -n 's/[^\"]*\"\([^\"]*\)\"[^\"]*/\1\n/gp'|sort|uniq)
