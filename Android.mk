@@ -273,9 +273,6 @@ LOCAL_ADDITIONAL_DEPENDENCIES := \
     twrp \
     utility_symlinks
 
-ifneq ($(TW_USE_TOOLBOX),true)
-    LOCAL_ADDITIONAL_DEPENDENCIES += busyboxtwrp
-endif
 ifneq ($(TARGET_ARCH), arm64)
     ifneq ($(TARGET_ARCH), x86_64)
         LOCAL_LDFLAGS += -Wl,-dynamic-linker,/sbin/linker
@@ -416,7 +413,6 @@ include $(commands_recovery_local_path)/injecttwrp/Android.mk \
     $(commands_recovery_local_path)/dosfstools/Android.mk \
     $(commands_recovery_local_path)/etc/Android.mk \
     $(commands_recovery_local_path)/toolboxes/Android.mk \
-    $(commands_recovery_local_path)/busybox/Android.mk \
     $(commands_recovery_local_path)/libpixelflinger/Android.mk
 
 ifeq ($(TW_INCLUDE_CRYPTO), true)
