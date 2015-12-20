@@ -97,12 +97,6 @@ LOCAL_CFLAGS += \
     -DTWRES=\"$(TWRES_PATH)\" \
     -DTWHTCD_PATH=\"$(TWHTCD_PATH)\"
 
-ifneq ($(TARGET_USERIMAGES_USE_EXT4), true)
-    ifneq ($(wildcard external/lz4/Android.mk),)
-        LOCAL_STATIC_LIBRARIES += liblz4-static
-    endif
-endif
-
 LOCAL_MODULE_PATH := $(TARGET_RECOVERY_ROOT_OUT)/sbin
 
 #TWRP Build Flags
