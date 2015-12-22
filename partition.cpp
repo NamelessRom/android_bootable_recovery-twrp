@@ -218,9 +218,9 @@ bool TWPartition::Process_Fstab_Line(string Line, bool Display_Error) {
 				// Partition length
 				ptr += 7;
 				Length = atoi(ptr);
-			} else if (strlen(ptr) > 6 && strncmp(ptr, "flags=", 6) == 0) {
+			} else if (strlen(ptr) > 5 && strncmp(ptr, "twrp=", 5) == 0) {
 				// Custom flags, save for later so that new values aren't overwritten by defaults
-				ptr += 6;
+				ptr += 5;
 				Flags = ptr;
 				Process_Flags(Flags, Display_Error);
 			} else if (strlen(ptr) == 4 && (strncmp(ptr, "NULL", 4) == 0 || strncmp(ptr, "null", 4) == 0 || strncmp(ptr, "null", 4) == 0)) {
