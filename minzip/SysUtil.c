@@ -118,12 +118,7 @@ static int sysMapBlockFile(FILE* mapf, MemMapping* pMap)
 
     // Reserve enough contiguous address space for the whole file.
     unsigned char* reserve;
-#if (PLATFORM_SDK_VERSION >= 21)
     reserve = mmap64(NULL, blocks * blksize, PROT_NONE, MAP_PRIVATE | MAP_ANON, -1, 0);
-#else
-    // Older versions of Android do not have mmap64 so we will just use mmap instead
-    reserve = mmap(NULL, blocks * blksize, PROT_NONE, MAP_PRIVATE | MAP_ANON, -1, 0);
-#endif
     if (reserve == MAP_FAILED) {
         LOGW("failed to reserve address space: %s\n", strerror(errno));
         return -1;
