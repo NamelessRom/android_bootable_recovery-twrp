@@ -72,6 +72,7 @@ int TWPartitionManager::Process_Fstab(string Fstab_Filename, bool Display_Error)
 	TWPartition* settings_partition = NULL;
 	TWPartition* andsec_partition = NULL;
 	unsigned int storageid = 1 << 16;	// upper 16 bits are for physical storage device, we pretend to have only one
+	string LastPartition = "";
 
 	fstabFile = fopen(Fstab_Filename.c_str(), "rt");
 	if (fstabFile == NULL) {
@@ -90,6 +91,10 @@ int TWPartitionManager::Process_Fstab(string Fstab_Filename, bool Display_Error)
 		memset(fstab_line, 0, sizeof(fstab_line));
 
 		if (partition->Process_Fstab_Line(line, Display_Error)) {
+			if (LastPartition == partition->Actual_Block_Device) {
+				delete partition;
+				continue;
+			}
 			if (partition->Is_Storage) {
 				++storageid;
 				partition->MTP_Storage_ID = storageid;
@@ -104,6 +109,7 @@ int TWPartitionManager::Process_Fstab(string Fstab_Filename, bool Display_Error)
 			} else {
 				partition->Has_Android_Secure = false;
 			}
+			LastPartition = partition->Actual_Block_Device;
 			Partitions.push_back(partition);
 		} else {
 			delete partition;
