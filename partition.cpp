@@ -442,6 +442,8 @@ bool TWPartition::Process_Flags(string Flags, bool Display_Error) {
 			Has_Android_Secure = true;
 		} else if (strcmp(ptr, "canbewiped") == 0) {
 			Can_Be_Wiped = true;
+		} else if (strcmp(ptr, "rw") == 0) {
+			Mount_Flags &= ~MS_RDONLY;
 		} else if (strcmp(ptr, "usermrf") == 0) {
 			Use_Rm_Rf = true;
 		} else if (ptr_len > 7 && strncmp(ptr, "backup=", 7) == 0) {
