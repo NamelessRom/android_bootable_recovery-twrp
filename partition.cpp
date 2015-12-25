@@ -187,8 +187,6 @@ bool TWPartition::Process_Fstab_Line(string Line, bool Display_Error) {
 				ptr += 5;
 				Flags = ptr;
 				Process_Flags(Flags, Display_Error);
-			} else if (strlen(ptr) == 4 && (strncmp(ptr, "NULL", 4) == 0 || strncmp(ptr, "null", 4) == 0 || strncmp(ptr, "null", 4) == 0)) {
-				// Do nothing
 			}
 		}
 		while (index < line_len && full_line[index] != '\0')
