@@ -182,11 +182,7 @@ bool TWPartition::Process_Fstab_Line(string Line, bool Display_Error) {
 			Process_FS_Flags(Mount_Options, Mount_Flags);
 			item_index++;
 		} else if (item_index > 2) {
-			if (strlen(ptr) > 7 && strncmp(ptr, "length=", 7) == 0) {
-				// Partition length
-				ptr += 7;
-				Length = atoi(ptr);
-			} else if (strlen(ptr) > 5 && strncmp(ptr, "twrp=", 5) == 0) {
+			if (strlen(ptr) > 5 && strncmp(ptr, "twrp=", 5) == 0) {
 				// Custom flags, save for later so that new values aren't overwritten by defaults
 				ptr += 5;
 				Flags = ptr;
