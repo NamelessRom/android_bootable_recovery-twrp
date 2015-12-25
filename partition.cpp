@@ -18,10 +18,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <sys/stat.h>
 #include <sys/vfs.h>
-#include <sys/mount.h>
 #include <unistd.h>
 #include <dirent.h>
 #include <iostream>
@@ -39,7 +37,6 @@
 #include "twrp-functions.hpp"
 #include "twrpDigest.hpp"
 #include "twrpTar.hpp"
-#include "twrpDU.hpp"
 #include "fixPermissions.hpp"
 #include "infomanager.hpp"
 #include "set_metadata.h"
@@ -71,39 +68,6 @@ using namespace std;
 
 extern struct selabel_handle *selinux_handle;
 extern bool datamedia;
-
-struct flag_list {
-	const char *name;
-	unsigned flag;
-};
-
-static struct flag_list mount_flags[] = {
-	{ "noatime",    MS_NOATIME },
-	{ "noexec",     MS_NOEXEC },
-	{ "nosuid",     MS_NOSUID },
-	{ "nodev",      MS_NODEV },
-	{ "nodiratime", MS_NODIRATIME },
-	{ "ro",         MS_RDONLY },
-	{ "rw",         0 },
-	{ "remount",    MS_REMOUNT },
-	{ "bind",       MS_BIND },
-	{ "rec",        MS_REC },
-#ifdef MS_UNBINDABLE
-	{ "unbindable", MS_UNBINDABLE },
-#endif
-#ifdef MS_PRIVATE
-	{ "private",    MS_PRIVATE },
-#endif
-#ifdef MS_SLAVE
-	{ "slave",      MS_SLAVE },
-#endif
-#ifdef MS_SHARED
-	{ "shared",     MS_SHARED },
-#endif
-	{ "sync",       MS_SYNCHRONOUS },
-	{ "defaults",   0 },
-	{ 0,            0 },
-};
 
 TWPartition::TWPartition() {
 	Can_Be_Mounted = false;
@@ -213,7 +177,11 @@ bool TWPartition::Process_Fstab_Line(string Line, bool Display_Error) {
 				Find_Real_Block_Device(Primary_Block_Device, Display_Error);
 			}
 			item_index++;
-		} else if (item_index > 1) {
+		} else if (item_index == 2) {
+			Mount_Options = ptr;
+			Process_FS_Flags(Mount_Options, Mount_Flags);
+			item_index++;
+		} else if (item_index > 2) {
 			if (strlen(ptr) > 7 && strncmp(ptr, "length=", 7) == 0) {
 				// Partition length
 				ptr += 7;
@@ -550,15 +518,6 @@ bool TWPartition::Process_Flags(string Flags, bool Display_Error) {
 			} else {
 				Use_Userdata_Encryption = false;
 			}
-		} else if (ptr_len > 8 && strncmp(ptr, "fsflags=", 8) == 0) {
-			ptr += 8;
-			if (*ptr == '\"') ptr++;
-
-			Mount_Options = ptr;
-			if (Mount_Options.substr(Mount_Options.size() - 1, 1) == "\"") {
-				Mount_Options.resize(Mount_Options.size() - 1);
-			}
-			Process_FS_Flags(Mount_Options, Mount_Flags);
 		} else if ((ptr_len > 12 && strncmp(ptr, "encryptable=", 12) == 0) || (ptr_len > 13 && strncmp(ptr, "forceencrypt=", 13) == 0)) {
 			ptr += 12;
 			if (*ptr == '=') ptr++;

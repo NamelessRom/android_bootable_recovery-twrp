@@ -21,6 +21,7 @@
 
 #include <vector>
 #include <string>
+#include <sys/mount.h>
 #include "twrpDU.hpp"
 #include "tw_atomic.hpp"
 
@@ -32,6 +33,30 @@ struct PartitionList {
 	std::string Display_Name;
 	std::string Mount_Point;
 	unsigned int selected;
+};
+
+struct flag_list {
+	const char *name;
+	unsigned flag;
+};
+
+const struct flag_list mount_flags[] = {
+	{ "noatime",    MS_NOATIME },
+	{ "noexec",     MS_NOEXEC },
+	{ "nosuid",     MS_NOSUID },
+	{ "nodev",      MS_NODEV },
+	{ "nodiratime", MS_NODIRATIME },
+	{ "ro",         MS_RDONLY },
+	{ "rw",         0 },
+	{ "remount",    MS_REMOUNT },
+	{ "bind",       MS_BIND },
+	{ "rec",        MS_REC },
+	{ "unbindable", MS_UNBINDABLE },
+	{ "private",    MS_PRIVATE },
+	{ "slave",      MS_SLAVE },
+	{ "shared",     MS_SHARED },
+	{ "defaults",   0 },
+	{ 0,            0 },
 };
 
 // Partition class
@@ -248,6 +273,7 @@ private:
 	bool Backup_Partition(TWPartition* Part, string Backup_Folder, bool generate_md5, unsigned long long* img_bytes_remaining, unsigned long long* file_bytes_remaining, unsigned long *img_time, unsigned long *file_time, unsigned long long *img_bytes, unsigned long long *file_bytes);
 	bool Restore_Partition(TWPartition* Part, string Restore_Name, int partition_count, const unsigned long long *total_restore_size, unsigned long long *already_restored_size);
 	void Output_Partition(TWPartition* Part);
+	string Regenerate_Mount_Flags(TWPartition* Part);	  // Regenerates string representation of fstab flags
 	TWPartition* Find_Partition_By_MTP_Storage_ID(unsigned int Storage_ID);   // Returns a pointer to a partition based on MTP Storage ID
 	bool Add_Remove_MTP_Storage(TWPartition* Part, int message_type);   // Adds or removes an MTP Storage partition
 	TWPartition* Find_Next_Storage(string Path, string Exclude);

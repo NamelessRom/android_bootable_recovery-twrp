@@ -18,11 +18,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <sys/stat.h>
 #include <sys/vfs.h>
 #include <unistd.h>
-#include <vector>
 #include <dirent.h>
 #include <time.h>
 #include <errno.h>
@@ -37,9 +35,7 @@
 #include "twrp-functions.hpp"
 #include "fixPermissions.hpp"
 #include "twrpDigest.hpp"
-#include "twrpDU.hpp"
 #include "set_metadata.h"
-#include "tw_atomic.hpp"
 #include "gui/gui.hpp"
 
 #ifdef TW_HAS_MTP
@@ -177,10 +173,30 @@ int TWPartitionManager::Process_Fstab(string Fstab_Filename, bool Display_Error)
 	return true;
 }
 
+string TWPartitionManager::Regenerate_Mount_Flags(TWPartition* Part) {
+	int i = 0;
+	string flags = "";
+
+	for (i = 0; mount_flags[i].name; i++) {
+		if (mount_flags[i].flag != 0 && (Part->Mount_Flags & mount_flags[i].flag)) {
+			if (!flags.empty())
+				flags += ",";
+			flags += std::string(mount_flags[i].name);
+		}
+	}
+
+	if (flags.empty())
+		flags = "defaults";
+
+	return flags;
+}
+
 int TWPartitionManager::Write_Fstab(void) {
 	FILE *fp;
 	std::vector<TWPartition*>::iterator iter;
 	string Line;
+	string Flags;
+	string Options;
 
 	fp = fopen("/etc/fstab", "w");
 	if (fp == NULL) {
@@ -189,7 +205,9 @@ int TWPartitionManager::Write_Fstab(void) {
 	}
 	for (iter = Partitions.begin(); iter != Partitions.end(); iter++) {
 		if ((*iter)->Can_Be_Mounted) {
-			Line = (*iter)->Actual_Block_Device + " " + (*iter)->Mount_Point + " " + (*iter)->Current_File_System + " rw\n";
+			Flags = Regenerate_Mount_Flags((*iter));
+			Options = "defaults";
+			Line = (*iter)->Actual_Block_Device + " " + (*iter)->Mount_Point + " " + (*iter)->Current_File_System + " " + Flags + " " + Options + "\n";
 			fputs(Line.c_str(), fp);
 		}
 		// Handle subpartition tracking
