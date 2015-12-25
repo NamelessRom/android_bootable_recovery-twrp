@@ -195,6 +195,7 @@ int TWPartitionManager::Write_Fstab(void) {
 	FILE *fp;
 	std::vector<TWPartition*>::iterator iter;
 	string Line;
+	string Device;
 	string Flags;
 	string Options;
 
@@ -205,9 +206,10 @@ int TWPartitionManager::Write_Fstab(void) {
 	}
 	for (iter = Partitions.begin(); iter != Partitions.end(); iter++) {
 		if ((*iter)->Can_Be_Mounted) {
+			Device = (*iter)->Actual_Block_Device.empty() ? (*iter)->Primary_Block_Device : (*iter)->Actual_Block_Device;
 			Flags = Regenerate_Mount_Flags((*iter));
 			Options = "defaults";
-			Line = (*iter)->Actual_Block_Device + " " + (*iter)->Mount_Point + " " + (*iter)->Current_File_System + " " + Flags + " " + Options + "\n";
+			Line = Device + " " + (*iter)->Mount_Point + " " + (*iter)->Current_File_System + " " + Flags + " " + Options + "\n";
 			fputs(Line.c_str(), fp);
 		}
 		// Handle subpartition tracking
