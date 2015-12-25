@@ -166,7 +166,6 @@ private:
 	string Mount_Point;                                                       // Mount point for this partition (e.g. /system or /data)
 	string Backup_Path;                                                       // Path for backup
 	string Primary_Block_Device;                                              // Block device (e.g. /dev/block/mmcblk1p1)
-	string Alternate_Block_Device;                                            // Alternate block device (e.g. /dev/block/mmcblk1)
 	string Decrypted_Block_Device;                                            // Decrypted block device available after decryption
 	bool Removable;                                                           // Indicates if this partition is removable -- affects how often we check overall size, if present, etc.
 	int Length;                                                               // Used by make_ext4fs to leave free space at the end of the partition block for things like a crypto footer

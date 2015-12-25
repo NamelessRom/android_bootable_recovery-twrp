@@ -307,8 +307,6 @@ void TWPartitionManager::Output_Partition(TWPartition* Part) {
 		printf("   Symlink_Mount_Point: %s\n", Part->Symlink_Mount_Point.c_str());
 	if (!Part->Primary_Block_Device.empty())
 		printf("   Primary_Block_Device: %s\n", Part->Primary_Block_Device.c_str());
-	if (!Part->Alternate_Block_Device.empty())
-		printf("   Alternate_Block_Device: %s\n", Part->Alternate_Block_Device.c_str());
 	if (!Part->Decrypted_Block_Device.empty())
 		printf("   Decrypted_Block_Device: %s\n", Part->Decrypted_Block_Device.c_str());
 	if (!Part->Crypto_Key_Location.empty() && Part->Crypto_Key_Location != "footer")
