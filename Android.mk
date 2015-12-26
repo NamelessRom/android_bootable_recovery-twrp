@@ -52,6 +52,7 @@ LOCAL_CFLAGS += -Wno-unused-parameter
 
 LOCAL_C_INCLUDES += \
     $(LOCAL_PATH)/libmincrypt/includes \
+    $(LOCAL_PATH)/libtar \
     bionic \
     external/libselinux/include \
     external/openssl/include \
@@ -75,7 +76,7 @@ LOCAL_SHARED_LIBRARIES := \
     libselinux \
     libsparse \
     libstdc++ \
-    libtar \
+    libtar_twrp \
     libz
 
 ifeq ($(TW_OEM_BUILD),true)

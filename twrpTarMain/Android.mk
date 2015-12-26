@@ -19,7 +19,7 @@ LOCAL_STATIC_LIBRARIES := \
     libc \
     libselinux \
     libstdc++ \
-    libtar_static
+    libtar_twrp_static
 
 ifneq ($(RECOVERY_SDCARD_ON_DATA),)
     LOCAL_CFLAGS += -DRECOVERY_SDCARD_ON_DATA
@@ -55,7 +55,7 @@ LOCAL_SHARED_LIBRARIES := \
     libc \
     libselinux \
     libstdc++ \
-    libtar
+    libtar_twrp
 
 ifneq ($(RECOVERY_SDCARD_ON_DATA),)
     LOCAL_CFLAGS += -DRECOVERY_SDCARD_ON_DATA

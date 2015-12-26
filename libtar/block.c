@@ -11,13 +11,14 @@
 */
 
 #include <internal.h>
-#include <stdio.h>
+
 #include <errno.h>
 
 #ifdef STDC_HEADERS
 # include <string.h>
 # include <stdlib.h>
 #endif
+
 
 #define BIT_ISSET(bitmask, bit) ((bitmask) & (bit))
 
@@ -260,41 +261,6 @@ th_read(TAR *t)
 				errno = EINVAL;
 			return -1;
 		}
-	}
-#endif
-
-#if 0
-	/*
-	** work-around for old archive files with broken typeflag fields
-	** NOTE: I fixed this in the TH_IS*() macros instead
-	*/
-
-	/*
-	** (directories are signified with a trailing '/')
-	*/
-	if (t->th_buf.typeflag == AREGTYPE
-	    && t->th_buf.name[strlen(t->th_buf.name) - 1] == '/')
-		t->th_buf.typeflag = DIRTYPE;
-
-	/*
-	** fallback to using mode bits
-	*/
-	if (t->th_buf.typeflag == AREGTYPE)
-	{
-		mode = (mode_t)oct_to_int(t->th_buf.mode);
-
-		if (S_ISREG(mode))
-			t->th_buf.typeflag = REGTYPE;
-		else if (S_ISDIR(mode))
-			t->th_buf.typeflag = DIRTYPE;
-		else if (S_ISFIFO(mode))
-			t->th_buf.typeflag = FIFOTYPE;
-		else if (S_ISCHR(mode))
-			t->th_buf.typeflag = CHRTYPE;
-		else if (S_ISBLK(mode))
-			t->th_buf.typeflag = BLKTYPE;
-		else if (S_ISLNK(mode))
-			t->th_buf.typeflag = SYMTYPE;
 	}
 #endif
 

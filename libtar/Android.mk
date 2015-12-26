@@ -12,13 +12,14 @@ common_src_files := \
     libtar_hash.c \
     libtar_list.c \
     output.c \
+    strlcpy.c \
     strmode.c \
     util.c \
     wrapper.c
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := libtar
+LOCAL_MODULE := libtar_twrp
 LOCAL_MODULE_TAGS := optional
 LOCAL_CFLAGS := -DHAVE_SELINUX
 LOCAL_SRC_FILES := $(common_src_files)
@@ -30,7 +31,7 @@ include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := libtar_static
+LOCAL_MODULE := libtar_twrp_static
 LOCAL_MODULE_TAGS := optional
 LOCAL_CFLAGS := -DHAVE_SELINUX
 LOCAL_SRC_FILES := $(common_src_files)
