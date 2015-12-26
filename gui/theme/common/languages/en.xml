@@ -237,6 +237,7 @@
 		<string name="restore_backup_date">Backup made on %tw_restore_file_date%</string>
 		<string name="restore_sel_part">Select Partitions to Restore:</string>
 		<string name="restore_enable_md5_chk">Enable MD5 verification of backup files</string>
+		<string name="restore_complete">Restore Complete</string>
 		<string name="swipe_restore">Swipe to Restore</string>
 		<string name="swipe_restore_s">   Restore</string>
 		<string name="rename_backup_hdr">Rename Backup</string>
@@ -498,7 +499,6 @@
 		<string name="restore_part_count">Restoring {1} partitions...</string>
 		<string name="total_restore_size">Total restore size is {1}MB</string>
 		<string name="updating_system_details">Updating System Details</string>
-		<string name="restore_complete">Restore Complete</string>
 		<string name="restore_completed">[RESTORE COMPLETED IN {1} SECONDS]</string>
 		<!-- {1} is the path we could not open, {2} is strerror output -->
 		<string name="error_opening_strerr">Error opening: '{1}' ({2})</string>
@@ -627,7 +627,7 @@
 		<string name="decrypt_cmd">Attempting to decrypt data partition via command line.</string>
 		<string name="base_pkg_err">Failed to load base packages.</string>
 		<string name="simulating">Simulating actions...</string>
-		<string name="backup_cancel">Backup Canceled</string>
+		<string name="backup_cancel">Backup Cancelled</string>
 		<string name="config_twrp">Configuring TWRP...</string>
 		<string name="config_twrp_err">Unable to configure TWRP with this kernel.</string>
 		<string name="copy_log">Copied recovery log to {1}.</string>
@@ -643,7 +643,7 @@
 		<string name="backup_name_len">Backup name is too long.</string>
 		<string name="backup_name_invalid">Backup name '{1}' contains invalid character: '{1}'</string>
 		<string name="no_real_sdcard">This device does not have a real SD Card! Aborting!</string>
-		<string name="cancel_sideload">Canceling ADB sideload...</string>
+		<string name="cancel_sideload">Cancelling ADB sideload...</string>
 		<string name="change_fs_err">Error changing file system.</string>
 		<string name="theme_ver_err">Custom theme version does not match TWRP version. Using stock theme.</string>
 	</resources>
