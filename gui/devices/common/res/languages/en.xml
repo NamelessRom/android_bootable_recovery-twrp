@@ -55,7 +55,7 @@
 		<string name="total_backup_size"> * Total size of all data: {1}MB</string>
 		<string name="available_space"> * Available space: {1}MB</string>
 		<string name="unable_locate_storage">Unable to locate storage device.</string>
-		<string name="Not enough free space on storage.">Not enough free space on storage.</string>
+		<string name="no_space">Not enough free space on storage.</string>
 		<string name="backup_started">[BACKUP STARTED]</string>
 		<string name="backup_folder"> * Backup Folder: {1}</string>
 		<string name="fail_backup_folder">Failed to make backup folder.</string>
