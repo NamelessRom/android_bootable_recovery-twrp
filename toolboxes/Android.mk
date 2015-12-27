@@ -72,7 +72,8 @@ BUSYBOX_EXCLUDE := tune2fs mke2fs mkdosfs mkfs.vfat gzip gunzip
 
 # Override:
 #  mount is needed for TWRP's old-school fstab
-BUSYBOX_OVERRIDE := mount
+#  tar from toybox is not entirely reliable
+BUSYBOX_OVERRIDE := mount tar
 
 BUSYBOX_TOOLS := $(filter-out $(BUSYBOX_EXCLUDE), $(notdir $(BUSYBOX_LINKS)))
 
