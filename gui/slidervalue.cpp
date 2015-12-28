@@ -260,7 +260,7 @@ int GUISliderValue::measureText(const std::string& str)
 	void* fontResource = NULL;
 	if (mFont)  fontResource = mFont->GetResource();
 
-	return gr_measureEx(str.c_str(), fontResource);
+	return gr_ttf_measureEx(str.c_str(), fontResource);
 }
 
 int GUISliderValue::Render(void)

@@ -335,7 +335,7 @@ void GUIKeyboard::DrawKey(Key& key, int keyX, int keyY, int keyW, int keyH)
 	else if (!labelText.empty())
 	{
 		void* fontResource = labelFont->GetResource();
-		int textW = gr_measureEx(labelText.c_str(), fontResource);
+		int textW = gr_ttf_measureEx(labelText.c_str(), fontResource);
 		int textH = labelFont->GetHeight();
 		int textX = keyX + (keyW - textW) / 2;
 		int textY = keyY + (keyH - textH) / 2;
@@ -349,7 +349,7 @@ void GUIKeyboard::DrawKey(Key& key, int keyX, int keyY, int keyW, int keyH)
 		gr_color(mLongpressFontColor.red, mLongpressFontColor.green, mLongpressFontColor.blue, mLongpressFontColor.alpha);
 		string text(1, keychar);
 		int textH = mLongpressFont->GetHeight();
-		int textW = gr_measureEx(text.c_str(), fontResource);
+		int textW = gr_ttf_measureEx(text.c_str(), fontResource);
 		int textX = keyX + keyW - longpressOffsetX - textW;
 		int textY = keyY + longpressOffsetY;
 		gr_textEx_scaleW(textX, textY, text.c_str(), fontResource, keyW, TOP_LEFT, 0);

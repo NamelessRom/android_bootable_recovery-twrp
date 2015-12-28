@@ -52,6 +52,8 @@ GUIText::GUIText(xml_node<>* node)
 
 	// Load the font, and possibly override the color
 	mFont = LoadAttrFont(FindNode(node, "font"), "resource");
+	if (!mFont)
+		return;
 	mColor = LoadAttrColor(FindNode(node, "font"), "color", mColor);
 	mHighlightColor = LoadAttrColor(FindNode(node, "font"), "highlightcolor", mColor);
 
@@ -93,6 +95,8 @@ int GUIText::Render(void)
 	void* fontResource = NULL;
 	if (mFont)
 		fontResource = mFont->GetResource();
+	else
+		return -1;
 
 	mLastValue = gui_parse_text(mText);
 	string displayValue = mLastValue;
@@ -103,7 +107,7 @@ int GUIText::Render(void)
 	mVarChanged = 0;
 
 	int x = mRenderX, y = mRenderY;
-	int width = gr_measureEx(displayValue.c_str(), fontResource);
+	int width = gr_ttf_measureEx(displayValue.c_str(), fontResource);
 
 	if (isHighlighted)
 		gr_color(mHighlightColor.red, mHighlightColor.green, mHighlightColor.blue, mHighlightColor.alpha);
@@ -150,7 +154,7 @@ int GUIText::GetCurrentBounds(int& w, int& h)
 
 	h = mFontHeight;
 	mLastValue = gui_parse_text(mText);
-	w = gr_measureEx(mLastValue.c_str(), fontResource);
+	w = gr_ttf_measureEx(mLastValue.c_str(), fontResource);
 	return 0;
 }
 

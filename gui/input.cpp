@@ -182,7 +182,7 @@ int GUIInput::HandleTextLocation(int x)
 			maskedValue += mMask;
 		displayValue = maskedValue;
 	}
-	textWidth = gr_measureEx(displayValue.c_str(), fontResource);
+	textWidth = gr_ttf_measureEx(displayValue.c_str(), fontResource);
 	if (textWidth <= mRenderW) {
 		lastX = x;
 		scrollingX = 0;
@@ -195,7 +195,7 @@ int GUIInput::HandleTextLocation(int x)
 	if (skipChars && skipChars < displayValue.size())
 		displayValue.erase(0, skipChars);
 
-	textWidth = gr_measureEx(displayValue.c_str(), fontResource);
+	textWidth = gr_ttf_measureEx(displayValue.c_str(), fontResource);
 	mRendered = false;
 
 	int deltaX, deltaText, newWidth;
@@ -208,11 +208,11 @@ int GUIInput::HandleTextLocation(int x)
 		if (mCursorLocation == -1) {
 			displayValue = originalValue;
 			skipChars = 0;
-			textWidth = gr_measureEx(displayValue.c_str(), fontResource);
+			textWidth = gr_ttf_measureEx(displayValue.c_str(), fontResource);
 			while (textWidth > mRenderW) {
 				displayValue.erase(0, 1);
 				skipChars++;
-				textWidth = gr_measureEx(displayValue.c_str(), fontResource);
+				textWidth = gr_ttf_measureEx(displayValue.c_str(), fontResource);
 			}
 			scrollingX = mRenderW - textWidth;
 			mInputText->SkipCharCount(skipChars);
@@ -223,12 +223,12 @@ int GUIInput::HandleTextLocation(int x)
 
 			cursorLocate = displayValue;
 			cursorLocate.resize(mCursorLocation);
-			textWidth = gr_measureEx(cursorLocate.c_str(), fontResource);
+			textWidth = gr_ttf_measureEx(cursorLocate.c_str(), fontResource);
 			while (textWidth > mRenderW) {
 				skipChars++;
 				mCursorLocation--;
 				cursorLocate.erase(0, 1);
-				textWidth = gr_measureEx(cursorLocate.c_str(), fontResource);
+				textWidth = gr_ttf_measureEx(cursorLocate.c_str(), fontResource);
 				adjust_scrollingX = -1;
 			}
 			if (adjust_scrollingX) {
@@ -247,7 +247,7 @@ int GUIInput::HandleTextLocation(int x)
 				}
 				insertChar = originalValue.substr(skipChars - 1, 1);
 				displayValue.insert(0, insertChar);
-				newWidth = gr_measureEx(displayValue.c_str(), fontResource);
+				newWidth = gr_ttf_measureEx(displayValue.c_str(), fontResource);
 				deltaText = newWidth - textWidth;
 				if (newWidth > mRenderW) {
 					scrollingX = mRenderW - textWidth;
@@ -275,7 +275,7 @@ int GUIInput::HandleTextLocation(int x)
 			}
 			insertChar = originalValue.substr(skipChars - 1, 1);
 			displayValue.insert(0, insertChar);
-			newWidth = gr_measureEx(displayValue.c_str(), fontResource);
+			newWidth = gr_ttf_measureEx(displayValue.c_str(), fontResource);
 			deltaText = newWidth - textWidth;
 			if (deltaText < deltaX) {
 				lastX += deltaText;
@@ -310,7 +310,7 @@ int GUIInput::HandleTextLocation(int x)
 			deltaX = lastX - x;
 			displayValue.erase(0, 1);
 			skipChars++;
-			newWidth = gr_measureEx(displayValue.c_str(), fontResource);
+			newWidth = gr_ttf_measureEx(displayValue.c_str(), fontResource);
 			deltaText = textWidth - newWidth;
 			if (newWidth <= mRenderW) {
 				scrollingX = mRenderW - newWidth;
@@ -393,15 +393,15 @@ int GUIInput::Render(void)
 
 					cursorDisplay = displayValue;
 					cursorDisplay.resize(mCursorLocation);
-					cursorX = gr_measureEx(cursorDisplay.c_str(), fontResource) + mRenderX;
+					cursorX = gr_ttf_measureEx(cursorDisplay.c_str(), fontResource) + mRenderX;
 				} else {
 					// Cursor location is after the end of the text  - reset to -1
 					mCursorLocation = -1;
-					cursorX = gr_measureEx(displayValue.c_str(), fontResource) + mRenderX;
+					cursorX = gr_ttf_measureEx(displayValue.c_str(), fontResource) + mRenderX;
 				}
 			} else {
 				// Cursor is at the end (-1)
-				cursorX = gr_measureEx(displayValue.c_str(), fontResource) + mRenderX;
+				cursorX = gr_ttf_measureEx(displayValue.c_str(), fontResource) + mRenderX;
 			}
 		}
 		cursorX += scrollingX;
@@ -520,7 +520,7 @@ int GUIInput::NotifyTouch(TOUCH_STATE state, int x, int y)
 			for(index=0; index<displayValue.size(); index++)
 			{
 				cursorString = displayValue.substr(0, index);
-				cursorX = gr_measureEx(cursorString.c_str(), fontResource) + mRenderX;
+				cursorX = gr_ttf_measureEx(cursorString.c_str(), fontResource) + mRenderX;
 				if (cursorX > x) {
 					if (index > 0)
 						mCursorLocation = index - 1;
