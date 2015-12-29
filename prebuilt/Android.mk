@@ -107,10 +107,14 @@ ifneq ($(TARGET_USERIMAGES_USE_EXT4), true)
 endif
 
 ifneq ($(TW_NO_EXFAT), true)
+    RELINK_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libfuse.so
+else ifeq ($(TW_INCLUDE_NTFS_3G), true)
+    RELINK_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libfuse.so
+endif
+ifneq ($(TW_NO_EXFAT), true)
     RELINK_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/mkfs.exfat
     RELINK_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/fsck.exfat
     RELINK_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libexfat.so
-    RELINK_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libfuse.so
 else
     TW_NO_EXFAT_FUSE := true
 endif
@@ -158,10 +162,11 @@ endif
 ifneq ($(wildcard external/pcre/Android.mk),)
     RELINK_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libpcre.so
 endif
-ifeq ($(TW_INCLUDE_NTFS_3G),true)
-    RELINK_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/ntfs-3g
-    RELINK_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/ntfsfix
-    RELINK_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/mkntfs
+ifeq ($(TW_INCLUDE_NTFS_3G), true)
+    RELINK_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/mount.ntfs
+    RELINK_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/fsck.ntfs
+    RELINK_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/mkfs.ntfs
+    RELINK_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libntfs-3g.so
 endif
 
 TWRP_AUTOGEN := $(intermediates)/teamwin
