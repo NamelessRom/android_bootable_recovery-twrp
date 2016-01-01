@@ -38,15 +38,15 @@
 #include "selinux/label.h"
 #endif
 
+#define kMode_0600 0600 // S_IRUSR | S_IWUSR
+#define kMode_0640 0640 // S_IRUSR | S_IWUSR | S_IRGRP
+#define kMode_0644 0644 // S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH
+#define kMode_0660 0660 // S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP
+#define kMode_0755 0755 // S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH
+#define kMode_0771 0771 // S_IRWXU | S_IRWXG | S_IXOTH
+
 using namespace std;
 using namespace rapidxml;
-
-static const mode_t kMode_0600 = 0600; // S_IRUSR | S_IWUSR
-static const mode_t kMode_0640 = 0640; // S_IRUSR | S_IWUSR | S_IRGRP
-static const mode_t kMode_0644 = 0644; // S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH
-static const mode_t kMode_0660 = 0660; // S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP
-static const mode_t kMode_0755 = 0755; // S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH
-static const mode_t kMode_0771 = 0771; // S_IRWXU | S_IRWXG | S_IXOTH
 
 fixPermissions::fixPermissions() : head(NULL) {
 }
@@ -394,19 +394,19 @@ int fixPermissions::fixDataData(string dataDir) {
 						return -1;
 				}
 				else if (dataDataDirs.at(n) == "shared_prefs") {
-					if (fixDir(directory, temp->uid, temp->gid,kMode_0771, temp->uid, temp->gid, kMode_0660) != 0)
+					if (fixDir(directory, temp->uid, temp->gid, kMode_0771, temp->uid, temp->gid, kMode_0660) != 0)
 						return -1;
 				}
 				else if (dataDataDirs.at(n) == "databases") {
-					if (fixDir(directory, temp->uid, temp->gid,kMode_0771, temp->uid, temp->gid, kMode_0660) != 0)
+					if (fixDir(directory, temp->uid, temp->gid, kMode_0771, temp->uid, temp->gid, kMode_0660) != 0)
 						return -1;
 				}
 				else if (dataDataDirs.at(n) == "cache") {
-					if (fixDir(directory, temp->uid, temp->gid,kMode_0771, temp->uid, temp->gid, kMode_0600) != 0)
+					if (fixDir(directory, temp->uid, temp->gid, kMode_0771, temp->uid, temp->gid, kMode_0600) != 0)
 						return -1;
 				}
 				else {
-					if (fixDir(directory, temp->uid, temp->gid,kMode_0771, temp->uid, temp->gid, kMode_0755) != 0)
+					if (fixDir(directory, temp->uid, temp->gid, kMode_0771, temp->uid, temp->gid, kMode_0755) != 0)
 						return -1;
 				}
 			}
