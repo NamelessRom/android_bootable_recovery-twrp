@@ -57,8 +57,6 @@ extern "C" {
 #include "objects.hpp"
 #include "../tw_atomic.hpp"
 
-void curtainClose(void);
-
 GUIAction::mapFunc GUIAction::mf;
 std::set<string> GUIAction::setActionsRunningInCallerThread;
 static string zip_queue[10];
@@ -506,8 +504,6 @@ void GUIAction::operation_end(const int operation_status)
 
 int GUIAction::reboot(std::string arg)
 {
-	//curtainClose(); this sometimes causes a crash
-
 	sync();
 	DataManager::SetValue("tw_gui_done", 1);
 	DataManager::SetValue("tw_reboot_arg", arg);

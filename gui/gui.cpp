@@ -62,8 +62,6 @@ extern "C"
 #define LOGEVENT(...) do {} while (0)
 #endif
 
-const static int CURTAIN_FADE = 32;
-
 using namespace rapidxml;
 
 // Global values
@@ -134,48 +132,6 @@ static void curtainRaise(gr_surface surface)
 	}
 	gr_blit(surface, 0, 0, msw, msh, 0, 0);
 	flip();
-}
-
-void curtainClose()
-{
-#if 0
-	int w = gr_get_width(gCurtain);
-	int h = 1;
-	int sy = gr_get_height(gCurtain) - 1;
-	int fbh = gr_fb_height();
-	int CURTAIN_RATE = fbh / 30;
-
-	if (gNoAnimation == 0)
-	{
-		for (; h < fbh; h += CURTAIN_RATE, sy -= CURTAIN_RATE)
-		{
-			gr_blit(gCurtain, 0, sy, w, h, 0, 0);
-			gr_flip();
-		}
-		gr_blit(gCurtain, 0, 0, gr_get_width(gCurtain),
-		gr_get_height(gCurtain), 0, 0);
-		gr_flip();
-
-		if (gRecorder != -1)
-			close(gRecorder);
-
-		int fade;
-		for (fade = 16; fade < 255; fade += CURTAIN_FADE)
-		{
-			gr_blit(gCurtain, 0, 0, gr_get_width(gCurtain),
-			gr_get_height(gCurtain), 0, 0);
-			gr_color(0, 0, 0, fade);
-			gr_fill(0, 0, gr_fb_width(), gr_fb_height());
-			gr_flip();
-		}
-		gr_color(0, 0, 0, 255);
-		gr_fill(0, 0, gr_fb_width(), gr_fb_height());
-		gr_flip();
-	}
-#else
-	gr_blit(gCurtain, 0, 0, gr_get_width(gCurtain), gr_get_height(gCurtain), 0, 0);
-	gr_flip();
-#endif
 }
 
 class InputHandler
