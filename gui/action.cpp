@@ -16,52 +16,51 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <stdarg.h>
+#include <cutils/properties.h>
+#include <errno.h>
+#include <linux/input.h>
+#include <map>
+#include <pthread.h>
+#include <pwd.h>
+#include <set>
+#include <signal.h>
+#include <stdbool.h>
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <fcntl.h>
+#include <string>
+#include <sys/select.h>
 #include <sys/stat.h>
 #include <sys/time.h>
-#include <sys/mman.h>
-#include <sys/types.h>
-#include <sys/ioctl.h>
-#include <linux/input.h>
-#include <time.h>
-#include <unistd.h>
-#include <stdlib.h>
 #include <sys/wait.h>
-#include <dirent.h>
-#include <pwd.h>
-
-#include <string>
-#include <sstream>
-#include "../partitions.hpp"
-#include "../twrp-functions.hpp"
-#include "../openrecoveryscript.hpp"
+#include <time.h>
+#include <utility>
+#include <vector>
 
 #include "../adb_install.h"
+#include "../data.hpp"
 #include "../fuse_sideload.h"
-#include "blanktimer.hpp"
-extern "C" {
-#include "../twcommon.h"
 #include "../minuitwrp/minui.h"
-#include "../variables.h"
-#include "../twinstall.h"
-#include "cutils/properties.h"
-#include "../adb_install.h"
+#include "../openrecoveryscript.hpp"
+#include "../partitions.hpp"
 #include "../set_metadata.h"
-};
-
-#include "rapidxml.hpp"
-#include "objects.hpp"
 #include "../tw_atomic.hpp"
+#include "../twcommon.h"
+#include "../twinstall.h"
+#include "../twrp-functions.hpp"
+#include "../variables.h"
+#include "blanktimer.hpp"
+#include "console.h"
+#include "gui.h"
+#include "objects.hpp"
+#include "pages.hpp"
+#include "rapidxml.hpp"
+#include "twmsg.hpp"
 
 GUIAction::mapFunc GUIAction::mf;
 std::set<string> GUIAction::setActionsRunningInCallerThread;
 static string zip_queue[10];
 static int zip_queue_index;
-static pthread_t terminal_command;
 pid_t sideload_child_pid;
 
 static void *ActionThread_work_wrapper(void *data);

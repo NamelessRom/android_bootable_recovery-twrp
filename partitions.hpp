@@ -16,13 +16,15 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __TWRP_Partition_Manager
-#define __TWRP_Partition_Manager
+#ifndef _PARTITIONS_HPP_HEADER
+#define _PARTITIONS_HPP_HEADER
 
-#include <vector>
+#include <stdint.h>
 #include <string>
 #include <sys/mount.h>
-#include "twrpDU.hpp"
+#include <sys/types.h>
+#include <vector>
+
 #include "tw_atomic.hpp"
 
 #define MAX_FSTAB_LINE_LENGTH 2048
@@ -288,4 +290,4 @@ private:
 
 extern TWPartitionManager PartitionManager;
 
-#endif // __TWRP_Partition_Manager
+#endif // _PARTITIONS_HPP_HEADER

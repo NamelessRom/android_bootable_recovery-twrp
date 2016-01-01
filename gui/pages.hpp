@@ -1,14 +1,34 @@
+/*
+	Copyright 2015 TeamWin
+	This file is part of TWRP/TeamWin Recovery Project.
+
+	TWRP is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	TWRP is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 // pages.hpp - Base classes for page manager of GUI
 
-#ifndef _PAGES_HEADER_HPP
-#define _PAGES_HEADER_HPP
+#ifndef _PAGES_HPP_HEADER
+#define _PAGES_HPP_HEADER
 
-#include "../minzip/Zip.h"
-#include <vector>
 #include <map>
 #include <string>
+#include <stdbool.h>
+#include <vector>
+
+#include "../minzip/Zip.h"
 #include "rapidxml.hpp"
-#include "gui.hpp"
+
 using namespace rapidxml;
 
 enum TOUCH_STATE {
@@ -38,11 +58,7 @@ extern std::vector<language_struct> Language_List;
 
 // Utility Functions
 int ConvertStrToColor(std::string str, COLOR* color);
-int gui_forceRender(void);
-int gui_changePage(std::string newPage);
-int gui_changeOverlay(std::string newPage);
 
-class Resource;
 class ResourceManager;
 class RenderObject;
 class ActionObject;
@@ -184,4 +200,4 @@ protected:
 	static std::string mStartPage;
 };
 
-#endif  // _PAGES_HEADER_HPP
+#endif  // _PAGES_HPP_HEADER

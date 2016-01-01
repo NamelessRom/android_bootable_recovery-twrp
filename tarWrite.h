@@ -19,10 +19,20 @@
 #ifndef _TARWRITE_HEADER
 #define _TARWRITE_HEADER
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "libtar/libtar.h"
+
 void reinit_libtar_buffer();
 void init_libtar_buffer(unsigned new_buff_size);
 void free_libtar_buffer();
 writefunc_t write_libtar_buffer(int fd, const void *buffer, size_t size);
 void flush_libtar_buffer(int fd);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif  // _TARWRITE_HEADER

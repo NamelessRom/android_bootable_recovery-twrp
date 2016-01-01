@@ -16,45 +16,43 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <algorithm>
+#include <dirent.h>
+#include <errno.h>
+#include <fstream>
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <string>
-#include <unistd.h>
-#include <vector>
-#include <dirent.h>
-#include <time.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <sys/mount.h>
-#include <sys/reboot.h>
-#include <sys/sendfile.h>
 #include <sys/stat.h>
-#include <sys/vfs.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <algorithm>
-#include "twrp-functions.hpp"
-#include "twcommon.h"
+#include <time.h>
+#include <unistd.h>
+#include <vector>
 #ifndef BUILD_TWRPTAR_MAIN
+#include <cutils/android_reboot.h>
+#include <cutils/properties.h>
+#endif
+
+#include "set_metadata.h"
+#include "twcommon.h"
+#include "twrp-functions.hpp"
+#ifndef BUILD_TWRPTAR_MAIN
+#include "bootloader.h"
 #include "data.hpp"
+#include "gui/console.h"
+#include "gui/twmsg.hpp"
 #include "partitions.hpp"
 #include "variables.h"
-#include "bootloader.h"
-#include "cutils/properties.h"
-#include "cutils/android_reboot.h"
-#include "gui/gui.hpp"
-#include <sys/reboot.h>
-#endif // ndef BUILD_TWRPTAR_MAIN
+#endif
 #ifndef TW_EXCLUDE_ENCRYPTED_BACKUPS
-	#include "openaes/inc/oaes_lib.h"
+#include "openaes/inc/oaes_lib.h"
 #endif
 
 extern "C" {
 	#include "libcrecovery/common.h"
-	#include "set_metadata.h"
 }
 
 /* Execute a command */

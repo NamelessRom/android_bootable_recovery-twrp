@@ -17,7 +17,7 @@
 #ifndef __FUSE_SIDELOAD_H
 #define __FUSE_SIDELOAD_H
 
-#include <sys/cdefs.h>
+#include <stdint.h>
 
 __BEGIN_DECLS
 

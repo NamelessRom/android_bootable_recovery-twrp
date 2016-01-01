@@ -16,17 +16,14 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _PAGES_HEADER
-#define _PAGES_HEADER
+#include <stdio.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include "../twcommon.h"
+#include "rapidxml.hpp"
 
-void gui_notifyVarChange(const char *name, const char* value);
-
-#ifdef __cplusplus
+void rapidxml::parse_error_handler(const char *what, void *where)
+{
+	fprintf(stderr, "Parser error: %s\n", what);
+	fprintf(stderr, "  Start of string: %s\n",(char *) where);
+	LOGERR("Error parsing XML file.\n");
 }
-#endif
-
-#endif  // _PAGES_HEADER

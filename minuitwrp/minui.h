@@ -19,6 +19,12 @@
 
 #include "../gui/placement.h"
 
+#ifdef __cplusplus
+#include <stddef.h>
+
+extern "C" {
+#endif
+
 typedef void* gr_surface;
 typedef unsigned short gr_pixel;
 
@@ -92,5 +98,9 @@ void ev_dispatch(void);
 int ev_get_input(int fd, short revents, struct input_event *ev);
 
 int vibrate(int timeout_ms);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

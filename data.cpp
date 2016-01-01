@@ -16,41 +16,37 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <linux/input.h>
+#include <ctype.h>
+#include <cutils/properties.h>
+#include <errno.h>
+#include <fstream>
+#include <map>
 #include <pthread.h>
-#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <fcntl.h>
+#include <string>
 #include <sys/stat.h>
 #include <sys/time.h>
-#include <sys/mman.h>
 #include <sys/types.h>
-#include <sys/ioctl.h>
 #include <time.h>
 #include <unistd.h>
-#include <stdlib.h>
-#include <ctype.h>
-
-#include <string>
 #include <utility>
-#include <map>
-#include <fstream>
-#include <sstream>
-#include <pthread.h>
 
-#include "variables.h"
 #include "data.hpp"
+#include "find_file.hpp"
+#include "gui/console.h"
+#include "gui/pages.h"
+#include "gui/twmsg.hpp"
+#include "minuitwrp/minui.h"
 #include "partitions.hpp"
+#include "set_metadata.h"
+#include "twcommon.h"
 #include "twrp-functions.hpp"
+#include "variables.h"
 #ifndef TW_NO_SCREEN_TIMEOUT
 #include "gui/blanktimer.hpp"
 #endif
-#include "find_file.hpp"
-#include "set_metadata.h"
-#include <cutils/properties.h>
-#include "gui/gui.hpp"
 
 #define DEVID_MAX 64
 #define HWID_MAX 32
@@ -58,14 +54,6 @@
 #ifndef TW_MAX_BRIGHTNESS
 #define TW_MAX_BRIGHTNESS 255
 #endif
-
-extern "C"
-{
-	#include "twcommon.h"
-	#include "gui/pages.h"
-	#include "minuitwrp/minui.h"
-	void gui_notifyVarChange(const char *name, const char* value);
-}
 
 #define FILE_VERSION 0x00010010
 

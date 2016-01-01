@@ -16,19 +16,19 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <string.h>
-#include <sys/stat.h>
-#include <dirent.h>
+#include <algorithm>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdio.h>
+#include <string>
+#include <vector>
 
-extern "C" {
-#include "../twcommon.h"
-#include "../minuitwrp/minui.h"
-}
-
-#include "rapidxml.hpp"
-#include "objects.hpp"
 #include "../data.hpp"
 #include "../partitions.hpp"
+#include "../twcommon.h"
+#include "objects.hpp"
+#include "rapidxml.hpp"
+#include "resources.hpp"
 
 GUIPartitionList::GUIPartitionList(xml_node<>* node) : GUIScrollList(node)
 {

@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2014 TeamWin - bigbiff and Dees_Troy mtp database conversion to C++
  * Copyright (C) 2010 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,32 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Copyright (C) 2014 TeamWin - bigbiff and Dees_Troy mtp database conversion to C++
  */
 
+#include <cutils/properties.h>
+#include <dirent.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <linux/usb/f_mtp.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/types.h>
 #include <sys/ioctl.h>
 #include <sys/stat.h>
-#include <fcntl.h>
-#include <errno.h>
 #include <sys/stat.h>
-#include <dirent.h>
-#include "../twcommon.h"
-#include "../set_metadata.h"
-#include <cutils/properties.h>
+#include <sys/types.h>
 
-#include "MtpTypes.h"
-#include "MtpDebug.h"
+#include "../set_metadata.h"
+#include "../twcommon.h"
 #include "MtpDatabase.h"
+#include "MtpDebug.h"
 #include "MtpObjectInfo.h"
 #include "MtpProperty.h"
 #include "MtpServer.h"
 #include "MtpStorage.h"
 #include "MtpStringBuffer.h"
-
-#include <linux/usb/f_mtp.h>
+#include "MtpTypes.h"
 
 static const MtpOperationCode kSupportedOperationCodes[] = {
 	MTP_OPERATION_GET_DEVICE_INFO,

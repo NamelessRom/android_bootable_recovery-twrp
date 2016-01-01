@@ -17,39 +17,37 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-extern "C" {
-	#include "libtar/libtar.h"
-	#include "twrpTar.h"
-	#include "tarWrite.h"
-	#include "set_metadata.h"
-}
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/wait.h>
-#include <string.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <vector>
 #include <csignal>
 #include <dirent.h>
-#include <libgen.h>
-#include <sys/mman.h>
-#include "twrpTar.hpp"
+#include <errno.h>
+#include <fcntl.h>
+#include <limits.h>
+#include <pthread.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <string>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <vector>
+
+#include "gui/console.h"
+#include "gui/twmsg.hpp"
+#include "set_metadata.h"
+#include "tarWrite.h"
 #include "twcommon.h"
-#include "variables.h"
 #include "twrp-functions.hpp"
+#include "twrpDU.hpp"
+#include "twrpTar.h"
+#include "twrpTar.hpp"
+#include "variables.h"
 #ifndef BUILD_TWRPTAR_MAIN
 #include "data.hpp"
+#include "gui/gui.h"
 #include "infomanager.hpp"
-#include "gui/gui.hpp"
-extern "C" {
-	#include "set_metadata.h"
-}
-#endif //ndef BUILD_TWRPTAR_MAIN
+#endif
 
 using namespace std;
 

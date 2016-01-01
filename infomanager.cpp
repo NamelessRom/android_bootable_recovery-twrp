@@ -16,30 +16,18 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <linux/input.h>
-#include <pthread.h>
-#include <stdarg.h>
+#include <fstream>
+#include <map>
+#include <sstream>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <sys/mman.h>
-#include <sys/types.h>
-#include <sys/ioctl.h>
-#include <unistd.h>
-#include <stdlib.h>
-
 #include <string>
 #include <utility>
-#include <map>
-#include <fstream>
-#include <sstream>
 
 #include "infomanager.hpp"
-#include "twcommon.h"
 #include "partitions.hpp"
 #include "set_metadata.h"
+#include "twcommon.h"
 
 using namespace std;
 

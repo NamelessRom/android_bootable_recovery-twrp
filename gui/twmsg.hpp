@@ -16,15 +16,12 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef twmsg_h
-#define twmsg_h
+#ifndef _TWMSG_HEADER
+#define _TWMSG_HEADER
 
-#include <cstdlib>
-#include <cstring>
-#include <string>
 #include <sstream>
+#include <string>
 #include <vector>
-#include <errno.h>
 
 /*
 Abstract interface for something that can look up strings by name.
@@ -94,4 +91,4 @@ public:
 Message Msg(const char* name);
 Message Msg(msg::Kind kind, const char* name);
 
-#endif
+#endif // _TWMSG_HEADER

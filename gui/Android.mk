@@ -4,30 +4,31 @@ include $(CLEAR_VARS)
 LOCAL_CFLAGS := -fno-strict-aliasing
 
 LOCAL_SRC_FILES := \
-    gui.cpp \
-    resources.cpp \
-    pages.cpp \
-    text.cpp \
-    image.cpp \
     action.cpp \
-    console.cpp \
-    fill.cpp \
+    animation.cpp \
+    blanktimer.cpp \
     button.cpp \
     checkbox.cpp \
+    console.cpp \
     fileselector.cpp \
-    progressbar.cpp \
-    animation.cpp \
+    fill.cpp \
+    gui.cpp \
+    image.cpp \
+    input.cpp \
+    keyboard.cpp \
+    listbox.cpp \
+    mousecursor.cpp \
     object.cpp \
+    pages.cpp \
+    partitionlist.cpp \
+    patternpassword.cpp \
+    progressbar.cpp \
+    rapidxml.cpp \
+    resources.cpp \
+    scrolllist.cpp \
     slider.cpp \
     slidervalue.cpp \
-    listbox.cpp \
-    keyboard.cpp \
-    input.cpp \
-    blanktimer.cpp \
-    partitionlist.cpp \
-    mousecursor.cpp \
-    scrolllist.cpp \
-    patternpassword.cpp \
+    text.cpp \
     textbox.cpp \
     twmsg.cpp
 
@@ -37,7 +38,13 @@ else
     LOCAL_SRC_FILES += hardwarekeyboard.cpp
 endif
 
-LOCAL_SHARED_LIBRARIES += libminuitwrp libc libstdc++ libminzip libaosprecovery
+LOCAL_SHARED_LIBRARIES += \
+    libaosprecovery \
+    libc \
+    libminuitwrp \
+    libminzip \
+    libstdc++
+
 LOCAL_MODULE := libguitwrp
 
 #TWRP_EVENT_LOGGING := true
@@ -71,7 +78,10 @@ ifneq ($(TW_REDUCED_GRAPHICS), true)
     LOCAL_CFLAGS += -DINCLUDE_JPEG_GRAPHICS
 endif
 
-LOCAL_C_INCLUDES += bionic system/core/libpixelflinger/include
+LOCAL_C_INCLUDES += \
+    system/core/include \
+    system/core/libpixelflinger/include
+
 LOCAL_CFLAGS += -DTWRES=\"$(TWRES_PATH)\"
 
 include $(BUILD_STATIC_LIBRARY)
@@ -171,7 +181,6 @@ endif
 	ln -sf pigz $(TARGET_RECOVERY_ROOT_OUT)/sbin/gzip
 	ln -sf pigz $(TARGET_RECOVERY_ROOT_OUT)/sbin/gunzip
 	ln -sf pigz $(TARGET_RECOVERY_ROOT_OUT)/sbin/unpigz
-
 
 LOCAL_GENERATED_SOURCES := $(TWRP_RES_GEN)
 LOCAL_SRC_FILES := twrp $(TWRP_RES_GEN)

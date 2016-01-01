@@ -16,31 +16,17 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <fcntl.h>
-#include <sys/reboot.h>
-#include <sys/stat.h>
-#include <sys/time.h>
-#include <sys/mman.h>
-#include <sys/types.h>
-#include <sys/ioctl.h>
-#include <time.h>
-#include <unistd.h>
-#include <stdlib.h>
+#include <stddef.h>
+
 #include "../data.hpp"
-
-#include <string>
-
-extern "C" {
-#include "../twcommon.h"
 #include "../minuitwrp/minui.h"
-}
-
-#include "rapidxml.hpp"
+#include "../twcommon.h"
 #include "objects.hpp"
+#include "pages.hpp"
+#include "placement.h"
+#include "rapidxml.hpp"
+#include "resources.hpp"
+#include "stdbool.h"
 
 GUIButton::GUIButton(xml_node<>* node)
 	: GUIObject(node)

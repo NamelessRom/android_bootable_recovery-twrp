@@ -16,17 +16,18 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <string.h>
+#include <algorithm>
+#include <stdbool.h>
+#include <stddef.h>
+#include <string>
+#include <vector>
 
-extern "C" {
-#include "../twcommon.h"
-#include "../minuitwrp/minui.h"
-}
-
-#include "rapidxml.hpp"
-#include "objects.hpp"
 #include "../data.hpp"
+#include "gui.h"
+#include "objects.hpp"
 #include "pages.hpp"
+#include "rapidxml.hpp"
+#include "resources.hpp"
 
 extern std::vector<language_struct> Language_List;
 

@@ -51,14 +51,11 @@ LOCAL_CFLAGS += -DRECOVERY_API_VERSION=$(RECOVERY_API_VERSION)
 LOCAL_CFLAGS += -Wno-unused-parameter
 
 LOCAL_C_INCLUDES += \
-    $(LOCAL_PATH)/libmincrypt/includes \
     $(LOCAL_PATH)/libtar \
-    bionic \
     external/libselinux/include \
-    external/openssl/include \
     system/core/adb \
-    system/extras/ext4_utils \
-    system/vold
+    system/core/include \
+    system/extras/ext4_utils
 
 LOCAL_STATIC_LIBRARIES := libguitwrp
 LOCAL_SHARED_LIBRARIES := \

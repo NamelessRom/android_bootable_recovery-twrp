@@ -16,20 +16,22 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <algorithm>
+#include <dirent.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <string>
 #include <string.h>
 #include <sys/stat.h>
-#include <dirent.h>
-#include <algorithm>
+#include <vector>
 
-extern "C" {
-#include "../twcommon.h"
-#include "../minuitwrp/minui.h"
-}
-
-#include "rapidxml.hpp"
-#include "objects.hpp"
 #include "../data.hpp"
+#include "../twcommon.h"
 #include "../twrp-functions.hpp"
+#include "objects.hpp"
+#include "rapidxml.hpp"
+#include "resources.hpp"
 
 #define TW_FILESELECTOR_UP_A_LEVEL "(Up A Level)"
 

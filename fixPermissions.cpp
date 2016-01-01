@@ -16,26 +16,26 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <string>
-#include <vector>
-#include <stdio.h>
-#include <libgen.h>
-#include <unistd.h>
-#include <sys/stat.h>
+#include <algorithm>
 #include <dirent.h>
-#include <errno.h>
-#include "gui/rapidxml.hpp"
+#include <fstream>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+#include <string>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <vector>
+
 #include "fixPermissions.hpp"
-#include "twrp-functions.hpp"
+#include "gui/console.h"
+#include "gui/rapidxml.hpp"
 #include "twcommon.h"
+#include "twrp-functions.hpp"
 #ifdef HAVE_SELINUX
-#include "selinux/selinux.h"
-#include "selinux/label.h"
 #include "selinux/android.h"
 #include "selinux/label.h"
+#include "selinux/selinux.h"
 #endif
 
 #define kMode_0600 0600 // S_IRUSR | S_IWUSR

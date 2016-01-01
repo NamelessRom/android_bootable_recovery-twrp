@@ -16,16 +16,21 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <string.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <algorithm>
+#include <string>
+#include <stdbool.h>
+#include <vector>
 
-extern "C" {
-#include "../twcommon.h"
-#include "../minuitwrp/minui.h"
-}
-
-#include "rapidxml.hpp"
-#include "objects.hpp"
 #include "../data.hpp"
+#include "../minuitwrp/minui.h"
+#include "gui.h"
+#include "objects.hpp"
+#include "pages.hpp"
+#include "placement.h"
+#include "rapidxml.hpp"
+#include "resources.hpp"
 
 #define SCROLLING_SPEED_DECREMENT 0.9f // friction
 #define SCROLLING_FLOOR 2 // minimum pixels for scrolling to stop

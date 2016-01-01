@@ -1,33 +1,29 @@
 /*
-        Copyright 2012 bigbiff/Dees_Troy TeamWin
-        This file is part of TWRP/TeamWin Recovery Project.
+	Copyright 2012 bigbiff/Dees_Troy TeamWin
+	This file is part of TWRP/TeamWin Recovery Project.
 
-        TWRP is free software: you can redistribute it and/or modify
-        it under the terms of the GNU General Public License as published by
-        the Free Software Foundation, either version 3 of the License, or
-        (at your option) any later version.
+	TWRP is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
 
-        TWRP is distributed in the hope that it will be useful,
-        but WITHOUT ANY WARRANTY; without even the implied warranty of
-        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        GNU General Public License for more details.
+	TWRP is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-        You should have received a copy of the GNU General Public License
-        along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
+	You should have received a copy of the GNU General Public License
+	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-extern "C" {
-	#include "libtar/libtar.h"
-}
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <string.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <fstream>
+#ifndef _TWRPTAR_HPP_HEADER
+#define _TWRPTAR_HPP_HEADER
+
 #include <string>
+#include <sys/types.h>
 #include <vector>
-#include "twrpDU.hpp"
+
+#include "libtar/libtar.h"
 
 using namespace std;
 
@@ -100,3 +96,5 @@ private:
 	std::vector<TarListStruct> *ItemList;
 	unsigned thread_id;
 };
+
+#endif // _TWRPTAR_HPP_HEADER

@@ -16,11 +16,11 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <fcntl.h>
+#include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include "libtar/libtar.h"
+
 #include "twcommon.h"
 
 int flush = 0, eot_count = -1;

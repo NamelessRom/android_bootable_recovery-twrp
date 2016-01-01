@@ -1,35 +1,37 @@
 /*
-        Copyright 2012 bigbiff/Dees_Troy TeamWin
-        This file is part of TWRP/TeamWin Recovery Project.
+	Copyright 2012 bigbiff/Dees_Troy TeamWin
+	This file is part of TWRP/TeamWin Recovery Project.
 
-        TWRP is free software: you can redistribute it and/or modify
-        it under the terms of the GNU General Public License as published by
-        the Free Software Foundation, either version 3 of the License, or
-        (at your option) any later version.
+	TWRP is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
 
-        TWRP is distributed in the hope that it will be useful,
-        but WITHOUT ANY WARRANTY; without even the implied warranty of
-        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        GNU General Public License for more details.
+	TWRP is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-        You should have received a copy of the GNU General Public License
-        along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
+	You should have received a copy of the GNU General Public License
+	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../data.hpp"
-
 #include <string>
+#include <vector>
 
-extern "C" {
-#include "../twcommon.h"
+#include "../data.hpp"
 #include "../minuitwrp/minui.h"
+#include "../twcommon.h"
 #include "gui.h"
-}
-
-#include "rapidxml.hpp"
 #include "objects.hpp"
+#include "pages.hpp"
+#include "placement.h"
+#include "rapidxml.hpp"
+#include "resources.hpp"
 
 GUIKeyboard::GUIKeyboard(xml_node<>* node)
 	: GUIObject(node)

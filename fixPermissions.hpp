@@ -1,16 +1,27 @@
-#include <iostream>
-#include <fstream>
-#include <sstream>
+/*
+	Copyright 2015 TeamWin
+	This file is part of TWRP/TeamWin Recovery Project.
+
+	TWRP is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	TWRP is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#ifndef _FIXPERMISSIONS_HPP_HEADER
+#define _FIXPERMISSIONS_HPP_HEADER
+
 #include <string>
-#include <vector>
-#include <string.h>
-#include <libgen.h>
-#include <unistd.h>
 #include <sys/stat.h>
-#include <dirent.h>
-#include <errno.h>
-#include "gui/rapidxml.hpp"
-#include "twrp-functions.hpp"
+#include <vector>
 
 using namespace std;
 
@@ -52,3 +63,5 @@ class fixPermissions {
 		bool remove_data;
 		package* head;
 };
+
+#endif // _FIXPERMISSIONS_HPP_HEADER

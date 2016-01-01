@@ -30,20 +30,13 @@
 
 #include <pixelflinger/pixelflinger.h>
 
+#include <math.h>
 #include <png.h>
 #ifdef INCLUDE_JPEG_GRAPHICS
 #include "jpeglib.h"
 #endif
 
 #include "minui.h"
-
-// libpng gives "undefined reference to 'pow'" errors, and I have no
-// idea how to convince the build system to link with -lm.  We don't
-// need this functionality (it's used for gamma adjustment) so provide
-// a dummy implementation to satisfy the linker.
-double pow(double x, double y) {
-    return x;
-}
 
 #define SURFACE_DATA_ALIGNMENT 8
 

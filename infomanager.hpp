@@ -19,9 +19,8 @@
 #ifndef _INFOMANAGER_HPP_HEADER
 #define _INFOMANAGER_HPP_HEADER
 
-#include <string>
-#include <utility>
 #include <map>
+#include <string>
 
 using namespace std;
 
@@ -54,5 +53,4 @@ private:
 
 };
 
-#endif // _DATAMANAGER_HPP_HEADER
-
+#endif // _INFOMANAGER_HPP_HEADER

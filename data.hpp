@@ -16,13 +16,13 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DATAMANAGER_HPP_HEADER
-#define _DATAMANAGER_HPP_HEADER
+#ifndef _DATA_HPP_HEADER
+#define _DATA_HPP_HEADER
 
-#include <string>
-#include <utility>
 #include <map>
 #include <pthread.h>
+#include <string>
+#include <utility>
 
 using namespace std;
 
@@ -83,5 +83,4 @@ private:
 	static pthread_mutex_t m_valuesLock;
 };
 
-#endif // _DATAMANAGER_HPP_HEADER
-
+#endif // _DATA_HPP_HEADER

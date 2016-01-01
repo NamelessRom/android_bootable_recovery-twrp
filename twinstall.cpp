@@ -16,35 +16,28 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <ctype.h>
 #include <errno.h>
 #include <fcntl.h>
-#include <limits.h>
-#include <sys/stat.h>
-#include <sys/wait.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <string>
+#include <string.h>
 #include <unistd.h>
 
-#include <string.h>
-#include <stdio.h>
-
-#include "twcommon.h"
-#include "mincrypt/rsa.h"
-#include "mincrypt/sha.h"
-#include "mtdutils/mounts.h"
-#include "mtdutils/mtdutils.h"
+#include "data.hpp"
+#include "gui/console.h"
+#include "gui/twmsg.hpp"
+#include "legacy_property_service.h"
 #include "minzip/SysUtil.h"
 #include "minzip/Zip.h"
-#include "verifier.h"
-#include "variables.h"
-#include "data.hpp"
-#include "partitions.hpp"
-#include "twrpDigest.hpp"
+#include "twcommon.h"
+#include "twinstall.h"
 #include "twrp-functions.hpp"
-#include "gui/gui.hpp"
-extern "C" {
-	#include "gui/gui.h"
-	#include "legacy_property_service.h"
-}
+#include "twrpDigest.hpp"
+#include "variables.h"
+#include "verifier.h"
 
 static const char* properties_path = "/dev/__properties__";
 static const char* properties_path_renamed = "/dev/__properties_kk__";

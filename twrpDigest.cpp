@@ -16,31 +16,24 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-extern "C"
-{
-	#include "digest/md5.h"
-	#include "libcrecovery/common.h"
-}
-
-#include <vector>
-#include <string>
-#include <sstream>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/wait.h>
-#include <string.h>
-#include <libgen.h>
 #include <errno.h>
-#include <fcntl.h>
 #include <fstream>
-#include <sys/mman.h>
+#include <libgen.h>
+#include <stddef.h>
+#include <stdio.h>
+#include <string.h>
+#include <string>
+#include <vector>
+
+#include "gui/console.h"
+#include "set_metadata.h"
 #include "twcommon.h"
-#include "data.hpp"
-#include "variables.h"
 #include "twrp-functions.hpp"
 #include "twrpDigest.hpp"
-#include "set_metadata.h"
-#include "gui/gui.hpp"
+
+extern "C" {
+	#include "digest/md5.h"
+}
 
 using namespace std;
 

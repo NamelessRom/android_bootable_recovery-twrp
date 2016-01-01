@@ -1,50 +1,36 @@
 /*
-        Copyright 2012 bigbiff/Dees_Troy TeamWin
-        This file is part of TWRP/TeamWin Recovery Project.
+	Copyright 2012 bigbiff/Dees_Troy TeamWin
+	This file is part of TWRP/TeamWin Recovery Project.
 
-        TWRP is free software: you can redistribute it and/or modify
-        it under the terms of the GNU General Public License as published by
-        the Free Software Foundation, either version 3 of the License, or
-        (at your option) any later version.
+	TWRP is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
 
-        TWRP is distributed in the hope that it will be useful,
-        but WITHOUT ANY WARRANTY; without even the implied warranty of
-        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        GNU General Public License for more details.
+	TWRP is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-        You should have received a copy of the GNU General Public License
-        along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
+	You should have received a copy of the GNU General Public License
+	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 // input.cpp - GUIInput object
 
 #include <linux/input.h>
-#include <pthread.h>
-#include <stdarg.h>
-#include <stdio.h>
+#include <stdbool.h>
 #include <stdlib.h>
-#include <string.h>
-#include <fcntl.h>
-#include <sys/reboot.h>
-#include <sys/stat.h>
-#include <sys/time.h>
-#include <sys/mman.h>
-#include <sys/types.h>
-#include <sys/ioctl.h>
-#include <time.h>
-#include <unistd.h>
-#include <stdlib.h>
-
 #include <string>
 
-extern "C" {
-#include "../twcommon.h"
-#include "../minuitwrp/minui.h"
-}
-
-#include "rapidxml.hpp"
-#include "objects.hpp"
 #include "../data.hpp"
+#include "../minuitwrp/minui.h"
+#include "../twcommon.h"
+#include "gui.h"
+#include "objects.hpp"
+#include "pages.hpp"
+#include "rapidxml.hpp"
+#include "resources.hpp"
 
 GUIInput::GUIInput(xml_node<>* node)
 	: GUIObject(node)

@@ -16,37 +16,29 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <cutils/properties.h>
+#include <errno.h>
+#include <fstream>
+#include <stddef.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
-#include <sys/vfs.h>
+#include <sys/wait.h>
 #include <unistd.h>
 #include <vector>
-#include <dirent.h>
-#include <time.h>
-#include <errno.h>
-#include <iostream>
-#include <fstream>
-#include <sys/types.h>
-#include <sys/wait.h>
 
-#include "twrp-functions.hpp"
-#include "partitions.hpp"
-#include "twcommon.h"
-#include "openrecoveryscript.hpp"
-#include "variables.h"
 #include "adb_install.h"
 #include "data.hpp"
-#include "adb_install.h"
 #include "fuse_sideload.h"
-#include "gui/gui.hpp"
-extern "C" {
-	#include "twinstall.h"
-	#include "gui/gui.h"
-	#include "cutils/properties.h"
-	int TWinstall_zip(const char* path, int* wipe_cache);
-}
+#include "gui/console.h"
+#include "gui/gui.h"
+#include "gui/twmsg.hpp"
+#include "openrecoveryscript.hpp"
+#include "partitions.hpp"
+#include "twcommon.h"
+#include "twinstall.h"
+#include "twrp-functions.hpp"
+#include "variables.h"
 
 OpenRecoveryScript::VoidFunction OpenRecoveryScript::call_after_cli_command;
 

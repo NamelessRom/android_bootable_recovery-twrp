@@ -27,9 +27,7 @@
 #include <stdio.h>
 #include <string.h>
 
-
 #include "../common.h"
-
 #include "minui.h"
 
 //#define _EVENT_LOGGING

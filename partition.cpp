@@ -16,53 +16,60 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <dirent.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <stddef.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <string>
+#include <sys/ioctl.h>
+#include <sys/mount.h>
 #include <sys/stat.h>
-#include <sys/vfs.h>
+#include <sys/statfs.h>
 #include <unistd.h>
-#include <dirent.h>
-#include <iostream>
-#include <sstream>
-
+#include <vector>
 #ifdef TW_INCLUDE_CRYPTO
-	#include "cutils/properties.h"
+	#include <cutils/properties.h>
+#endif
+#ifdef HAVE_SELINUX
+	#include <selinux/label.h>
+	#include <selinux/selinux.h>
+#endif
+#ifdef HAVE_CAPABILITIES
+	#include <linux/xattr.h>
+	#include <sys/capability.h>
+	#include <sys/xattr.h>
 #endif
 
-#include "libblkid/include/blkid.h"
-#include "variables.h"
-#include "twcommon.h"
-#include "partitions.hpp"
 #include "data.hpp"
+#include "gui/console.h"
+#include "gui/gui.h"
+#include "gui/twmsg.hpp"
+#include "infomanager.hpp"
+#include "libblkid/include/blkid.h"
+#include "partitions.hpp"
+#include "set_metadata.h"
+#include "twcommon.h"
 #include "twrp-functions.hpp"
 #include "twrpDigest.hpp"
+#include "twrpDU.hpp"
 #include "twrpTar.hpp"
-#include "fixPermissions.hpp"
-#include "infomanager.hpp"
-#include "set_metadata.h"
-#include "gui/gui.hpp"
+#include "variables.h"
+
 extern "C" {
 	#include "mtdutils/mtdutils.h"
-	#include "mtdutils/mounts.h"
 #ifdef USE_EXT4
-	#include "make_ext4fs.h"
+	#include <make_ext4fs.h>
 #endif
-
 #ifdef TW_INCLUDE_CRYPTO
 	#include "crypto/lollipop/cryptfs.h"
 #else
 	#define CRYPT_FOOTER_OFFSET 0x4000
 #endif
 }
-#ifdef HAVE_SELINUX
-#include "selinux/selinux.h"
-#include <selinux/label.h>
-#endif
-#ifdef HAVE_CAPABILITIES
-#include <sys/capability.h>
-#include <sys/xattr.h>
-#include <linux/xattr.h>
-#endif
 
 using namespace std;
 

@@ -16,41 +16,40 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/stat.h>
-#include <sys/vfs.h>
-#include <unistd.h>
+#include <cutils/properties.h>
 #include <dirent.h>
-#include <time.h>
 #include <errno.h>
-#include <fcntl.h>
-#include <iostream>
-#include <iomanip>
+#include <stdint.h>
+#include <stdio.h>
+#include <string.h>
+#include <string>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <sys/wait.h>
-#include "variables.h"
-#include "twcommon.h"
-#include "partitions.hpp"
-#include "data.hpp"
-#include "twrp-functions.hpp"
-#include "fixPermissions.hpp"
-#include "twrpDigest.hpp"
-#include "set_metadata.h"
-#include "gui/gui.hpp"
+#include <time.h>
+#include <unistd.h>
+#include <vector>
 
+#include "data.hpp"
+#include "fixPermissions.hpp"
+#include "gui/console.h"
+#include "gui/gui.h"
+#include "gui/twmsg.hpp"
+#include "partitions.hpp"
+#include "set_metadata.h"
+#include "tw_atomic.hpp"
+#include "twcommon.h"
+#include "twrp-functions.hpp"
+#include "twrpDigest.hpp"
+#include "twrpDU.hpp"
+#include "variables.h"
 #ifdef TW_HAS_MTP
 #include "mtp/mtp_MtpServer.hpp"
-#include "mtp/twrpMtp.hpp"
 #include "mtp/MtpMessage.hpp"
+#include "mtp/twrpMtp.hpp"
 #endif
-
-extern "C" {
-	#include "cutils/properties.h"
-	#include "gui/gui.h"
-}
-
 #ifdef TW_INCLUDE_CRYPTO
-	#include "crypto/lollipop/cryptfs.h"
+#include "crypto/lollipop/cryptfs.h"
 #endif
 
 extern bool datamedia;

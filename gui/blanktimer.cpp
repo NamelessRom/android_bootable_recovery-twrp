@@ -1,36 +1,36 @@
 /*
-        Copyright 2012 bigbiff/Dees_Troy TeamWin
-        This file is part of TWRP/TeamWin Recovery Project.
+	Copyright 2012 bigbiff/Dees_Troy TeamWin
+	This file is part of TWRP/TeamWin Recovery Project.
 
-        TWRP is free software: you can redistribute it and/or modify
-        it under the terms of the GNU General Public License as published by
-        the Free Software Foundation, either version 3 of the License, or
-        (at your option) any later version.
+	TWRP is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
 
-        TWRP is distributed in the hope that it will be useful,
-        but WITHOUT ANY WARRANTY; without even the implied warranty of
-        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        GNU General Public License for more details.
+	TWRP is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-        You should have received a copy of the GNU General Public License
-        along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
+	You should have received a copy of the GNU General Public License
+	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-using namespace std;
-#include <string>
 #include <pthread.h>
+#include <string>
 #include <sys/time.h>
 #include <time.h>
-#include <unistd.h>
-#include "pages.hpp"
-#include "blanktimer.hpp"
-#include "../data.hpp"
-extern "C" {
+
 #include "../minuitwrp/minui.h"
+#include "../data.hpp"
 #include "../twcommon.h"
-}
 #include "../twrp-functions.hpp"
-#include "../variables.h"
+#include "blanktimer.hpp"
+#include "gui.h"
+#include "pages.hpp"
+#include "stdbool.h"
+
+using namespace std;
 
 blanktimer::blanktimer(void) {
 	pthread_mutex_init(&mutex, NULL);

@@ -13,45 +13,41 @@
 		along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <cutils/properties.h>
+#include <signal.h>
+#include <stdbool.h>
 #include <stdio.h>
-#include <stdlib.h>
+#include <string.h>
 #include <string>
 #include <sys/stat.h>
-#include <sys/types.h>
 #include <time.h>
 #include <unistd.h>
-#include <signal.h>
-#include "gui/twmsg.h"
-
-#include "cutils/properties.h"
-extern "C" {
-#include "bootloader.h"
-}
-
 #ifdef ANDROID_RB_RESTART
-#include "cutils/android_reboot.h"
+#include <cutils/android_reboot.h>
 #else
 #include <sys/reboot.h>
 #endif
+#ifdef HAVE_SELINUX
+#include <selinux/label.h>
+#endif
 
-extern "C" {
+#include "adb.h"
+#include "bootloader.h"
+#include "data.hpp"
+#include "gui/console.h"
 #include "gui/gui.h"
-#include "set_metadata.h"
-}
-#include "gui/gui.hpp"
-#include "gui/pages.hpp"
 #include "gui/objects.hpp"
+#include "gui/pages.hpp"
+#include "gui/twmsg.hpp"
+#include "openrecoveryscript.hpp"
+#include "partitions.hpp"
+#include "set_metadata.h"
 #include "twcommon.h"
 #include "twrp-functions.hpp"
-#include "data.hpp"
-#include "partitions.hpp"
-#include "openrecoveryscript.hpp"
-#include "variables.h"
 #include "twrpDU.hpp"
-#include "adb.h"
+#include "variables.h"
 
 #ifdef HAVE_SELINUX
-#include "selinux/label.h"
 struct selabel_handle *selinux_handle;
 #endif
 

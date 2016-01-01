@@ -19,31 +19,21 @@
 // console.cpp - GUIConsole object
 
 #include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <stdbool.h>
+#include <stddef.h>
 #include <string.h>
-#include <fcntl.h>
-#include <sys/reboot.h>
-#include <sys/stat.h>
-#include <sys/time.h>
-#include <sys/mman.h>
-#include <sys/types.h>
-#include <sys/ioctl.h>
-#include <time.h>
-#include <unistd.h>
-#include <stdlib.h>
-
 #include <string>
+#include <vector>
 
-extern "C" {
-#include "../twcommon.h"
 #include "../minuitwrp/minui.h"
-}
-
-#include "rapidxml.hpp"
+#include "console.h"
 #include "objects.hpp"
-#include "gui.hpp"
-#include "twmsg.h"
+#include "pages.hpp"
+#include "placement.h"
+#include "rapidxml.hpp"
+#include "resources.hpp"
+#include "stdarg.h"
+#include "twmsg.hpp"
 
 #define GUI_CONSOLE_BUFFER_SIZE 512
 

@@ -18,36 +18,34 @@
 
 // pages.cpp - Source to manage GUI base objects
 
-#include <stdarg.h>
+#include <dirent.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <stdbool.h>
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <fcntl.h>
-#include <sys/reboot.h>
 #include <sys/stat.h>
-#include <sys/time.h>
-#include <sys/mman.h>
-#include <sys/types.h>
-#include <sys/ioctl.h>
-#include <time.h>
 #include <unistd.h>
-#include <stdlib.h>
-#include "../twrp-functions.hpp"
-#include "../partitions.hpp"
+#include <utility>
+#include <utime.h>
 
-#include <string>
-
-extern "C" {
-#include "../twcommon.h"
+#include "../data.hpp"
 #include "../minuitwrp/minui.h"
 #include "../minzip/SysUtil.h"
 #include "../minzip/Zip.h"
-#include "gui.h"
-}
-
-#include "rapidxml.hpp"
-#include "objects.hpp"
+#include "../partitions.hpp"
+#include "../twcommon.h"
+#include "../twrp-functions.hpp"
 #include "blanktimer.hpp"
+#include "gui.h"
+#include "objects.hpp"
+#include "pages.h"
+#include "pages.hpp"
+#include "placement.h"
+#include "rapidxml.hpp"
+#include "resources.hpp"
 
 extern int gGuiRunning;
 

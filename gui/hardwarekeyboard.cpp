@@ -1,26 +1,29 @@
+/*
+	Copyright 2015 TeamWin
+	This file is part of TWRP/TeamWin Recovery Project.
+
+	TWRP is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	TWRP is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 // hardwarekeyboard.cpp - HardwareKeyboard object
 
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <sys/time.h>
-#include <sys/mman.h>
-#include <sys/types.h>
-#include <time.h>
-#include <unistd.h>
-#include <stdlib.h>
-
-#include <string>
-
-extern "C" {
-#include "../common.h"
-}
+#include <linux/input.h>
+#include <set>
+#include <stdbool.h>
 
 #include "objects.hpp"
-#include <linux/input.h>
+#include "pages.hpp"
 
 HardwareKeyboard::HardwareKeyboard()
  : mLastKeyChar(0)

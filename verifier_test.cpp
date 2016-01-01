@@ -23,9 +23,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-/*
 #include "common.h"
-*/
 #include "verifier.h"
 #include "ui.h"
 #include "mincrypt/sha.h"

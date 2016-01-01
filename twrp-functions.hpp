@@ -19,7 +19,10 @@
 #ifndef _TWRPFUNCTIONS_HPP
 #define _TWRPFUNCTIONS_HPP
 
+#include <stdint.h>
 #include <string>
+#include <sys/types.h>
+#include <time.h>
 #include <vector>
 
 using namespace std;

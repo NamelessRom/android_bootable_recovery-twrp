@@ -1,25 +1,41 @@
+/*
+	Copyright 2015 TeamWin
+	This file is part of TWRP/TeamWin Recovery Project.
+
+	TWRP is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	TWRP is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 // resource.cpp - Source to manage GUI resources
 
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-
-#include <string>
-#include <sstream>
-#include <iostream>
+#include <fcntl.h>
 #include <iomanip>
+#include <sstream>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <string>
+#include <unistd.h>
+#include <utility>
 
-#include "../minzip/Zip.h"
-extern "C" {
-#include "../twcommon.h"
 #include "../minuitwrp/minui.h"
+#include "../minzip/Zip.h"
+#include "../twcommon.h"
+#include "console.h"
 #include "gui.h"
-}
-
+#include "pages.hpp"
 #include "rapidxml.hpp"
-#include "objects.hpp"
+#include "resources.hpp"
 
 #define TMP_RESOURCE_NAME   "/tmp/extract.bin"
 
@@ -365,7 +381,7 @@ void ResourceManager::LoadResources(xml_node<>* resList, ZipArchive* pZip, std::
 		else if (type == "fontoverride")
 		{
 			if (mFonts.size() != 0 && child && child->first_attribute("name")) {
-				string FontName = child->first_attribute("name")->value();
+				std::string FontName = child->first_attribute("name")->value();
 				size_t font_count = mFonts.size(), i;
 				bool found = false;
 

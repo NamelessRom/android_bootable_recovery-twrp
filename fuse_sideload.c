@@ -46,7 +46,6 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <limits.h>
-#include "fuse.h"
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -61,6 +60,7 @@
 #include <sys/uio.h>
 #include <unistd.h>
 
+#include "fuse.h"
 #include "mincrypt/sha256.h"
 #include "fuse_sideload.h"
 

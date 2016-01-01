@@ -1,18 +1,37 @@
+/*
+	Copyright 2015 TeamWin
+	This file is part of TWRP/TeamWin Recovery Project.
+
+	TWRP is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	TWRP is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 // resources.hpp - Base classes for resource management of GUI
 
-#ifndef _RESOURCE_HEADER
-#define _RESOURCE_HEADER
+#ifndef _RESOURCES_HPP_HEADER
+#define _RESOURCES_HPP_HEADER
 
+#include <map>
+#include <stddef.h>
 #include <string>
 #include <vector>
-#include <map>
+
+#include "../minuitwrp/minui.h"
 #include "rapidxml.hpp"
 
-struct ZipArchive;
+using namespace rapidxml;
 
-extern "C" {
-#include "../minuitwrp/minui.h"
-}
+struct ZipArchive;
 
 // Base Objects
 class Resource
@@ -124,4 +143,4 @@ private:
 	std::map<std::string, string_resource_struct> mStrings;
 };
 
-#endif  // _RESOURCE_HEADER
+#endif  // _RESOURCES_HPP_HEADER

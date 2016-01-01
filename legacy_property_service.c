@@ -14,26 +14,16 @@
  * limitations under the License.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <ctype.h>
+#include <cutils/properties.h>
 #include <fcntl.h>
-#include <stdarg.h>
-#include <dirent.h>
-#include <limits.h>
-#include <errno.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <string.h>
+#include <sys/mman.h>
+#include <unistd.h>
 
 #include "../../bionic/libc/private/bionic_futex.h"
-
-#include <cutils/properties.h>
-
 #include "legacy_properties.h"
-
-#include <sys/mman.h>
-// Not available in 5.0
-//#include <sys/atomics.h>
 #include "legacy_property_service.h"
 
 static int persistent_properties_loaded = 0;

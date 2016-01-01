@@ -18,23 +18,25 @@
 
 // objects.hpp - Base classes for object manager of GUI
 
-#ifndef _OBJECTS_HEADER
-#define _OBJECTS_HEADER
+#ifndef _OBJECTS_HPP_HEADER
+#define _OBJECTS_HPP_HEADER
 
-#include "rapidxml.hpp"
-#include <vector>
-#include <string>
 #include <map>
 #include <set>
+#include <stdbool.h>
+#include <stddef.h>
+#include <string>
+#include <sys/types.h>
 #include <time.h>
+#include <vector>
+
+#include "../minuitwrp/minui.h"
+#include "../partitions.hpp"
+#include "pages.hpp"
+#include "placement.h"
+#include "rapidxml.hpp"
 
 using namespace rapidxml;
-
-#include "../data.hpp"
-#include "resources.hpp"
-#include "pages.hpp"
-#include "../partitions.hpp"
-#include "placement.h"
 
 #ifndef TW_X_OFFSET
 #define TW_X_OFFSET 0
@@ -51,6 +53,10 @@ struct translate_later_struct {
 	std::string text;          // Final, translated, formatted text
 	bool inline_format;        // Indicates if the final text includes an inlined format variable
 };
+
+class AnimationResource;
+class FontResource;
+class ImageResource;
 
 class RenderObject
 {
@@ -1182,8 +1188,6 @@ COLOR LoadAttrColor(xml_node<>* element, const char* attrname, COLOR defaultvalu
 FontResource* LoadAttrFont(xml_node<>* element, const char* attrname);
 ImageResource* LoadAttrImage(xml_node<>* element, const char* attrname);
 AnimationResource* LoadAttrAnimation(xml_node<>* element, const char* attrname);
-
 bool LoadPlacement(xml_node<>* node, int* x, int* y, int* w = NULL, int* h = NULL, Placement* placement = NULL);
 
-#endif  // _OBJECTS_HEADER
-
+#endif // _OBJECTS_HPP_HEADER

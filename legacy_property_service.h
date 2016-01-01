@@ -14,12 +14,18 @@
  * limitations under the License.
  */
 
-#ifndef _LEGACY_PROPERTY_H
-#define _LEGACY_PROPERTY_H
+#ifndef _LEGACY_PROPERTY_SERVICE_H
+#define _LEGACY_PROPERTY_SERVICE_H
 
-#include <stdbool.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 void legacy_get_property_workspace(int *fd, int *sz);
 int legacy_properties_init();
 
-#endif	/* _LEGACY_PROPERTY_H */
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* _LEGACY_PROPERTY_SERVICE_H */
