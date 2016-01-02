@@ -41,7 +41,6 @@
 #include "blanktimer.hpp"
 #include "gui.h"
 #include "objects.hpp"
-#include "pages.h"
 #include "pages.hpp"
 #include "placement.h"
 #include "rapidxml.hpp"
@@ -1667,16 +1666,16 @@ int PageManager::NotifyVarChange(std::string varName, std::string value)
 	return (mCurrentSet ? mCurrentSet->NotifyVarChange(varName, value) : -1);
 }
 
-void PageManager::AddStringResource(std::string resource_source, std::string resource_name, std::string value)
-{
-	if (mCurrentSet)
-		mCurrentSet->AddStringResource(resource_source, resource_name, value);
-}
-
-extern "C" void gui_notifyVarChange(const char *name, const char* value)
+void PageManager::NotifyVarChangeSafe(const std::string varName, const std::string value)
 {
 	if (!gGuiRunning)
 		return;
 
-	PageManager::NotifyVarChange(name, value);
+	PageManager::NotifyVarChange(varName, value);
+}
+
+void PageManager::AddStringResource(std::string resource_source, std::string resource_name, std::string value)
+{
+	if (mCurrentSet)
+		mCurrentSet->AddStringResource(resource_source, resource_name, value);
 }

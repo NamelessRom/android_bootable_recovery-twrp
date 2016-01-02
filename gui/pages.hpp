@@ -174,6 +174,7 @@ public:
 	static int NotifyKeyboard(int key);
 	static int SetKeyBoardFocus(int inFocus);
 	static int NotifyVarChange(std::string varName, std::string value);
+	void NotifyVarChangeSafe(const std::string varName, const std::string value);
 
 	static MouseCursor *GetMouseCursor();
 	static void LoadCursorData(xml_node<>* node);

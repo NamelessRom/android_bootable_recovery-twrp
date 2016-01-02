@@ -36,7 +36,7 @@
 #include "data.hpp"
 #include "find_file.hpp"
 #include "gui/console.h"
-#include "gui/pages.h"
+#include "gui/pages.hpp"
 #include "gui/twmsg.hpp"
 #include "minuitwrp/minui.h"
 #include "partitions.hpp"
@@ -458,6 +458,8 @@ int DataManager::GetIntValue(const string varName)
 
 int DataManager::SetValue(const string varName, string value, int persist /* = 0 */)
 {
+	PageManager pm;
+
 	if (!mInitialized)
 		SetDefaultValues();
 
@@ -500,7 +502,8 @@ int DataManager::SetValue(const string varName, string value, int persist /* = 0
 	if (varName == "tw_storage_path") {
 		SetBackupFolder();
 	}
-	gui_notifyVarChange(varName.c_str(), value.c_str());
+	pm.NotifyVarChangeSafe(varName, value);
+
 	return 0;
 }
 
