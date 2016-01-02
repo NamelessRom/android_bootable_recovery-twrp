@@ -634,11 +634,11 @@ void DataManager::SetDefaultValues()
 		mValues.insert(make_pair("tw_storage_path", make_pair("/", 1)));
 
 #ifdef TW_FORCE_CPUINFO_FOR_DEVICE_ID
-	printf("TW_FORCE_CPUINFO_FOR_DEVICE_ID := true\n");
+	LOGINFO("TW_FORCE_CPUINFO_FOR_DEVICE_ID := true\n");
 #endif
 
 #ifdef BOARD_HAS_NO_REAL_SDCARD
-	printf("BOARD_HAS_NO_REAL_SDCARD := true\n");
+	LOGINFO("BOARD_HAS_NO_REAL_SDCARD := true\n");
 	mConstValues.insert(make_pair(TW_ALLOW_PARTITION_SDCARD, "0"));
 #else
 	mConstValues.insert(make_pair(TW_ALLOW_PARTITION_SDCARD, "1"));
@@ -656,20 +656,20 @@ void DataManager::SetDefaultValues()
 
 	mConstValues.insert(make_pair(TW_REBOOT_SYSTEM, "1"));
 #ifdef TW_NO_REBOOT_RECOVERY
-	printf("TW_NO_REBOOT_RECOVERY := true\n");
+	LOGINFO("TW_NO_REBOOT_RECOVERY := true\n");
 	mConstValues.insert(make_pair(TW_REBOOT_RECOVERY, "0"));
 #else
 	mConstValues.insert(make_pair(TW_REBOOT_RECOVERY, "1"));
 #endif
 	mConstValues.insert(make_pair(TW_REBOOT_POWEROFF, "1"));
 #ifdef TW_NO_REBOOT_BOOTLOADER
-	printf("TW_NO_REBOOT_BOOTLOADER := true\n");
+	LOGINFO("TW_NO_REBOOT_BOOTLOADER := true\n");
 	mConstValues.insert(make_pair(TW_REBOOT_BOOTLOADER, "0"));
 #else
 	mConstValues.insert(make_pair(TW_REBOOT_BOOTLOADER, "1"));
 #endif
 #ifdef RECOVERY_SDCARD_ON_DATA
-	printf("RECOVERY_SDCARD_ON_DATA := true\n");
+	LOGINFO("RECOVERY_SDCARD_ON_DATA := true\n");
 	mConstValues.insert(make_pair(TW_HAS_DATA_MEDIA, "1"));
 	mConstValues.insert(make_pair("tw_has_internal", "1"));
 	datamedia = true;
@@ -678,13 +678,13 @@ void DataManager::SetDefaultValues()
 	mValues.insert(make_pair("tw_has_internal", make_pair("0", 0)));
 #endif
 #ifdef TW_NO_BATT_PERCENT
-	printf("TW_NO_BATT_PERCENT := true\n");
+	LOGINFO("TW_NO_BATT_PERCENT := true\n");
 	mConstValues.insert(make_pair(TW_NO_BATTERY_PERCENT, "1"));
 #else
 	mConstValues.insert(make_pair(TW_NO_BATTERY_PERCENT, "0"));
 #endif
 #ifdef TW_NO_CPU_TEMP
-	printf("TW_NO_CPU_TEMP := true\n");
+	LOGINFO("TW_NO_CPU_TEMP := true\n");
 	mConstValues.insert(make_pair("tw_no_cpu_temp", "1"));
 #else
 	string cpu_temp_file;
@@ -701,23 +701,23 @@ void DataManager::SetDefaultValues()
 	}
 #endif
 #ifdef TW_CUSTOM_POWER_BUTTON
-	printf("TW_POWER_BUTTON := %s\n", EXPAND(TW_CUSTOM_POWER_BUTTON));
+	LOGINFO("TW_POWER_BUTTON := %s\n", EXPAND(TW_CUSTOM_POWER_BUTTON));
 	mConstValues.insert(make_pair(TW_POWER_BUTTON, EXPAND(TW_CUSTOM_POWER_BUTTON)));
 #else
 	mConstValues.insert(make_pair(TW_POWER_BUTTON, "0"));
 #endif
 #ifdef TW_ALWAYS_RMRF
-	printf("TW_ALWAYS_RMRF := true\n");
+	LOGINFO("TW_ALWAYS_RMRF := true\n");
 	mConstValues.insert(make_pair(TW_RM_RF_VAR, "1"));
 #endif
 #ifdef TW_NEVER_UNMOUNT_SYSTEM
-	printf("TW_NEVER_UNMOUNT_SYSTEM := true\n");
+	LOGINFO("TW_NEVER_UNMOUNT_SYSTEM := true\n");
 	mConstValues.insert(make_pair(TW_DONT_UNMOUNT_SYSTEM, "1"));
 #else
 	mConstValues.insert(make_pair(TW_DONT_UNMOUNT_SYSTEM, "0"));
 #endif
 #ifdef TW_NO_USB_STORAGE
-	printf("TW_NO_USB_STORAGE := true\n");
+	LOGINFO("TW_NO_USB_STORAGE := true\n");
 	mConstValues.insert(make_pair(TW_HAS_USB_STORAGE, "0"));
 #else
 	char lun_file[255];
@@ -736,7 +736,7 @@ void DataManager::SetDefaultValues()
 	}
 #endif
 #ifdef TW_INCLUDE_INJECTTWRP
-	printf("TW_INCLUDE_INJECTTWRP := true\n");
+	LOGINFO("TW_INCLUDE_INJECTTWRP := true\n");
 	mConstValues.insert(make_pair(TW_HAS_INJECTTWRP, "1"));
 	mValues.insert(make_pair(TW_INJECT_AFTER_ZIP, make_pair("1", 1)));
 #else
@@ -744,15 +744,15 @@ void DataManager::SetDefaultValues()
 	mValues.insert(make_pair(TW_INJECT_AFTER_ZIP, make_pair("0", 1)));
 #endif
 #ifdef TW_HAS_DOWNLOAD_MODE
-	printf("TW_HAS_DOWNLOAD_MODE := true\n");
+	LOGINFO("TW_HAS_DOWNLOAD_MODE := true\n");
 	mConstValues.insert(make_pair(TW_DOWNLOAD_MODE, "1"));
 #endif
 #ifdef TW_INCLUDE_CRYPTO
 	mConstValues.insert(make_pair(TW_HAS_CRYPTO, "1"));
-	printf("TW_INCLUDE_CRYPTO := true\n");
+	LOGINFO("TW_INCLUDE_CRYPTO := true\n");
 #endif
 #ifdef TW_SDEXT_NO_EXT4
-	printf("TW_SDEXT_NO_EXT4 := true\n");
+	LOGINFO("TW_SDEXT_NO_EXT4 := true\n");
 	mConstValues.insert(make_pair(TW_SDEXT_DISABLE_EXT4, "1"));
 #else
 	mConstValues.insert(make_pair(TW_SDEXT_DISABLE_EXT4, "0"));

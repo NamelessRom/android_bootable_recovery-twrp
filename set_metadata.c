@@ -25,10 +25,12 @@
  * operations like backups, copying the log, and MTP operations.
  */
 
-#include <sys/stat.h>
 #include <stdio.h>
+#include <sys/stat.h>
 #include <unistd.h>
+
 #include "selinux/selinux.h"
+#include "twcommon.h"
 
 static security_context_t selinux_context;
 struct stat s;
@@ -36,10 +38,10 @@ static int has_stat = 0;
 
 int tw_get_context(const char* filename) {
 	if (lgetfilecon(filename, &selinux_context) >= 0) {
-		printf("tw_get_context got selinux context: %s\n", selinux_context);
+		LOGINFO("tw_get_context got selinux context '%s' for file '%s'\n", selinux_context, filename);
 		return 0;
 	} else {
-		printf("tw_get_context failed to get selinux context\n");
+		LOGINFO("tw_get_context failed to get selinux context of '%s'\n", filename);
 		selinux_context = NULL;
 	}
 	return -1;
@@ -50,7 +52,7 @@ int tw_get_stat(const char* filename) {
 		has_stat = 1;
 		return 0;
 	}
-	printf("tw_get_stat failed to lstat '%s'\n", filename);
+	LOGINFO("tw_get_stat failed to lstat '%s'\n", filename);
 	return -1;
 }
 
@@ -68,22 +70,22 @@ int tw_set_default_metadata(const char* filename) {
 	struct stat st;
 
 	if (selinux_context == NULL) {
-		//printf("selinux_context was null, '%s'\n", filename);
+		//LOGINFO("selinux_context of '%s' was null\n", filename);
 		ret = -1;
 	} else if (lsetfilecon(filename, selinux_context) < 0) {
-		//printf("Failed to set default contexts on '%s'.\n", filename);
+		//LOGINFO("Failed to set default contexts on '%s'\n", filename);
 		ret = -1;
 	}
 
 	if (lstat(filename, &st) == 0 && st.st_mode & S_IFREG && chmod(filename, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH) < 0) {
-		//printf("Failed to chmod '%s'\n", filename);
+		//LOGINFO("Failed to chmod '%s'\n", filename);
 		ret = -1;
 	}
 
 	if (has_stat && chown(filename, s.st_uid, s.st_gid) < 0) {
-		//printf("Failed to lchown '%s'.\n", filename);
+		//LOGINFO("Failed to chown '%s'\n", filename);
 		ret = -1;
 	}
-	//printf("Done trying to set defaults on '%s'\n");
+	//LOGINFO("Done trying to set defaults on '%s'\n", filename);
 	return ret;
 }
