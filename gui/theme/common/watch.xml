@@ -2408,7 +2408,7 @@
 				<condition var1="tw_cancel_backup" var2="1"/>
 				<actions>
 					<action function="set">tw_back=backup_selectpartitions</action>
-					<action function="set">tw_complete_text1={@backup_cancel=Backup Cancelled}</action>
+					<action function="set">tw_complete_text1={@backup_cancel=Backup Canceled}</action>
 					<action function="set">tw_show_reboot=1</action>
 					<action function="page">action_complete</action>
 				</actions>

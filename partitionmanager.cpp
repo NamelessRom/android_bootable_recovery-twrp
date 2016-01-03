@@ -665,7 +665,7 @@ int TWPartitionManager::Cancel_Backup() {
 		while (kill(tar_fork_pid, 0) == 0) {
 			usleep(1000);
 		}
-		LOGINFO("Backup_Run stopped and returning false, backup cancelled.\n");
+		LOGINFO("Backup_Run stopped and returning false, backup canceled.\n");
 		LOGINFO("Removing directory %s\n", Full_Backup_Path.c_str());
 		TWFunc::removeDir(Full_Backup_Path, false);
 		tar_fork_pid = 0;
@@ -962,7 +962,7 @@ int TWPartitionManager::Run_Restore(string Restore_Name) {
 	Update_System_Details();
 	UnMount_Main_Partitions();
 	time(&rStop);
-	gui_msg(Msg(msg::kHighlight, "restore_complete=[RESTORE COMPLETED IN {1} SECONDS]")((int)difftime(rStop,rStart)));
+	gui_msg(Msg(msg::kHighlight, "restore_completed=[RESTORE COMPLETED IN {1} SECONDS]")((int)difftime(rStop,rStart)));
 	DataManager::SetValue("tw_file_progress", "");
 	return true;
 }
@@ -1480,7 +1480,7 @@ int TWPartitionManager::Decrypt_Device(string Password) {
 			dat->Decrypted_Block_Device = crypto_blkdev;
 			dat->Setup_File_System(false);
 			dat->Current_File_System = dat->Fstab_File_System; // Needed if we're ignoring blkid because encrypted devices start out as emmc
-			gui_msg(Msg("decrypt_success=Data successfully decrypted, new block device: '{1}'")(crypto_blkdev));
+			gui_msg(Msg("decrypt_success_dev=Data successfully decrypted, new block device: '{1}'")(crypto_blkdev));
 
 			// Sleep for a bit so that the device will be ready
 			sleep(1);

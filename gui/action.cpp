@@ -339,7 +339,7 @@ void GUIAction::simulate_progress_bar(void)
 	{
 		if (PartitionManager.stop_backup.get_value()) {
 			DataManager::SetValue("tw_cancel_backup", 1);
-			gui_msg("backup_cancel=Backup Canceled.");
+			gui_msg("backup_cancel=Backup Canceled");
 			DataManager::SetValue("ui_progress", 0);
 			PartitionManager.stop_backup.set_value(0);
 			return;
@@ -1171,7 +1171,7 @@ int GUIAction::nandroid(std::string arg)
 		}
 		else {
 			DataManager::SetValue("tw_cancel_backup", 1);
-			gui_msg("backup_cancel=Backup Canceled.");
+			gui_msg("backup_cancel=Backup Canceled");
 			ret = 0;
 		}
 		operation_end(ret);
@@ -1466,7 +1466,7 @@ int GUIAction::adbsideloadcancel(std::string arg __unused)
 {
 	struct stat st;
 	DataManager::SetValue("tw_has_cancel", 0); // Remove cancel button from gui
-	gui_msg("cancel_sideload=Cancelling ADB sideload...");
+	gui_msg("cancel_sideload=Canceling ADB sideload...");
 	LOGINFO("Signaling child sideload process to exit.\n");
 	// Calling stat() on this magic filename signals the minadbd
 	// subprocess to shut down.
