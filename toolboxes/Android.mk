@@ -15,13 +15,15 @@
 #
 
 # Hierarchy:
-# 1) toybox
-# 2) busybox (if !TW_USE_TOOLBOX)
-# 3) toolbox
+# 1) toybox (if TW_USE_TOYBOX)
+# 2) busybox (if !TW_USE_TOYBOX)
+# 3) toolbox (always included; provides start, stop, restart for services)
 
 #####################
 ##      toybox     ##
 #####################
+
+ifeq ($(TW_USE_TOYBOX), true)
 
 LOCAL_PATH := external/toybox
 
@@ -56,11 +58,13 @@ TOYBOX_INSTLIST := $(HOST_OUT_EXECUTABLES)/toybox-instlist
 
 include $(BUILD_EXECUTABLE)
 
+endif
+
 #####################
 ##     busybox     ##
 #####################
 
-ifneq ($(TW_USE_TOOLBOX),true)
+ifneq ($(TW_USE_TOYBOX), true)
 
 BUSYBOX_LINKS := $(shell cat external/busybox/busybox-full.links)
 
@@ -70,17 +74,7 @@ BUSYBOX_LINKS := $(shell cat external/busybox/busybox-full.links)
 #  dosfstools provides equivalents of mkdosfs mkfs.vfat
 BUSYBOX_EXCLUDE := tune2fs mke2fs mkdosfs mkfs.vfat gzip gunzip
 
-# Override:
-#  mount is needed for TWRP's old-school fstab
-#  tar from toybox is not entirely reliable
-BUSYBOX_OVERRIDE := mount tar
-
 BUSYBOX_TOOLS := $(filter-out $(BUSYBOX_EXCLUDE), $(notdir $(BUSYBOX_LINKS)))
-
-else
-
-BUSYBOX_TOOLS :=
-BUSYBOX_OVERRIDE :=
 
 endif
 
@@ -121,16 +115,26 @@ TOOLBOX_TOOLS := \
 
 include $(CLEAR_VARS)
 
+ifeq ($(TW_USE_TOYBOX), true)
+
 utility_symlinks: $(TOYBOX_INSTLIST)
 utility_symlinks: TOYBOX_TOOLS=$(shell $(TOYBOX_INSTLIST))
-utility_symlinks: BUSYBOX_TOOLS_INSTALLED=$(filter-out $(TOYBOX_TOOLS), $(BUSYBOX_TOOLS))
-utility_symlinks: BUSYBOX_TOOLS_INSTALLED+=$(BUSYBOX_OVERRIDE)
-utility_symlinks: TOOLBOX_TOOLS_INSTALLED=$(filter-out $(TOYBOX_TOOLS) $(BUSYBOX_TOOLS_INSTALLED), $(BSD_TOOLS) $(TOOLBOX_TOOLS))
+utility_symlinks: TOOLBOX_TOOLS_INSTALLED=$(filter-out $(TOYBOX_TOOLS), $(BSD_TOOLS) $(TOOLBOX_TOOLS))
 utility_symlinks:
 	@mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/sbin
 	@echo -e ${CL_CYN}"Generate toybox links:"${CL_RST} $(TOYBOX_TOOLS)
 	$(hide) $(foreach t,$(TOYBOX_TOOLS),ln -sf toybox $(TARGET_RECOVERY_ROOT_OUT)/sbin/$(t);)
-	@echo -e ${CL_CYN}"Generate busybox links:"${CL_RST} $(BUSYBOX_TOOLS_INSTALLED)
-	$(hide) $(foreach t,$(BUSYBOX_TOOLS_INSTALLED),ln -sf busybox $(TARGET_RECOVERY_ROOT_OUT)/sbin/$(t);)
 	@echo -e ${CL_CYN}"Generate toolbox links:"${CL_RST} $(TOOLBOX_TOOLS_INSTALLED)
 	$(hide) $(foreach t,$(TOOLBOX_TOOLS_INSTALLED),ln -sf toolbox $(TARGET_RECOVERY_ROOT_OUT)/sbin/$(t);)
+
+else
+
+utility_symlinks: TOOLBOX_TOOLS_INSTALLED=$(filter-out $(BUSYBOX_TOOLS), $(BSD_TOOLS) $(TOOLBOX_TOOLS))
+utility_symlinks:
+	@mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/sbin
+	@echo -e ${CL_CYN}"Generate busybox links:"${CL_RST} $(BUSYBOX_TOOLS)
+	$(hide) $(foreach t,$(BUSYBOX_TOOLS),ln -sf busybox $(TARGET_RECOVERY_ROOT_OUT)/sbin/$(t);)
+	@echo -e ${CL_CYN}"Generate toolbox links:"${CL_RST} $(TOOLBOX_TOOLS_INSTALLED)
+	$(hide) $(foreach t,$(TOOLBOX_TOOLS_INSTALLED),ln -sf toolbox $(TARGET_RECOVERY_ROOT_OUT)/sbin/$(t);)
+
+endif

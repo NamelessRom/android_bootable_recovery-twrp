@@ -79,7 +79,7 @@ LOCAL_SHARED_LIBRARIES := \
 ifeq ($(TW_OEM_BUILD),true)
     LOCAL_CFLAGS += -DTW_OEM_BUILD
     BOARD_HAS_NO_REAL_SDCARD := true
-    TW_USE_TOOLBOX := true
+    TW_USE_TOYBOX := true
     TW_EXCLUDE_MTP := true
 endif
 
@@ -256,11 +256,12 @@ LOCAL_ADDITIONAL_DEPENDENCIES := \
     pigz \
     teamwin \
     toolbox \
-    toybox_recovery \
     twrp \
     utility_symlinks
 
-ifneq ($(TW_USE_TOOLBOX),true)
+ifeq ($(TW_USE_TOYBOX), true)
+    LOCAL_ADDITIONAL_DEPENDENCIES += sh toybox_recovery unzip
+else
     LOCAL_ADDITIONAL_DEPENDENCIES += busyboxtwrp
 endif
 ifneq ($(TARGET_ARCH), arm64)
