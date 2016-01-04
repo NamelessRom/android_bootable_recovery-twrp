@@ -53,7 +53,6 @@ LOCAL_CFLAGS := \
 LOCAL_CXX_STL := none
 LOCAL_CLANG := true
 
-LOCAL_ADDITIONAL_DEPENDENCY := toybox-instlist
 TOYBOX_INSTLIST := $(HOST_OUT_EXECUTABLES)/toybox-instlist
 
 include $(BUILD_EXECUTABLE)
@@ -109,6 +108,21 @@ TOOLBOX_TOOLS := \
     uptime \
     watchprops
 
+###########################
+##     micro.toolbox     ##
+###########################
+
+# Provides getprop, setprop when toybox is not available
+# These tools originated in toolbox, but were removed when toybox took responsibility
+
+ifneq ($(TW_USE_TOYBOX), true)
+
+LOCAL_PATH:= $(call my-dir)
+
+MTOOLBOX_LINKS := $(shell cat $(LOCAL_PATH)/mt/micro.toolbox-links)
+
+endif
+
 ##############################
 ##     utility symlinks     ##
 ##############################
@@ -130,11 +144,14 @@ utility_symlinks:
 else
 
 utility_symlinks: TOOLBOX_TOOLS_INSTALLED=$(filter-out $(BUSYBOX_TOOLS), $(BSD_TOOLS) $(TOOLBOX_TOOLS))
+utility_symlinks: MTOOLBOX_TOOLS_INSTALLED=$(filter-out $(BUSYBOX_TOOLS) $(TOOLBOX_TOOLS_INSTALLED), $(MTOOLBOX_LINKS))
 utility_symlinks:
 	@mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/sbin
 	@echo -e ${CL_CYN}"Generate busybox links:"${CL_RST} $(BUSYBOX_TOOLS)
 	$(hide) $(foreach t,$(BUSYBOX_TOOLS),ln -sf busybox $(TARGET_RECOVERY_ROOT_OUT)/sbin/$(t);)
 	@echo -e ${CL_CYN}"Generate toolbox links:"${CL_RST} $(TOOLBOX_TOOLS_INSTALLED)
 	$(hide) $(foreach t,$(TOOLBOX_TOOLS_INSTALLED),ln -sf toolbox $(TARGET_RECOVERY_ROOT_OUT)/sbin/$(t);)
+	@echo -e ${CL_CYN}"Generate micro.toolbox links:"${CL_RST} $(MTOOLBOX_TOOLS_INSTALLED)
+	$(hide) $(foreach t,$(MTOOLBOX_TOOLS_INSTALLED),ln -sf micro.toolbox $(TARGET_RECOVERY_ROOT_OUT)/sbin/$(t);)
 
 endif

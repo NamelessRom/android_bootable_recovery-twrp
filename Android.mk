@@ -262,7 +262,7 @@ LOCAL_ADDITIONAL_DEPENDENCIES := \
 ifeq ($(TW_USE_TOYBOX), true)
     LOCAL_ADDITIONAL_DEPENDENCIES += sh toybox_recovery unzip
 else
-    LOCAL_ADDITIONAL_DEPENDENCIES += busyboxtwrp
+    LOCAL_ADDITIONAL_DEPENDENCIES += busyboxtwrp micro.toolbox
 endif
 ifneq ($(TARGET_ARCH), arm64)
     ifneq ($(TARGET_ARCH), x86_64)
@@ -407,6 +407,7 @@ include $(commands_recovery_local_path)/injecttwrp/Android.mk \
     $(commands_recovery_local_path)/dosfstools/Android.mk \
     $(commands_recovery_local_path)/etc/Android.mk \
     $(commands_recovery_local_path)/toolboxes/Android.mk \
+    $(commands_recovery_local_path)/toolboxes/mt/Android.mk \
     $(commands_recovery_local_path)/busybox/Android.mk \
     $(commands_recovery_local_path)/libpixelflinger/Android.mk
 
