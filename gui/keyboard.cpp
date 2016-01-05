@@ -16,6 +16,7 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <linux/input.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,13 +34,15 @@
 #include "rapidxml.hpp"
 #include "resources.hpp"
 
+bool GUIKeyboard::CtrlActive = false;
+
 GUIKeyboard::GUIKeyboard(xml_node<>* node)
 	: GUIObject(node)
 {
 	int layoutindex, rowindex, keyindex, Xindex, Yindex, keyHeight = 0, keyWidth = 0;
 	currentKey = NULL;
 	highlightRenderCount = 0;
-	hasHighlight = hasCapsHighlight = false;
+	hasHighlight = hasCapsHighlight = hasCtrlHighlight = false;
 	char resource[10], layout[8], row[5], key[6], longpress[7];
 	xml_attribute<>* attr;
 	xml_node<>* child;
@@ -60,6 +63,7 @@ GUIKeyboard::GUIKeyboard(xml_node<>* node)
 
 	mHighlightColor = LoadAttrColor(FindNode(node, "highlight"), "color", &hasHighlight);
 	mCapsHighlightColor = LoadAttrColor(FindNode(node, "capshighlight"), "color", &hasCapsHighlight);
+	mCtrlHighlightColor = LoadAttrColor(FindNode(node, "ctrlhighlight"), "color", &hasCtrlHighlight);
 
 	child = FindNode(node, "keymargin");
 	mKeyMarginX = LoadAttrIntScaleX(child, "x", 0);
@@ -230,10 +234,11 @@ int GUIKeyboard::ParseKey(const char* keyinfo, Key& key, int& Xindex, int keyWid
 			keychar = *ptr;
 		} else if (*ptr == 'c') {  // This is an ASCII character code: "c:{number}"
 			keychar = atoi(ptr + 2);
+		} else if (*ptr == 'k') {  // This is a Linux keycode from input.h: "k:{number}"
+			keychar = -atoi(ptr + 2);
 		} else if (*ptr == 'l') {  // This is a different layout: "layout{number}"
-			keychar = KEYBOARD_LAYOUT;
 			key.layout = atoi(ptr + 6);
-		} else if (*ptr == 'a') {  // This is an action: "action"
+		} else if (*ptr == 'a') {  // This is an action: "action" (the Enter key)
 			keychar = KEYBOARD_ACTION;
 		} else
 			return -1;
@@ -275,8 +280,8 @@ void GUIKeyboard::LoadKeyLabels(xml_node<>* parent, int layout)
 
 void GUIKeyboard::DrawKey(Key& key, int keyX, int keyY, int keyW, int keyH)
 {
-	unsigned char keychar = key.key;
-	if (!keychar)
+	int keychar = key.key;
+	if (!keychar && !key.layout)
 		return;
 
 	// key background
@@ -293,7 +298,13 @@ void GUIKeyboard::DrawKey(Key& key, int keyX, int keyY, int keyW, int keyH)
 	string labelText;
 	ImageResource* labelImage = NULL;
 	if (keychar > 32 && keychar < 127) {
+		// TODO: this will eventually need UTF-8 support
 		labelText = (char) keychar;
+		if (CtrlActive) {
+			int ctrlchar = KeyCharToCtrlChar(keychar);
+			if (ctrlchar != keychar)
+				labelText = std::string("^") + (char)(ctrlchar + 64);
+		}
 		gr_color(mFontColor.red, mFontColor.green, mFontColor.blue, mFontColor.alpha);
 	}
 	else {
@@ -345,6 +356,15 @@ void GUIKeyboard::DrawKey(Key& key, int keyX, int keyY, int keyW, int keyH)
 	}
 }
 
+int GUIKeyboard::KeyCharToCtrlChar(int key)
+{
+	// convert upper and lower case to ctrl chars
+	// Ctrl+A to Ctrl+_ (we don't support entering null bytes)
+	if (key >= 65 && key <= 127 && key != 96)
+		return key & 0x1f;
+	return key; // pass on others (already ctrl chars, numbers, etc.) unchanged
+}
+
 int GUIKeyboard::Render(void)
 {
 	if (!isConditionTrue())
@@ -387,8 +407,14 @@ int GUIKeyboard::Render(void)
 				DrawKey(key, keyX, keyY, keyW, keyH);
 
 			// Draw highlight for capslock
-			if (hasCapsHighlight && lay.is_caps && CapsLockOn && (int)key.key == KEYBOARD_LAYOUT && key.layout == lay.revert_layout) {
+			if (hasCapsHighlight && lay.is_caps && CapsLockOn && key.layout > 0 && key.layout == lay.revert_layout) {
 				gr_color(mCapsHighlightColor.red, mCapsHighlightColor.green, mCapsHighlightColor.blue, mCapsHighlightColor.alpha);
+				gr_fill(keyX, keyY, keyW, keyH);
+			}
+
+			// Draw highlight for control
+			if (hasCtrlHighlight && key.key == -KEY_LEFTCTRL && CtrlActive) {
+				gr_color(mCtrlHighlightColor.red, mCtrlHighlightColor.green, mCtrlHighlightColor.blue, mCtrlHighlightColor.alpha);
 				gr_fill(keyX, keyY, keyW, keyH);
 			}
 
@@ -446,7 +472,7 @@ GUIKeyboard::Key* GUIKeyboard::HitTestKey(int x, int y)
 	int x1 = 0;
 	for (col = 0; col < MAX_KEYBOARD_KEYS; ++col) {
 		Key& key = lay.keys[row][col];
-		if (x1 <= relx && relx < key.end_x && key.key != 0) {
+		if (x1 <= relx && relx < key.end_x && (key.key != 0 || key.layout != 0)) {
 			// This is the key that was pressed!
 			return &key;
 		}
@@ -478,19 +504,20 @@ int GUIKeyboard::NotifyTouch(TOUCH_STATE state, int x, int y)
 		break;
 
 	case TOUCH_RELEASE:
+		// TODO: we might want to notify of key releases here
 		if (x < startX - (mRenderW * 0.5)) {
 			if (highlightRenderCount != 0) {
 				highlightRenderCount = 0;
 				mRendered = false;
 			}
-			PageManager::NotifyKeyboard(KEYBOARD_SWIPE_LEFT);
+			PageManager::NotifyCharInput(KEYBOARD_SWIPE_LEFT);
 			return 0;
 		} else if (x > startX + (mRenderW * 0.5)) {
 			if (highlightRenderCount != 0) {
 				highlightRenderCount = 0;
 				mRendered = false;
 			}
-			PageManager::NotifyKeyboard(KEYBOARD_SWIPE_RIGHT);
+			PageManager::NotifyCharInput(KEYBOARD_SWIPE_RIGHT);
 			return 0;
 		}
 		// fall through
@@ -522,10 +549,11 @@ int GUIKeyboard::NotifyTouch(TOUCH_STATE state, int x, int y)
 			return 0;
 		} else {
 			Key& key = *currentKey;
+			bool repeatKey = false;
 			Layout& lay = layouts[currentLayout - 1];
 			if (state == TOUCH_RELEASE && was_held == 0) {
 				DataManager::Vibrate("tw_keyboard_vibrate");
-				if ((int)key.key == KEYBOARD_LAYOUT) {
+				if (key.layout > 0) {
 					// Switch layouts
 					if (lay.is_caps && key.layout == lay.revert_layout && !CapsLockOn) {
 						CapsLockOn = true; // Set the caps lock
@@ -534,14 +562,30 @@ int GUIKeyboard::NotifyTouch(TOUCH_STATE state, int x, int y)
 						currentLayout = key.layout;
 					}
 					mRendered = false;
-				} else if ((int)key.key == KEYBOARD_ACTION) {
+				} else if (key.key == KEYBOARD_ACTION) {
 					// Action
 					highlightRenderCount = 0;
 					// Send action notification
-					PageManager::NotifyKeyboard(key.key);
-				} else if ((int)key.key < KEYBOARD_SPECIAL_KEYS && (int)key.key > 0) {
+					PageManager::NotifyCharInput(key.key);
+				} else if (key.key == -KEY_LEFTCTRL) {
+					CtrlActive = !CtrlActive; // toggle Control key state
+					mRendered = false; // render Ctrl key highlight
+				} else if (key.key != 0) {
 					// Regular key
-					PageManager::NotifyKeyboard(key.key);
+					if (key.key > 0) {
+						// ASCII code or character
+						int keycode = key.key;
+						if (CtrlActive) {
+							CtrlActive = false;
+							mRendered = false;
+							keycode = KeyCharToCtrlChar(key.key);
+						}
+						PageManager::NotifyCharInput(keycode);
+					} else {
+						// Linux key code
+						PageManager::NotifyKey(-key.key, true);
+						PageManager::NotifyKey(-key.key, false);
+					}
 					if (!CapsLockOn && lay.is_caps) {
 						// caps lock was not set, change layouts
 						currentLayout = lay.revert_layout;
@@ -550,19 +594,32 @@ int GUIKeyboard::NotifyTouch(TOUCH_STATE state, int x, int y)
 				}
 			} else if (state == TOUCH_HOLD) {
 				was_held = 1;
-				if ((int)key.key == KEYBOARD_BACKSPACE) {
-					// Repeat backspace
-					PageManager::NotifyKeyboard(key.key);
-				} else if ((int)key.longpresskey < KEYBOARD_SPECIAL_KEYS && (int)key.longpresskey > 0) {
+				if (key.longpresskey > 0) {
 					// Long Press Key
 					DataManager::Vibrate("tw_keyboard_vibrate");
-					PageManager::NotifyKeyboard(key.longpresskey);
+					PageManager::NotifyCharInput(key.longpresskey);
 				}
+				else
+					repeatKey = true;
 			} else if (state == TOUCH_REPEAT) {
 				was_held = 1;
-				if ((int)key.key == KEYBOARD_BACKSPACE) {
+				repeatKey = true;
+			}
+			if (repeatKey) {
+				if (key.key == KEYBOARD_BACKSPACE) {
 					// Repeat backspace
-					PageManager::NotifyKeyboard(key.key);
+					PageManager::NotifyCharInput(key.key);
+				}
+				switch (key.key)
+				{
+					// Repeat arrows
+					case -KEY_LEFT:
+					case -KEY_RIGHT:
+					case -KEY_UP:
+					case -KEY_DOWN:
+						PageManager::NotifyKey(-key.key, true);
+						PageManager::NotifyKey(-key.key, false);
+						break;
 				}
 			}
 		}
@@ -570,4 +627,10 @@ int GUIKeyboard::NotifyTouch(TOUCH_STATE state, int x, int y)
 	}
 
 	return 0;
+}
+
+void GUIKeyboard::SetPageFocus(int inFocus)
+{
+	if (inFocus)
+		CtrlActive = false;
 }
