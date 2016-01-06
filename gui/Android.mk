@@ -30,6 +30,7 @@ LOCAL_SRC_FILES := \
     slidervalue.cpp \
     text.cpp \
     textbox.cpp \
+    terminal.cpp \
     twmsg.cpp
 
 ifneq ($(TWRP_CUSTOM_KEYBOARD),)
