@@ -161,16 +161,14 @@ bool TWPartition::Process_Fstab_Line(string Line, bool Display_Error) {
 		if (index >= line_len)
 			continue;
 		ptr = full_line + index;
-		if (item_index == 0) {
-			// Mount point
+		if (item_index == 0) { // Mount point
 			Mount_Point = ptr;
 			Backup_Path = Mount_Point;
 			Storage_Path = Mount_Point;
 			item_index++;
-		} else if (item_index == 1) {
+		} else if (item_index == 1) { // Filesystem
 			Fstab_File_System = ptr;
 			Current_File_System = ptr;
-			// Primary Block Device
 			if (Fstab_File_System == "mtd" || Fstab_File_System == "yaffs2") {
 				MTD_Name = Primary_Block_Device;
 				Find_MTD_Block_Device(MTD_Name);
@@ -183,13 +181,16 @@ bool TWPartition::Process_Fstab_Line(string Line, bool Display_Error) {
 				Find_Real_Block_Device(Primary_Block_Device, Display_Error);
 			}
 			item_index++;
-		} else if (item_index == 2) {
+		} else if (item_index == 2) { // Mount flags/options
 			Mount_Options = ptr;
 			Process_FS_Flags(Mount_Options, Mount_Flags);
 			if (Mount_Point == "/system") // ro/rw /system is custom-handled by TWRP
 				Mount_Flags &= ~MS_RDONLY;
 			item_index++;
-		} else if (item_index > 2) {
+		} else if (item_index == 3) { // fs_mgr flags
+			Process_Fsmgr_Flags(ptr);
+			item_index++;
+		} else if (item_index > 3) { // twrp flags
 			if (strlen(ptr) > 5 && strncmp(ptr, "twrp=", 5) == 0) {
 				// Custom flags, save for later so that new values aren't overwritten by defaults
 				ptr += 5;
@@ -403,6 +404,34 @@ bool TWPartition::Process_FS_Flags(string& Options, int& Flags) {
 	}
 
 	return true;
+}
+
+void TWPartition::Process_Fsmgr_Flags(const char *str) {
+	int i, ptr_len;
+	char *ptr;
+	char flags[250];
+
+	strlcpy(flags, str, sizeof(flags));
+
+	ptr = strtok(flags, ",");
+	while (ptr) {
+		ptr_len = strlen(ptr);
+
+		for (i = 0; fs_mgr_flags[i].name; i++) {
+			if (strncmp(ptr, fs_mgr_flags[i].name, strlen(fs_mgr_flags[i].name)) == 0) {
+				if (fs_mgr_flags[i].flag == MF_CRYPT && ptr_len > 12) {
+					ptr += 12;
+					if (*ptr == '\"') ptr++;
+					if (ptr[strlen(ptr)-1] == '\"')
+						ptr[strlen(ptr)-1] = 0;
+
+					Crypto_Key_Location = ptr;
+				}
+				break;
+			}
+		}
+		ptr = strtok(NULL, ",");
+	}
 }
 
 bool TWPartition::Process_Flags(string Flags, bool Display_Error) {

@@ -61,6 +61,16 @@ const struct flag_list mount_flags[] = {
 	{ 0,            0 },
 };
 
+// We support a very small subset of fs_mgr flags
+// See system/core/fs_mgr/fs_mgr_fstab.c for the full list
+#define MF_CRYPT        0x4
+
+const struct flag_list fs_mgr_flags[] = {
+	{ "encryptable=", MF_CRYPT },
+	{ "defaults",     0 },
+	{ 0,              0 },
+};
+
 // Partition class
 class TWPartition
 {
@@ -120,6 +130,7 @@ private:
 
 	bool Process_Flags(string Flags, bool Display_Error);                     // Process custom fstab flags
 	bool Process_FS_Flags(string& Options, int& Flags);                       // Process standard fstab fs flags
+	void Process_Fsmgr_Flags(const char *str);                                // Process a select few fs_mgr flags
 	bool Is_File_System(string File_System);                                  // Checks to see if the file system given is considered a file system
 	bool Is_Image(string File_System);                                        // Checks to see if the file system given is considered an image
 	void Setup_File_System(bool Display_Error);                               // Sets defaults for a file system partition
