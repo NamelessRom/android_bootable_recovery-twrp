@@ -65,7 +65,9 @@ endif
 
 ifneq ($(TW_USE_TOYBOX), true)
 
-BUSYBOX_LINKS := $(shell cat external/busybox/busybox-full.links)
+LOCAL_PATH := $(call my-dir)
+
+BUSYBOX_LINKS := $(shell cat $(LOCAL_PATH)/../busybox/busybox-full.links)
 
 # Exclusions:
 #  fstools provides tune2fs and mke2fs
@@ -117,7 +119,7 @@ TOOLBOX_TOOLS := \
 
 ifneq ($(TW_USE_TOYBOX), true)
 
-LOCAL_PATH:= $(call my-dir)
+LOCAL_PATH := $(call my-dir)
 
 MTOOLBOX_LINKS := $(shell cat $(LOCAL_PATH)/mt/micro.toolbox-links)
 
