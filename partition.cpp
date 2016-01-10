@@ -186,6 +186,8 @@ bool TWPartition::Process_Fstab_Line(string Line, bool Display_Error) {
 		} else if (item_index == 2) {
 			Mount_Options = ptr;
 			Process_FS_Flags(Mount_Options, Mount_Flags);
+			if (Mount_Point == "/system") // ro/rw /system is custom-handled by TWRP
+				Mount_Flags &= ~MS_RDONLY;
 			item_index++;
 		} else if (item_index > 2) {
 			if (strlen(ptr) > 5 && strncmp(ptr, "twrp=", 5) == 0) {
