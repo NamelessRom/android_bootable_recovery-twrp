@@ -1064,9 +1064,7 @@ void DataManager::ReadSettingsFile(void)
 	PartitionManager.Mount_All_Storage();
 	update_tz_environment_variables();
 #ifdef TW_MAX_BRIGHTNESS
-	if (GetStrValue("tw_brightness_path") != "/nobrightness") {
-		TWFunc::Set_Brightness(GetStrValue("tw_brightness"));
-	}
+	TWFunc::Set_Brightness(GetStrValue("tw_brightness"));
 #endif
 }
 
