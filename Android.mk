@@ -277,7 +277,7 @@ ifneq ($(TW_NO_EXFAT), true)
     LOCAL_ADDITIONAL_DEPENDENCIES += mkfs.exfat fsck.exfat
 endif
 ifeq ($(BOARD_HAS_NO_REAL_SDCARD),)
-    LOCAL_ADDITIONAL_DEPENDENCIES += parted
+    LOCAL_ADDITIONAL_DEPENDENCIES += sgdisk
 endif
 ifneq ($(TW_EXCLUDE_ENCRYPTED_BACKUPS), true)
     LOCAL_ADDITIONAL_DEPENDENCIES += openaes ../openaes/LICENSE
