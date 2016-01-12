@@ -407,7 +407,7 @@ bool TWPartition::Process_FS_Flags(string& Options, int& Flags) {
 }
 
 void TWPartition::Process_Fsmgr_Flags(const char *str) {
-	int i, ptr_len;
+	int i, ptr_len, flag_len;
 	char *ptr;
 	char flags[250];
 
@@ -418,14 +418,19 @@ void TWPartition::Process_Fsmgr_Flags(const char *str) {
 		ptr_len = strlen(ptr);
 
 		for (i = 0; fs_mgr_flags[i].name; i++) {
-			if (strncmp(ptr, fs_mgr_flags[i].name, strlen(fs_mgr_flags[i].name)) == 0) {
-				if (fs_mgr_flags[i].flag == MF_CRYPT && ptr_len > 12) {
-					ptr += 12;
+			flag_len = strlen(fs_mgr_flags[i].name);
+
+			if (strncmp(ptr, fs_mgr_flags[i].name, flag_len) == 0) {
+				if (fs_mgr_flags[i].flag == MF_CRYPT && ptr_len > flag_len) {
+					ptr += flag_len;
 					if (*ptr == '\"') ptr++;
 					if (ptr[strlen(ptr)-1] == '\"')
 						ptr[strlen(ptr)-1] = 0;
 
 					Crypto_Key_Location = ptr;
+				} else if (fs_mgr_flags[i].flag == MF_LENGTH && ptr_len > flag_len) {
+					ptr += flag_len;
+					Length = atoi(ptr);
 				}
 				break;
 			}

@@ -64,9 +64,11 @@ const struct flag_list mount_flags[] = {
 // We support a very small subset of fs_mgr flags
 // See system/core/fs_mgr/fs_mgr_fstab.c for the full list
 #define MF_CRYPT        0x4
+#define MF_LENGTH       0x20
 
 const struct flag_list fs_mgr_flags[] = {
 	{ "encryptable=", MF_CRYPT },
+	{ "length=",      MF_LENGTH },
 	{ "defaults",     0 },
 	{ 0,              0 },
 };
