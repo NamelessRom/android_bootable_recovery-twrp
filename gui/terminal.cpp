@@ -837,6 +837,8 @@ int GUITerminal::NotifyTouch(TOUCH_STATE state, int x, int y)
 
 int GUITerminal::NotifyKey(int key, bool down)
 {
+	if (!HasInputFocus)
+		return 1;
 	if (down)
 		if (engine->inputKey(key))
 			mUpdate = 1;
