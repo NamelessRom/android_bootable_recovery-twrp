@@ -2810,6 +2810,11 @@
 				<text>Swipe to Unlock</text>
 				<action function="overlay"></action>
 			</object>
+
+			<action>
+				<touch key="power"/>
+				<action function="setbacklight"/>
+			</action>
 		</page>
 
 		<page name="filemanagerlist">

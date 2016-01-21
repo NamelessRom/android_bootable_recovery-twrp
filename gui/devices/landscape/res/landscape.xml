@@ -2773,6 +2773,11 @@
 				<text>Swipe to Unlock</text>
 				<action function="overlay"></action>
 			</object>
+
+			<action>
+				<touch key="power"/>
+				<action function="setbacklight"/>
+			</action>
 		</page>
 
 
@@ -3441,7 +3446,7 @@
 
 			<object type="action">
 				<touch key="power" />
-				<action function="overlay">lock</action>
+				<action function="setbacklight"/>
 			</object>
 
 			<object type="action">

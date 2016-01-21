@@ -3,6 +3,7 @@
 This fork differs from the original in the following ways:
 
 *   Stripped support for building in any Android tree other than CyanogenMod 13.0
+*   Power key toggles screen on/off
 *   Require fstab v2 syntax ([example](https://github.com/mdmower/android_device_huawei_mt2/commit/2cf14490ce3d0c9cd5d087e4d9422dbc0831bf7c)) -- see `TWPartition::Process_Flags()` in [partition.cpp](https://github.com/mdmower/twrp/blob/cm-13.0/partition.cpp) for supported TWRP flags
 *   Use external repositories for pigz, exfat, fuse
 *   Support reduced graphics to slightly trim the size of recovery
