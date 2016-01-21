@@ -482,7 +482,7 @@ int TWPartitionManager::Check_Backup_Name(bool Display_Error) {
 	sprintf(tw_image_dir,"%s/%s", backup_loc, Backup_Name.c_str());
 	if (TWFunc::Path_Exists(tw_image_dir)) {
 		if (Display_Error)
-			gui_err("backup_name_exists=A backup with this name already exists.");
+			gui_err("backup_name_exists=A backup with that name already exists!");
 		return -4;
 	}
 	// No problems found, return 0

@@ -2505,7 +2505,7 @@
 
 			<text style="text_l">
 				<placement x="%col1_x_header%" y="%row3_header_y%"/>
-				<text>{@reboot_hdr=Reboot Menu}</text>
+				<text>{@reboot_hdr=Reboot}</text>
 			</text>
 
 			<button style="main_button">

@@ -90,7 +90,7 @@
 		<string name="zip_add_btn">Add more Zips</string>
 		<string name="zip_clear_btn">Clear Zip Queue</string>
 		<string name="install_zip_count_hdr">Install Zip %tw_zip_index% of %tw_zip_queue_count%</string>
-		<string name="installing_zip">Installing Zip: %tw_file%</string>
+		<string name="installing_zip_xml">Installing Zip: %tw_file%</string>
 		<string name="failed">Failed</string>
 		<string name="successful">Successful</string>
 		<string name="install_failed">Installation Failed</string>
@@ -248,7 +248,6 @@
 		<string name="swipe_rename">   Rename</string>
 		<string name="confirm_hdr">Confirm</string>
 		<string name="mount_hdr">Mount</string>
-		<string name="mount_sel_part"></string>
 		<string name="mount_sel_part">Select Partitions to Mount:</string>
 		<string name="mount_sys_ro_chk">Mount system partition read-only</string>
 		<string name="mount_sys_ro_s_chk">Mount System RO</string>
@@ -261,7 +260,6 @@
 		<string name="usb_stor_mnt2">Be sure to safely remove your device</string>
 		<string name="usb_stor_mnt3">from your computer before unmounting!</string>
 		<string name="unmount_btn">Unmount</string>
-		<string name="reboot_hdr">Reboot Menu</string>
 		<string name="rb_system_btn">System</string>
 		<string name="rb_poweroff_btn">Power Off</string>
 		<string name="rb_recovery_btn">Recovery</string>
@@ -463,7 +461,6 @@
 		<string name="no_selinux">No SELinux support (no libselinux).</string>
 		<string name="mtp_enabled">MTP Enabled</string>
 		<string name="mtp_crash">MTP Crashed, not starting MTP on boot.</string>
-		<string name="rebooting">Rebooting...</string>
 		<string name="decrypt_success">Successfully decrypted with default password.</string>
 		<string name="unable_to_decrypt">Unable to decrypt with default password. You may need to perform a Format Data.</string>
 		<string name="generating_md51">Generating MD5</string>
@@ -645,7 +642,6 @@
 		<string name="curr_date">(Current Date)</string>
 		<string name="backup_name_len">Backup name is too long.</string>
 		<string name="backup_name_invalid">Backup name '{1}' contains invalid character: '{1}'</string>
-		<string name="backup_name_exists">A backup with this name already exists.</string>
 		<string name="no_real_sdcard">This device does not have a real SD Card! Aborting!</string>
 		<string name="cancel_sideload">Canceling ADB sideload...</string>
 		<string name="change_fs_err">Error changing file system.</string>

@@ -219,9 +219,10 @@
 		<string name="curr_date">(Current Date)</string>
 		<string name="backup_name_len">Backup name is too long.</string>
 		<string name="backup_name_invalid">Backup name '{1}' contains invalid character: '{1}'</string>
-		<string name="backup_name_exists">A backup with this name already exists.</string>
+		<string name="backup_name_exists">A backup with that name already exists!</string>
 		<string name="no_real_sdcard">This device does not have a real SD Card! Aborting!</string>
 		<string name="cancel_sideload">Canceling ADB sideload...</string>
 		<string name="change_fs_err">Error changing file system.</string>
+		<string name="theme_ver_err">Custom theme version does not match TWRP version. Using stock theme.</string>
 	</resources>
 </language>

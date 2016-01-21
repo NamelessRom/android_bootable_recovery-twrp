@@ -643,7 +643,7 @@
 
 			<text style="text_m">
 				<placement x="%col1_x_left%" y="%row1_header_y%"/>
-				<text>{@installing_zip=Installing Zip: %tw_file%}</text>
+				<text>{@installing_zip_xml=Installing Zip: %tw_file%}</text>
 			</text>
 
 			<template name="console"/>
@@ -3144,7 +3144,7 @@
 
 			<text style="text_m">
 				<placement x="%col1_x_left%" y="%row1_header_y%"/>
-				<text>{@reboot_hdr=Reboot Menu}</text>
+				<text>{@reboot_hdr=Reboot}</text>
 			</text>
 
 			<button style="main_button">
