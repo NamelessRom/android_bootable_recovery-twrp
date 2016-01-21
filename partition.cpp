@@ -1114,7 +1114,7 @@ bool TWPartition::Wipe(string New_File_System) {
 	string Layout_Filename = Mount_Point + "/.layout_version";
 
 	if (!Can_Be_Wiped) {
-		gui_msg(Msg(msg::kError, "cannot_wipe=Partition {1} cannot be wiped.\n")(Display_Name));
+		gui_msg(Msg(msg::kError, "cannot_wipe=Partition {1} cannot be wiped.")(Display_Name));
 		return false;
 	}
 
