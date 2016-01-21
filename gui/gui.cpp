@@ -317,26 +317,9 @@ void InputHandler::process_EV_ABS(input_event& ev)
 void InputHandler::process_EV_KEY(input_event& ev)
 {
 	HardwareKeyboard *kb = PageManager::GetHardwareKeyboard();
-	static time_t vol_down_time = 0;
-	static bool vol_down = false;
 
 	// Handle key-press here
 	LOGEVENT("TOUCH_KEY: %d\n", ev.code);
-
-	// Do not toggle screen blank on power button if volume down was
-	// recently pressed (for fb2png screenshots)
-	if (ev.code == KEY_VOLUMEDOWN) {
-		vol_down_time = ev.time.tv_sec;
-		vol_down = (ev.value == 1) ? true : false;
-	} else if (ev.code == KEY_POWER) {
-		if (ev.value == 0) {
-			if (!vol_down && (ev.time.tv_sec - vol_down_time) >= 3) {
-				blankTimer.toggleBlank();
-				return;
-			}
-		}
-	}
-
 	// Left mouse button is treated as a touch
 	if(ev.code == BTN_LEFT)
 	{
@@ -367,6 +350,12 @@ void InputHandler::process_EV_KEY(input_event& ev)
 			kb->KeyDown(KEY_BACK);
 		else
 			kb->KeyUp(KEY_BACK);
+	} else if (ev.code == KEY_POWER) {
+		// Wait for key_up
+		if (ev.value == 0) {
+			blankTimer.toggleBlank();
+			return;
+		}
 	} else if (ev.value != 0) {
 		// This is a key press
 #ifdef TW_USE_KEY_CODE_TOUCH_SYNC
