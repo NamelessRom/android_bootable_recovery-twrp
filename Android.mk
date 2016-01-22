@@ -263,7 +263,7 @@ LOCAL_ADDITIONAL_DEPENDENCIES := \
     utility_symlinks
 
 ifeq ($(TW_USE_TOYBOX), true)
-    LOCAL_ADDITIONAL_DEPENDENCIES += sh toybox_recovery unzip
+    LOCAL_ADDITIONAL_DEPENDENCIES += sh toybox_recovery unzip zip
 else
     LOCAL_ADDITIONAL_DEPENDENCIES += busyboxtwrp micro.toolbox
 endif
