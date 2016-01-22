@@ -2396,6 +2396,16 @@ int TWPartition::Decrypt_Adopted() {
 	if (!Removable)
 		return ret;
 
+	string Alternate_Block_Device = Actual_Block_Device;
+	if (Alternate_Block_Device.find("/dev/block/mmcblk") != string::npos) {
+		Alternate_Block_Device.resize(strlen("/dev/block/mmcblkX"));
+	} else if (Alternate_Block_Device.find("/dev/block/sd") != string::npos) {
+		Alternate_Block_Device.resize(strlen("/dev/block/sdX"));
+	} else {
+		LOGINFO("Unable to find base block device for '%s'\n", Actual_Block_Device.c_str());
+		return ret;
+	}
+
 	int fd = open(Alternate_Block_Device.c_str(), O_RDONLY);
 	if (fd < 0) {
 		LOGINFO("failed to open '%s'\n", Alternate_Block_Device.c_str());
