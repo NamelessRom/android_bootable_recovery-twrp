@@ -7,6 +7,8 @@ extern "C" {
 
 int TWinstall_zip(const char* path, int* wipe_cache);
 
+void set_perf_mode(bool enable);
+
 #ifdef __cplusplus
 }
 #endif

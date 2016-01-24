@@ -39,6 +39,8 @@
 #include "variables.h"
 #include "verifier.h"
 
+#include "cutils/properties.h"
+
 static const char* properties_path = "/dev/__properties__";
 static const char* properties_path_renamed = "/dev/__properties_kk__";
 static bool legacy_props_env_initd = false;
@@ -246,9 +248,12 @@ extern "C" int TWinstall_zip(const char* path, int* wipe_cache) {
 	int ret_val, zip_verify = 1;
 	ZipArchive Zip;
 
+	set_perf_mode(true);
+
 	if (strcmp(path, "error") == 0) {
 		LOGERR("Failed to get adb sideload file: '%s'\n", path);
-		return INSTALL_CORRUPT;
+		ret_val = INSTALL_CORRUPT;
+		goto out;
 	}
 
 	gui_msg(Msg("installing_zip=Installing zip file '{1}'")(path));
@@ -259,7 +264,8 @@ extern "C" int TWinstall_zip(const char* path, int* wipe_cache) {
 		int md5_return = md5sum.verify_md5digest();
 		if (md5_return == -2) { // md5 did not match
 			LOGERR("Aborting zip install\n");
-			return INSTALL_CORRUPT;
+			ret_val = INSTALL_CORRUPT;
+			goto out;
 		}
 	}
 
@@ -271,7 +277,8 @@ extern "C" int TWinstall_zip(const char* path, int* wipe_cache) {
 	MemMapping map;
 	if (sysMapFile(path, &map) != 0) {
 		gui_msg(Msg(msg::kError, "fail_sysmap=Failed to map file '{1}'")(path));
-		return -1;
+		ret_val = -1;
+		goto out;
 	}
 
 	if (zip_verify) {
@@ -281,7 +288,8 @@ extern "C" int TWinstall_zip(const char* path, int* wipe_cache) {
 			LOGINFO("Zip signature verification failed: %i\n", ret_val);
 			gui_err("verify_zip_fail=Zip signature verification failed!");
 			sysReleaseMap(&map);
-			return -1;
+			ret_val = -1;
+			goto out;
 		} else {
 			gui_msg("verify_zip_done=Zip signature verified successfully.");
 		}
@@ -290,9 +298,17 @@ extern "C" int TWinstall_zip(const char* path, int* wipe_cache) {
 	if (ret_val != 0) {
 		gui_err("zip_corrupt=Zip file is corrupt!");
 		sysReleaseMap(&map);
-		return INSTALL_CORRUPT;
+		ret_val = INSTALL_CORRUPT;
+		goto out;
 	}
 	ret_val = Run_Update_Binary(path, &Zip, wipe_cache);
 	sysReleaseMap(&map);
+
+out:
+	set_perf_mode(false);
 	return ret_val;
+}
+
+void set_perf_mode(bool enable) {
+    property_set("recovery.perf.mode", enable ? "1" : "0");
 }
