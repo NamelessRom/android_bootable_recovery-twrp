@@ -195,7 +195,6 @@ protected:
 protected:
 	static std::map<std::string, PageSet*> mPageSets;
 	static PageSet* mCurrentSet;
-	static PageSet* mBaseSet;
 	static MouseCursor *mMouseCursor;
 	static HardwareKeyboard *mHardwareKeyboard;
 	static bool mReloadTheme;

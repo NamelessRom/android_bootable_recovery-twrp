@@ -58,10 +58,8 @@
 using namespace rapidxml;
 
 // Global values
-static gr_surface gCurtain = NULL;
 static int gGuiInitialized = 0;
 static TWAtomicInt gForceRender;
-const int gNoAnimation = 1;
 blanktimer blankTimer;
 int ors_read_fd = -1;
 static FILE* orsout = NULL;
@@ -90,36 +88,12 @@ static void flip(void)
 	gr_flip();
 }
 
-static void curtainSet()
+void rapidxml::parse_error_handler(const char *what, void *where)
 {
-	gr_color(0, 0, 0, 255);
-	gr_fill(0, 0, gr_fb_width(), gr_fb_height());
-	gr_blit(gCurtain, 0, 0, gr_get_width(gCurtain), gr_get_height(gCurtain), TW_X_OFFSET, TW_Y_OFFSET);
-	gr_flip();
-}
-
-static void curtainRaise(gr_surface surface)
-{
-	int sy = 0;
-	int h = gr_get_height(gCurtain) - 1;
-	int w = gr_get_width(gCurtain);
-	int fy = 1;
-
-	int msw = gr_get_width(surface);
-	int msh = gr_get_height(surface);
-	int CURTAIN_RATE = msh / 30;
-
-	if (gNoAnimation == 0)
-	{
-		for (; h > 0; h -= CURTAIN_RATE, sy += CURTAIN_RATE, fy += CURTAIN_RATE)
-		{
-			gr_blit(surface, 0, 0, msw, msh, 0, 0);
-			gr_blit(gCurtain, 0, sy, w, h, 0, 0);
-			gr_flip();
-		}
-	}
-	gr_blit(surface, 0, 0, msw, msh, 0, 0);
-	flip();
+	fprintf(stderr, "Parser error: %s\n", what);
+	fprintf(stderr, "  Start of string: %s\n",(char *) where);
+	LOGERR("Error parsing XML file.\n");
+	//abort();
 }
 
 class InputHandler
@@ -561,17 +535,6 @@ static int runPages(const char *page_name, const int stop_on_page_done)
 		gui_changePage(page_name);
 	}
 
-	// Raise the curtain
-	if (gCurtain != NULL)
-	{
-		gr_surface surface;
-
-		PageManager::Render();
-		gr_get_surface(&surface);
-		curtainRaise(surface);
-		gr_free_surface(surface);
-	}
-
 	gGuiRunning = 1;
 
 	DataManager::SetValue("tw_loaded", 1);
@@ -765,29 +728,17 @@ std::string gui_lookup(const std::string& resource_name, const std::string& defa
 extern "C" int gui_init(void)
 {
 	gr_init();
-	std::string curtain_path = TWRES "images/curtain.jpg";
-	gr_surface source_Surface = NULL;
 
-	if (res_create_surface(curtain_path.c_str(), &source_Surface))
-	{
-		printf("Unable to locate '%s'\nDid you set a TW_THEME in your config files?\n", curtain_path.c_str());
-		return -1;
+	// load and show splash screen
+	if (PageManager::LoadPackage("splash", TWRES "splash.xml", "splash")) {
+		LOGERR("Failed to load splash screen XML.\n");
 	}
-	if (gr_get_width(source_Surface) != (unsigned)gr_fb_width() || gr_get_height(source_Surface) != (unsigned)gr_fb_height()) {
-		// We need to scale the curtain to fit the screen
-		float scale_w = (float)gr_fb_width() / (float)gr_get_width(source_Surface);
-		float scale_h = (float)gr_fb_height() / (float)gr_get_height(source_Surface);
-		if (res_scale_surface(source_Surface, &gCurtain, scale_w, scale_h)) {
-			LOGINFO("Failed to scale curtain\n");
-			gCurtain = source_Surface;
-		} else {
-			LOGINFO("Scaling the curtain width %fx and height %fx\n", scale_w, scale_h);
-		}
-	} else {
-		gCurtain = source_Surface;
+	else {
+		PageManager::SelectPackage("splash");
+		PageManager::Render();
+		flip();
+		PageManager::ReleasePackage("splash");
 	}
-
-	curtainSet();
 
 	ev_init();
 	return 0;
