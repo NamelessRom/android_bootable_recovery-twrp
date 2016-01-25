@@ -75,9 +75,6 @@ endif
 ifeq ($(TW_ROUND_SCREEN), true)
     LOCAL_CFLAGS += -DTW_ROUND_SCREEN
 endif
-ifneq ($(TW_REDUCED_GRAPHICS), true)
-    LOCAL_CFLAGS += -DINCLUDE_JPEG_GRAPHICS
-endif
 
 LOCAL_C_INCLUDES += \
     system/core/include \
@@ -125,7 +122,6 @@ ifeq ($(TW_CUSTOM_THEME),)
         TWRP_RES := $(commands_recovery_local_path)/gui/theme/common/fonts
         TWRP_RES += $(commands_recovery_local_path)/gui/theme/common/languages
         TWRP_RES += $(commands_recovery_local_path)/gui/theme/common/$(word 1,$(subst _, ,$(TW_THEME))).xml
-        TWRP_CURTAIN_LOC := $(commands_recovery_local_path)/gui/theme/alt-images/curtain/$(TW_THEME)
         # for future copying of used include xmls and fonts:
         # UI_XML := $(TWRP_THEME_LOC)/ui.xml
         # TWRP_INCLUDE_XMLS := $(shell xmllint --xpath '/recovery/include/xmlfile/@name' $(UI_XML)|sed -n 's/[^\"]*\"\([^\"]*\)\"[^\"]*/\1\n/gp'|sort|uniq)
@@ -137,19 +133,14 @@ ifeq ($(TW_CUSTOM_THEME),)
         TWRP_RES += $(commands_recovery_local_path)/gui/devices/$(word 1,$(subst _, ,$(TW_THEME)))/res/*
         ifeq ($(TW_THEME), portrait_mdpi)
             TWRP_THEME_LOC := $(commands_recovery_local_path)/gui/devices/480x800/res
-            TWRP_CURTAIN_LOC := $(commands_recovery_local_path)/gui/devices/alt-images/curtain/480x800
         else ifeq ($(TW_THEME), portrait_hdpi)
             TWRP_THEME_LOC := $(commands_recovery_local_path)/gui/devices/1080x1920/res
-            TWRP_CURTAIN_LOC := $(commands_recovery_local_path)/gui/devices/alt-images/curtain/1080x1920
         else ifeq ($(TW_THEME), watch_mdpi)
             TWRP_THEME_LOC := $(commands_recovery_local_path)/gui/devices/320x320/res
-            TWRP_CURTAIN_LOC := $(commands_recovery_local_path)/gui/devices/alt-images/curtain/320x320
         else ifeq ($(TW_THEME), landscape_mdpi)
             TWRP_THEME_LOC := $(commands_recovery_local_path)/gui/devices/800x480/res
-            TWRP_CURTAIN_LOC := $(commands_recovery_local_path)/gui/devices/alt-images/curtain/800x480
         else ifeq ($(TW_THEME), landscape_hdpi)
             TWRP_THEME_LOC := $(commands_recovery_local_path)/gui/devices/1920x1200/res
-            TWRP_CURTAIN_LOC := $(commands_recovery_local_path)/gui/devices/alt-images/curtain/1920x1200
         else
             $(error ERROR: TW_THEME '$(TW_THEME)' is not one of landscape_hdpi landscape_mdpi portrait_hdpi portrait_mdpi watch_mdpi)
         endif
@@ -157,18 +148,12 @@ ifeq ($(TW_CUSTOM_THEME),)
 else
     TWRP_THEME_LOC := $(TW_CUSTOM_THEME)
 endif
-ifeq ($(TW_REDUCED_GRAPHICS), true)
-    TWRP_CURTAIN_IMAGE := $(TWRP_CURTAIN_LOC)/curtain.png
-else
-    TWRP_CURTAIN_IMAGE := $(TWRP_CURTAIN_LOC)/curtain.jpg
-endif
 
 TWRP_RES_GEN := $(intermediates)/twrp
 $(TWRP_RES_GEN):
 	mkdir -p $(TARGET_RECOVERY_ROOT_OUT)$(TWRES_PATH)
 	cp -fr $(TWRP_RES) $(TARGET_RECOVERY_ROOT_OUT)$(TWRES_PATH)
 	cp -fr $(TWRP_THEME_LOC)/* $(TARGET_RECOVERY_ROOT_OUT)$(TWRES_PATH)
-	cp -f $(TWRP_CURTAIN_IMAGE) $(TARGET_RECOVERY_ROOT_OUT)$(TWRES_PATH)images
 	mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/sbin/
 	ln -sf pigz $(TARGET_RECOVERY_ROOT_OUT)/sbin/gzip
 	ln -sf pigz $(TARGET_RECOVERY_ROOT_OUT)/sbin/gunzip

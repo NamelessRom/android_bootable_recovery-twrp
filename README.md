@@ -6,7 +6,6 @@ This fork differs from the original in the following ways:
 *   Require fstab v2 syntax (see examples and supported flags below)
 *   Use external repositories for pigz, exfat, fuse
 *   Power key toggles screen on/off
-*   Support grayscale splash to trim the size of recovery by 100-200 KB depending on screen resolution. Use `TW_REDUCED_GRAPHICS := true` to enable this option
 *   Remove the need to specify either `DEVICE_RESOLUTION` or `TW_THEME` so long as `TARGET_SCREEN_HEIGHT` and `TARGET_SCREEN_WIDTH` are set
 *   Other minor customizations (see change history)
 

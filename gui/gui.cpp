@@ -765,11 +765,7 @@ std::string gui_lookup(const std::string& resource_name, const std::string& defa
 extern "C" int gui_init(void)
 {
 	gr_init();
-#ifdef INCLUDE_JPEG_GRAPHICS
 	std::string curtain_path = TWRES "images/curtain.jpg";
-#else
-	std::string curtain_path = "curtain";
-#endif
 	gr_surface source_Surface = NULL;
 
 	if (res_create_surface(curtain_path.c_str(), &source_Surface))

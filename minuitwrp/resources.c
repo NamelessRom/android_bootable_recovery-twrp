@@ -32,9 +32,7 @@
 
 #include <math.h>
 #include <png.h>
-#ifdef INCLUDE_JPEG_GRAPHICS
 #include "jpeglib.h"
-#endif
 
 #include "minui.h"
 
@@ -251,7 +249,6 @@ int res_create_surface_png(const char* name, gr_surface* pSurface) {
     return result;
 }
 
-#ifdef INCLUDE_JPEG_GRAPHICS
 int res_create_surface_jpg(const char* name, gr_surface* pSurface) {
     GGLSurface* surface = NULL;
     int result = 0;
@@ -340,23 +337,18 @@ exit:
     }
     return result;
 }
-#endif /* INCLUDE_JPEG_GRAPHICS */
 
 int res_create_surface(const char* name, gr_surface* pSurface) {
     int ret;
 
     if (!name)      return -1;
 
-#ifdef INCLUDE_JPEG_GRAPHICS
     if (strlen(name) > 4 && strcmp(name + strlen(name) - 4, ".jpg") == 0)
         return res_create_surface_jpg(name,pSurface);
-#endif
 
     ret = res_create_surface_png(name,pSurface);
-#ifdef INCLUDE_JPEG_GRAPHICS
     if (ret < 0)
         ret = res_create_surface_jpg(name,pSurface);
-#endif
 
     return ret;
 }
