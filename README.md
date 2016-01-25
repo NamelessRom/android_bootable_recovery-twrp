@@ -72,7 +72,8 @@ _Syntax:_ comma separated
 * `length=`
 
 Recognized twrp flags (Column 6):  
-_Syntax:_ semicolon separated, begin with `twrp={flags}`
+_Syntax:_ semicolon separated, begin with `twrp=`  
+_Example:_ `twrp=display="Firmware";mounttodecrypt`
 
 * `andsec`
 * `backup=`
@@ -81,6 +82,7 @@ _Syntax:_ semicolon separated, begin with `twrp={flags}`
 * `canbewiped`
 * `canencryptbackup=`
 * `display=`
+* `encryptable=`
 * `flashimg`
 * `forceencrypt=`
 * `ignoreblkid`
