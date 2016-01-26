@@ -77,12 +77,6 @@ void Resource::LoadImage(ZipArchive* pZip, std::string file, gr_surface* source)
 		res_create_surface(TMP_RESOURCE_NAME, source);
 		unlink(TMP_RESOURCE_NAME);
 	}
-	else if (ExtractResource(pZip, "images", file, "", TMP_RESOURCE_NAME) == 0)
-	{
-		// JPG includes the .jpg extension in the filename so extension should be blank
-		res_create_surface(TMP_RESOURCE_NAME, source);
-		unlink(TMP_RESOURCE_NAME);
-	}
 	else if (!pZip)
 	{
 		// File name in xml may have included .png so try without adding .png
