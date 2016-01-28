@@ -26,7 +26,7 @@ LOCAL_SRC_FILES := \
     data.cpp \
     digest/md5.c \
     find_file.cpp \
-    fixPermissions.cpp \
+    fixContexts.cpp \
     infomanager.cpp \
     openrecoveryscript.cpp \
     partition.cpp \
@@ -250,7 +250,6 @@ LOCAL_ADDITIONAL_DEPENDENCIES := \
     dump_image \
     erase_image \
     fatlabel \
-    fix_permissions.sh \
     flash_image \
     fsck.fat \
     mke2fs.conf \
