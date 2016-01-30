@@ -55,6 +55,7 @@ LOCAL_C_INCLUDES += \
     external/libselinux/include \
     system/core/adb \
     system/core/include \
+    system/core/libsparse \
     system/extras/ext4_utils
 
 LOCAL_STATIC_LIBRARIES := libguitwrp
@@ -256,6 +257,7 @@ LOCAL_ADDITIONAL_DEPENDENCIES := \
     mkfs.fat \
     permissive.sh \
     pigz \
+    simg2img_twrp \
     teamwin \
     toolbox \
     twrp \
@@ -411,6 +413,7 @@ include $(commands_recovery_local_path)/injecttwrp/Android.mk \
     $(commands_recovery_local_path)/toolboxes/Android.mk \
     $(commands_recovery_local_path)/toolboxes/mt/Android.mk \
     $(commands_recovery_local_path)/busybox/Android.mk \
+    $(commands_recovery_local_path)/simg2img/Android.mk \
     $(commands_recovery_local_path)/libpixelflinger/Android.mk
 
 ifeq ($(TW_INCLUDE_CRYPTO), true)
