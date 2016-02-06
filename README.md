@@ -9,6 +9,17 @@ This fork differs from the original in the following ways:
 *   Remove the need to specify either `DEVICE_RESOLUTION` or `TW_THEME` so long as `TARGET_SCREEN_HEIGHT` and `TARGET_SCREEN_WIDTH` are set
 *   Other minor customizations (see change history)
 
+**Versioning**
+
+To help distinguish builds of recovery made from this fork, the minor version digit is replaced with M#. Minor version increments will be handled as needed, independent of TWRP. The major and semi-major version digits follow upstream to roughly indicate feature parity (as close as possible with a fork, anyways).
+
+Convention:
+
+* `3.0.M0-0` incorporates all major features from TWRP `3.0.0-0`
+* `3.0.M1-0` is the minor version increment after `3.0.M0-0` and is independent of any TWRP minor version increment(s)
+* `3.1.M0-0` is the semi-major version increment after `3.0.M4-2` and is tied to a TWRP semi-major version increment
+* `3.0.M0-1` is a device-specific fix to `3.0.M0-0`; this device digit resets when any other version increments
+
 **Examples of fstab v2 for TWRP**
 
 Example fstab v2 for device [mt2](https://github.com/mdmower/android_device_huawei_mt2):  
