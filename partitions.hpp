@@ -43,6 +43,69 @@ struct flag_list {
 	unsigned flag;
 };
 
+enum TW_FSTAB_FLAGS {
+	TWFLAG_DEFAULTS, // Retain position
+	TWFLAG_ANDSEC,
+	TWFLAG_BACKUP,
+	TWFLAG_BACKUPNAME,
+	TWFLAG_BLOCKSIZE,
+	TWFLAG_CANBEWIPED,
+	TWFLAG_CANENCRYPTBACKUP,
+	TWFLAG_DISPLAY,
+	TWFLAG_ENCRYPTABLE,
+	TWFLAG_FLASHIMG,
+	TWFLAG_FORCEENCRYPT,
+	TWFLAG_IGNOREBLKID,
+	TWFLAG_LENGTH,
+	TWFLAG_MOUNTTODECRYPT,
+	TWFLAG_REMOVABLE,
+	TWFLAG_RETAINLAYOUTVERSION,
+	TWFLAG_RW,
+	TWFLAG_SETTINGSSTORAGE,
+	TWFLAG_STORAGE,
+	TWFLAG_STORAGENAME,
+	TWFLAG_SUBPARTITIONOF,
+	TWFLAG_SYMLINK,
+	TWFLAG_USERDATAENCRYPTBACKUP,
+	TWFLAG_USERMRF,
+	TWFLAG_WIPEDURINGFACTORYRESET,
+	TWFLAG_WIPEINGUI,
+};
+
+/* Flags without a trailing '=' are considered dual format flags and can be
+ * written as either 'flagname' or 'flagname=', where the character following
+ * the '=' is Y,y,1 for true and false otherwise.
+ */
+const struct flag_list tw_flags[] = {
+	{ "andsec",                 TWFLAG_ANDSEC },
+	{ "backup",                 TWFLAG_BACKUP },
+	{ "backupname=",            TWFLAG_BACKUPNAME },
+	{ "blocksize=",             TWFLAG_BLOCKSIZE },
+	{ "canbewiped",             TWFLAG_CANBEWIPED },
+	{ "canencryptbackup",       TWFLAG_CANENCRYPTBACKUP },
+	{ "defaults",               TWFLAG_DEFAULTS },
+	{ "display=",               TWFLAG_DISPLAY },
+	{ "encryptable=",           TWFLAG_ENCRYPTABLE },
+	{ "flashimg",               TWFLAG_FLASHIMG },
+	{ "forceencrypt=",          TWFLAG_FORCEENCRYPT },
+	{ "ignoreblkid",            TWFLAG_IGNOREBLKID },
+	{ "length=",                TWFLAG_LENGTH },
+	{ "mounttodecrypt",         TWFLAG_MOUNTTODECRYPT },
+	{ "removable",              TWFLAG_REMOVABLE },
+	{ "retainlayoutversion",    TWFLAG_RETAINLAYOUTVERSION },
+	{ "rw",                     TWFLAG_RW },
+	{ "settingsstorage",        TWFLAG_SETTINGSSTORAGE },
+	{ "storage",                TWFLAG_STORAGE },
+	{ "storagename=",           TWFLAG_STORAGENAME },
+	{ "subpartitionof=",        TWFLAG_SUBPARTITIONOF },
+	{ "symlink=",               TWFLAG_SYMLINK },
+	{ "userdataencryptbackup",  TWFLAG_USERDATAENCRYPTBACKUP },
+	{ "usermrf",                TWFLAG_USERMRF },
+	{ "wipeduringfactoryreset", TWFLAG_WIPEDURINGFACTORYRESET },
+	{ "wipeingui",              TWFLAG_WIPEINGUI },
+	{ 0,                        0 },
+};
+
 const struct flag_list mount_flags[] = {
 	{ "noatime",    MS_NOATIME },
 	{ "noexec",     MS_NOEXEC },
@@ -137,7 +200,8 @@ private:
 	bool Process_Fstab_Line(string Line, bool Display_Error);                 // Processes a fstab line
 	void Find_Actual_Block_Device();                                          // Determines the correct block device and stores it in Actual_Block_Device
 
-	bool Process_Flags(string Flags, bool Display_Error);                     // Process custom fstab flags
+	void Apply_TW_Flag(const unsigned flag, const char* str, const bool val); // Apply custom twrp fstab flags
+	void Process_TW_Flags(char *flags, bool Display_Error);                   // Process custom twrp fstab flags
 	bool Process_FS_Flags(string& Options, int& Flags);                       // Process standard fstab fs flags
 	void Process_Fsmgr_Flags(const char *str);                                // Process a select few fs_mgr flags
 	bool Is_File_System(string File_System);                                  // Checks to see if the file system given is considered a file system
