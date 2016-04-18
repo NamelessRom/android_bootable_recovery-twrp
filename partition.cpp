@@ -157,9 +157,6 @@ bool TWPartition::Process_Fstab_Line(string Line, bool Display_Error) {
 	}
 	Primary_Block_Device = full_line;
 	LOGINFO("Processing '%s'\n", Primary_Block_Device.c_str());
-	Display_Name = full_line + 1;
-	Backup_Display_Name = Display_Name;
-	Storage_Name = Display_Name;
 	index = Primary_Block_Device.size();
 	while (index < line_len) {
 		while (index < line_len && full_line[index] == '\0')
@@ -171,6 +168,9 @@ bool TWPartition::Process_Fstab_Line(string Line, bool Display_Error) {
 			Mount_Point = ptr;
 			Backup_Path = Mount_Point;
 			Storage_Path = Mount_Point;
+			Display_Name = ptr + 1;
+			Backup_Display_Name = Display_Name;
+			Storage_Name = Display_Name;
 			item_index++;
 		} else if (item_index == 1) { // Filesystem
 			Fstab_File_System = ptr;
