@@ -180,30 +180,11 @@ int TWPartitionManager::Process_Fstab(string Fstab_Filename, bool Display_Error)
 	return true;
 }
 
-string TWPartitionManager::Regenerate_Mount_Flags(TWPartition* Part) {
-	int i = 0;
-	string flags = "";
-
-	for (i = 0; mount_flags[i].name; i++) {
-		if (mount_flags[i].flag != 0 && (Part->Mount_Flags & mount_flags[i].flag)) {
-			if (!flags.empty())
-				flags += ",";
-			flags += std::string(mount_flags[i].name);
-		}
-	}
-
-	if (flags.empty())
-		flags = "defaults";
-
-	return flags;
-}
-
 int TWPartitionManager::Write_Fstab(void) {
 	FILE *fp;
 	std::vector<TWPartition*>::iterator iter;
 	string Line;
 	string Device;
-	string Flags;
 	string Options;
 
 	fp = fopen("/etc/fstab", "w");
@@ -214,9 +195,8 @@ int TWPartitionManager::Write_Fstab(void) {
 	for (iter = Partitions.begin(); iter != Partitions.end(); iter++) {
 		if ((*iter)->Can_Be_Mounted) {
 			Device = (*iter)->Actual_Block_Device.empty() ? (*iter)->Primary_Block_Device : (*iter)->Actual_Block_Device;
-			Flags = Regenerate_Mount_Flags((*iter));
 			Options = "defaults";
-			Line = Device + " " + (*iter)->Mount_Point + " " + (*iter)->Current_File_System + " " + Flags + " " + Options + "\n";
+			Line = Device + " " + (*iter)->Mount_Point + " " + (*iter)->Current_File_System + " " + (*iter)->Mount_Options + " " + Options + "\n";
 			fputs(Line.c_str(), fp);
 		}
 		// Handle subpartition tracking
@@ -347,8 +327,6 @@ void TWPartitionManager::Output_Partition(TWPartition* Part) {
 	if (!Part->MTD_Name.empty())
 		printf("   MTD_Name: %s\n", Part->MTD_Name.c_str());
 	printf("   Backup_Method: %s\n", Part->Backup_Method_By_Name().c_str());
-	if (Part->Mount_Flags)
-		printf("   Mount_Flags: %s\n", Regenerate_Mount_Flags(Part).c_str());
 	if (!Part->Mount_Options.empty())
 		printf("   Mount_Options: %s\n", Part->Mount_Options.c_str());
 	if (Part->MTP_Storage_ID)

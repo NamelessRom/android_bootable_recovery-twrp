@@ -188,8 +188,7 @@ bool TWPartition::Process_Fstab_Line(string Line, bool Display_Error) {
 			}
 			item_index++;
 		} else if (item_index == 2) { // Mount flags/options
-			Mount_Options = ptr;
-			Process_FS_Flags(Mount_Options, Mount_Flags);
+			Process_FS_Flags(ptr);
 			if (Mount_Point == "/system") // ro/rw /system is custom-handled by TWRP
 				Mount_Flags &= ~MS_RDONLY;
 			item_index++;
@@ -403,36 +402,40 @@ bool TWPartition::Process_Fstab_Line(string Line, bool Display_Error) {
 	return true;
 }
 
-bool TWPartition::Process_FS_Flags(string& Options, int& Flags) {
-	int i;
-	char *p;
-	char *savep;
-	char fs_options[250];
+void TWPartition::Process_FS_Flags(const char *str) {
+	char *options = strdup(str);
+	char *ptr, *savep;
 
-	strlcpy(fs_options, Options.c_str(), sizeof(fs_options));
-	Options = "";
+	Mount_Options = "";
 
-	p = strtok_r(fs_options, ",", &savep);
-	while (p) {
-		/* Look for the flag "p" in the flag list "fl"
-		* If not found, the loop exits with fl[i].name being null.
-		*/
-		for (i = 0; mount_flags[i].name; i++) {
-			if (strncmp(p, mount_flags[i].name, strlen(mount_flags[i].name)) == 0) {
-				Flags |= mount_flags[i].flag;
+	// Avoid issues with potentially nested strtok by using strtok_r
+	ptr = strtok_r(options, ",", &savep);
+	while (ptr) {
+		const struct flag_list* mount_flag = mount_flags;
+
+		for (; mount_flag->name; mount_flag++) {
+			// mount_flags are never postfixed by '=',
+			// so only match identical strings (including length)
+			if (strcmp(ptr, mount_flag->name) == 0) {
+				Mount_Flags |= mount_flag->flag;
 				break;
 			}
 		}
 
-		if (!mount_flags[i].name) {
-			if (Options.size() > 0)
-				Options += ",";
-			Options += p;
-		}
-		p = strtok_r(NULL, ",", &savep);
-	}
+		if (mount_flag->flag == MS_RDONLY)
+			Mount_Read_Only = true;
 
-	return true;
+		if (mount_flag->name != 0) {
+			if (!Mount_Options.empty())
+				Mount_Options += ",";
+			Mount_Options += mount_flag->name;
+		} else {
+			LOGINFO("Unhandled mount flag: '%s'\n", ptr);
+		}
+
+		ptr = strtok_r(NULL, ",", &savep);
+	}
+	free(options);
 }
 
 void TWPartition::Process_Fsmgr_Flags(const char *str) {

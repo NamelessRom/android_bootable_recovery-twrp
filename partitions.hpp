@@ -202,7 +202,7 @@ private:
 
 	void Apply_TW_Flag(const unsigned flag, const char* str, const bool val); // Apply custom twrp fstab flags
 	void Process_TW_Flags(char *flags, bool Display_Error);                   // Process custom twrp fstab flags
-	bool Process_FS_Flags(string& Options, int& Flags);                       // Process standard fstab fs flags
+	void Process_FS_Flags(const char *str);                                   // Process standard fstab fs flags
 	void Process_Fsmgr_Flags(const char *str);                                // Process a select few fs_mgr flags
 	bool Is_File_System(string File_System);                                  // Checks to see if the file system given is considered a file system
 	bool Is_Image(string File_System);                                        // Checks to see if the file system given is considered an image
@@ -365,7 +365,6 @@ private:
 	bool Backup_Partition(TWPartition* Part, const string& Backup_Folder, bool generate_md5, unsigned long *img_time, unsigned long *file_time, ProgressTracking *progress);
 	bool Restore_Partition(TWPartition* Part, const string& Restore_Name, ProgressTracking *progress);
 	void Output_Partition(TWPartition* Part);                                 // Outputs partition details to the log
-	string Regenerate_Mount_Flags(TWPartition* Part);                         // Regenerates string representation of fstab flags
 	TWPartition* Find_Partition_By_MTP_Storage_ID(unsigned int Storage_ID);   // Returns a pointer to a partition based on MTP Storage ID
 	bool Add_Remove_MTP_Storage(TWPartition* Part, int message_type);         // Adds or removes an MTP Storage partition
 	TWPartition* Find_Next_Storage(string Path, bool Exclude_Data_Media);
