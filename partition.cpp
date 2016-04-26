@@ -141,14 +141,14 @@ TWPartition::~TWPartition(void) {
 	// Do nothing
 }
 
-bool TWPartition::Process_Fstab_Line(string Line, bool Display_Error) {
-	char full_line[MAX_FSTAB_LINE_LENGTH], item[MAX_FSTAB_LINE_LENGTH];
+bool TWPartition::Process_Fstab_Line(const char *fstab_line, bool Display_Error) {
+	char full_line[MAX_FSTAB_LINE_LENGTH];
 	char twflags[MAX_FSTAB_LINE_LENGTH] = "";
-	int line_len = Line.size(), index = 0, item_index = 0;
 	char* ptr;
-	strncpy(full_line, Line.c_str(), line_len);
+	int line_len = strlen(fstab_line), index = 0, item_index = 0;
 	bool skip = false;
 
+	strlcpy(full_line, fstab_line, sizeof(full_line));
 	for (index = 0; index < line_len; index++) {
 		if (full_line[index] == 34)
 			skip = !skip;

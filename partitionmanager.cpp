@@ -86,11 +86,9 @@ int TWPartitionManager::Process_Fstab(string Fstab_Filename, bool Display_Error)
 
 		if (fstab_line[strlen(fstab_line) - 1] != '\n')
 			fstab_line[strlen(fstab_line)] = '\n';
-		TWPartition* partition = new TWPartition();
-		string line = fstab_line;
-		memset(fstab_line, 0, sizeof(fstab_line));
 
-		if (partition->Process_Fstab_Line(line, Display_Error)) {
+		TWPartition* partition = new TWPartition();
+		if (partition->Process_Fstab_Line(fstab_line, Display_Error)) {
 			if (LastPartition == partition->Actual_Block_Device) {
 				delete partition;
 				continue;
@@ -114,6 +112,8 @@ int TWPartitionManager::Process_Fstab(string Fstab_Filename, bool Display_Error)
 		} else {
 			delete partition;
 		}
+
+		memset(fstab_line, 0, sizeof(fstab_line));
 	}
 	fclose(fstabFile);
 	if (!datamedia && !settings_partition && Find_Partition_By_Path("/sdcard") == NULL && Find_Partition_By_Path("/internal_sd") == NULL && Find_Partition_By_Path("/internal_sdcard") == NULL && Find_Partition_By_Path("/emmc") == NULL) {
