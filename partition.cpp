@@ -193,7 +193,7 @@ bool TWPartition::Process_Fstab_Line(const char *fstab_line, bool Display_Error)
 				Mount_Flags &= ~MS_RDONLY;
 			item_index++;
 		} else if (item_index == 3) { // fs_mgr flags
-			Process_Fsmgr_Flags(ptr);
+			Process_Fsmgr_Flags(ptr, Display_Error);
 			item_index++;
 		} else if (item_index > 3) { // twrp flags
 			if (strlen(ptr) > 5 && strncmp(ptr, "twrp=", 5) == 0) {
@@ -461,37 +461,85 @@ void TWPartition::Process_FS_Flags(const char *str) {
 	free(options);
 }
 
-void TWPartition::Process_Fsmgr_Flags(const char *str) {
-	int i, ptr_len, flag_len;
-	char *ptr;
-	char flags[250];
+void TWPartition::Apply_Fsmgr_Flag(const unsigned flag, const char* str, const bool val) {
+	switch (flag) {
+		case MF_CRYPT:
+			Crypto_Key_Location = str;
+			break;
+		case MF_DEFAULTS:
+			// Do nothing
+			break;
+		case MF_LENGTH:
+			Length = atoi(str);
+			break;
+		default:
+			// Should not get here
+			LOGINFO("fsmgr flag identified for processing, but later unmatched: %i\n", flag);
+			break;
+	}
+}
 
-	strlcpy(flags, str, sizeof(flags));
+void TWPartition::Process_Fsmgr_Flags(const char *str, bool Display_Error) {
+	char *flags = strdup(str);
+	char *ptr, *savep;
 
-	ptr = strtok(flags, ",");
+	// Avoid issues with potentially nested strtok by using strtok_r
+	ptr = strtok_r(flags, ",", &savep);
 	while (ptr) {
-		ptr_len = strlen(ptr);
+		int ptr_len = strlen(ptr);
+		const struct flag_list* fs_mgr_flag = fs_mgr_flags;
 
-		for (i = 0; fs_mgr_flags[i].name; i++) {
-			flag_len = strlen(fs_mgr_flags[i].name);
+		for (; fs_mgr_flag->name; fs_mgr_flag++) {
+			int flag_len = strlen(fs_mgr_flag->name);
 
-			if (strncmp(ptr, fs_mgr_flags[i].name, flag_len) == 0) {
-				if (fs_mgr_flags[i].flag == MF_CRYPT && ptr_len > flag_len) {
+			if (strncmp(ptr, fs_mgr_flag->name, flag_len) == 0) {
+				bool flag_val = false;
+
+				if (ptr_len > flag_len && (fs_mgr_flag->name)[flag_len-1] != '='
+						&& ptr[flag_len] != '=') {
+					// Handle flags with same starting string
+					// (hypothetical e.g. length and lengthier)
+					continue;
+				} else if (ptr_len == flag_len
+						&& (fs_mgr_flag->name)[flag_len-1] == '=') {
+					// Skip flags missing argument after =
+					// (e.g. backupname=)
+					LOGINFO("fsmgr flag missing argument: %s\n", fs_mgr_flag->name);
+					break;
+				} else if (ptr_len > flag_len
+						&& (fs_mgr_flag->name)[flag_len-1] == '=') {
+					// Handle arguments to flags
+					// (e.g. backupname="My Stuff")
 					ptr += flag_len;
-					if (*ptr == '\"') ptr++;
-					if (ptr[strlen(ptr)-1] == '\"')
-						ptr[strlen(ptr)-1] = 0;
-
-					Crypto_Key_Location = ptr;
-				} else if (fs_mgr_flags[i].flag == MF_LENGTH && ptr_len > flag_len) {
-					ptr += flag_len;
-					Length = atoi(ptr);
+					TWFunc::Strip_Quotes(ptr);
+					// Skip flags with empty argument
+					// (e.g. backupname="")
+					if (strlen(ptr) == 0) {
+						LOGINFO("fsmgr flag missing argument: %s\n", fs_mgr_flag->name);
+						break;
+					}
+				} else if (ptr_len == flag_len) {
+					// Handle flags without arguments
+					// (e.g. defaults)
+					flag_val = true;
+				} else {
+					LOGINFO("fsmgr flag matched, but could not be processed: %s\n", ptr);
+					break;
 				}
+
+				Apply_Fsmgr_Flag(fs_mgr_flag->flag, ptr, flag_val);
 				break;
 			}
 		}
-		ptr = strtok(NULL, ",");
+		if (fs_mgr_flag->name == 0) {
+			if (Display_Error)
+				LOGERR("Unhandled fsmgr flag: '%s'\n", ptr);
+			else
+				LOGINFO("Unhandled fsmgr flag: '%s'\n", ptr);
+		}
+		ptr = strtok_r(NULL, ",", &savep);
 	}
+	free(flags);
 }
 
 void TWPartition::Apply_TW_Flag(const unsigned flag, const char* str, const bool val) {
