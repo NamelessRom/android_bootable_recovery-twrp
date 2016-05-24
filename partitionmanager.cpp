@@ -72,7 +72,7 @@ int TWPartitionManager::Process_Fstab(string Fstab_Filename, bool Display_Error)
 	TWPartition* settings_partition = NULL;
 	TWPartition* andsec_partition = NULL;
 	unsigned int storageid = 1 << 16;	// upper 16 bits are for physical storage device, we pretend to have only one
-	string LastPartition = "";
+	string Last_Mount_Point = "";
 
 	fstabFile = fopen(Fstab_Filename.c_str(), "rt");
 	if (fstabFile == NULL) {
@@ -89,11 +89,11 @@ int TWPartitionManager::Process_Fstab(string Fstab_Filename, bool Display_Error)
 
 		TWPartition* partition = new TWPartition();
 		if (partition->Process_Fstab_Line(fstab_line, Display_Error)) {
-			if (LastPartition == partition->Actual_Block_Device) {
+			if (Last_Mount_Point == partition->Mount_Point) {
 				delete partition;
 				continue;
 			}
-			LastPartition = partition->Actual_Block_Device;
+			Last_Mount_Point = partition->Mount_Point;
 			Partitions.push_back(partition);
 		} else {
 			delete partition;
