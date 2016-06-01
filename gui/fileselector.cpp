@@ -130,7 +130,7 @@ GUIFileSelector::~GUIFileSelector()
 
 int GUIFileSelector::Update(void)
 {
-	if(!isConditionTrue())
+	if (!isConditionTrue())
 		return 0;
 
 	GUIScrollList::Update();
@@ -158,7 +158,7 @@ int GUIFileSelector::NotifyVarChange(const std::string& varName, const std::stri
 {
 	GUIScrollList::NotifyVarChange(varName, value);
 
-	if(!isConditionTrue())
+	if (!isConditionTrue())
 		return 0;
 
 	if (varName.empty()) {

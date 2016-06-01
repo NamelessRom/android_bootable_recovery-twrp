@@ -43,7 +43,7 @@ GUIFill::GUIFill(xml_node<>* node) : GUIObject(node)
 
 int GUIFill::Render(void)
 {
-	if(!isConditionTrue())
+	if (!isConditionTrue())
 		return 0;
 
 	gr_color(mColor.red, mColor.green, mColor.blue, mColor.alpha);

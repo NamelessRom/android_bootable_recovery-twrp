@@ -195,7 +195,7 @@ void GUIScrollList::SetVisibleListLocation(size_t list_index)
 
 int GUIScrollList::Render(void)
 {
-	if(!isConditionTrue())
+	if (!isConditionTrue())
 		return 0;
 
 	// First step, fill background
@@ -357,7 +357,7 @@ void GUIScrollList::RenderStdItem(int yPos, bool selected, ImageResource* icon, 
 
 int GUIScrollList::Update(void)
 {
-	if(!isConditionTrue())
+	if (!isConditionTrue())
 		return 0;
 
 	if (!mHeaderIsStatic) {
@@ -426,7 +426,7 @@ size_t GUIScrollList::HitTestItem(int x __unused, int y)
 
 int GUIScrollList::NotifyTouch(TOUCH_STATE state, int x, int y)
 {
-	if(!isConditionTrue())
+	if (!isConditionTrue())
 		return -1;
 
 	switch (state)
@@ -529,7 +529,7 @@ void GUIScrollList::HandleScrolling()
 {
 	// handle dragging downward, scrolling upward
 	// the offset should always be <= 0 and > -actualItemHeight, adjust the first display row and offset as needed
-	while(firstDisplayedItem && y_offset > 0) {
+	while (firstDisplayedItem && y_offset > 0) {
 		firstDisplayedItem--;
 		y_offset -= actualItemHeight;
 	}
@@ -574,7 +574,7 @@ int GUIScrollList::NotifyVarChange(const std::string& varName, const std::string
 {
 	GUIObject::NotifyVarChange(varName, value);
 
-	if(!isConditionTrue())
+	if (!isConditionTrue())
 		return 0;
 
 	if (!mHeaderIsStatic) {
@@ -629,7 +629,7 @@ bool GUIScrollList::AddLines(std::vector<std::string>* origText, std::vector<std
 		string curr_color;
 		if (origColor)
 			curr_color = origColor->at(i);
-		for(;;) {
+		for (;;) {
 			size_t line_char_width = gr_ttf_maxExW(curr_line.c_str(), mFont->GetResource(), mRenderW);
 			if (line_char_width < curr_line.size()) {
 				//string left = curr_line.substr(0, line_char_width);

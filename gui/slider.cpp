@@ -112,7 +112,7 @@ GUISlider::~GUISlider()
 
 int GUISlider::Render(void)
 {
-	if(!isConditionTrue())
+	if (!isConditionTrue())
 		return 0;
 
 	if (!sSlider || !sSlider->GetResource())
@@ -140,7 +140,7 @@ int GUISlider::Render(void)
 
 int GUISlider::Update(void)
 {
-	if(!isConditionTrue())
+	if (!isConditionTrue())
 		return 0;
 
 	if (sUpdate)
@@ -150,7 +150,7 @@ int GUISlider::Update(void)
 
 int GUISlider::NotifyTouch(TOUCH_STATE state, int x, int y)
 {
-	if(!isConditionTrue())
+	if (!isConditionTrue())
 		return -1;
 
 	static bool dragging = false;
