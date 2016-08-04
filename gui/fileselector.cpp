@@ -16,15 +16,15 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <algorithm>
 #include <dirent.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
-#include <string>
-#include <string.h>
 #include <sys/stat.h>
 #include <vector>
+
+#include <algorithm>
+#include <string>
 
 #include "../data.hpp"
 #include "../twcommon.h"

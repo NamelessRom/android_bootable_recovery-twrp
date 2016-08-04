@@ -16,9 +16,10 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <algorithm>
 #include <stdbool.h>
 #include <stdlib.h>
+
+#include <algorithm>
 
 #include "../minuitwrp/minui.h"
 #include "objects.hpp"

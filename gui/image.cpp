@@ -18,8 +18,8 @@
 
 // image.cpp - GUIImage object
 
-#include <stddef.h>
 #include <stdbool.h>
+#include <stddef.h>
 
 #include "../minuitwrp/minui.h"
 #include "objects.hpp"

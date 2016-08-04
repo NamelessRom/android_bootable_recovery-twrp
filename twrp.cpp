@@ -17,8 +17,6 @@
 #include <signal.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include <string.h>
-#include <string>
 #include <sys/stat.h>
 #include <time.h>
 #include <unistd.h>
@@ -30,6 +28,8 @@
 #ifdef HAVE_SELINUX
 #include <selinux/label.h>
 #endif
+
+#include <string>
 
 #include "adb.h"
 #include "bootloader.h"

@@ -19,13 +19,14 @@
 // resource.cpp - Source to manage GUI resources
 
 #include <fcntl.h>
-#include <iomanip>
-#include <sstream>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
-#include <string>
 #include <unistd.h>
+
+#include <iomanip>
+#include <sstream>
+#include <string>
 #include <utility>
 
 #include "../minuitwrp/minui.h"

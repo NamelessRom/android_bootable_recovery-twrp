@@ -19,6 +19,7 @@
 // progressbar.cpp - GUIProgressBar object
 
 #include <stdlib.h>
+
 #include <string>
 
 #include "../data.hpp"

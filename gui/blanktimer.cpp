@@ -17,9 +17,10 @@
 */
 
 #include <pthread.h>
-#include <string>
 #include <sys/time.h>
 #include <time.h>
+
+#include <string>
 
 #include "../minuitwrp/minui.h"
 #include "../data.hpp"

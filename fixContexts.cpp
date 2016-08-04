@@ -16,20 +16,22 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <string>
-#include <unistd.h>
-#include <sys/stat.h>
 #include <dirent.h>
 #include <errno.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
 #include <cctype>
+#include <string>
+
 #include "fixContexts.hpp"
-#include "twrp-functions.hpp"
 #include "twcommon.h"
+#include "twrp-functions.hpp"
 #ifdef HAVE_SELINUX
-#include "selinux/selinux.h"
-#include "selinux/label.h"
 #include "selinux/android.h"
 #include "selinux/label.h"
+#include "selinux/label.h"
+#include "selinux/selinux.h"
 #endif
 
 using namespace std;

@@ -18,13 +18,14 @@
 
 #include <cutils/properties.h>
 #include <errno.h>
-#include <fstream>
 #include <stddef.h>
 #include <stdio.h>
-#include <string.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <unistd.h>
+
+#include <fstream>
+#include <string>
 #include <vector>
 
 #include "adb_install.h"

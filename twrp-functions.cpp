@@ -16,26 +16,26 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <algorithm>
 #include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
-#include <fstream>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <string>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <time.h>
 #include <unistd.h>
-#include <vector>
 #ifndef BUILD_TWRPTAR_MAIN
 #include <cutils/android_reboot.h>
 #include <cutils/properties.h>
 #endif
+
+#include <algorithm>
+#include <fstream>
+#include <string>
+#include <vector>
 
 #include "set_metadata.h"
 #include "twcommon.h"

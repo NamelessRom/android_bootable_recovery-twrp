@@ -19,8 +19,9 @@
 // hardwarekeyboard.cpp - HardwareKeyboard object
 
 #include <linux/input.h>
-#include <set>
 #include <stdbool.h>
+
+#include <set>
 
 #include "../twcommon.h"
 #include "objects.hpp"

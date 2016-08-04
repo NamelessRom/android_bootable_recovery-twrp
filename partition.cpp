@@ -24,15 +24,12 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <string>
 #include <sys/ioctl.h>
 #include <sys/mount.h>
 #include <sys/param.h>
 #include <sys/stat.h>
 #include <sys/statfs.h>
 #include <unistd.h>
-#include <vector>
 #ifdef TW_INCLUDE_CRYPTO
 	#include <cutils/properties.h>
 #endif
@@ -45,6 +42,15 @@
 	#include <sys/capability.h>
 	#include <sys/xattr.h>
 #endif
+
+extern "C" {
+#ifdef USE_EXT4
+	#include <make_ext4fs.h>
+#endif
+}
+
+#include <string>
+#include <vector>
 
 #include "data.hpp"
 #include "gui/console.h"
@@ -64,16 +70,15 @@
 
 extern "C" {
 	#include "mtdutils/mtdutils.h"
-#ifdef USE_EXT4
-	#include <make_ext4fs.h>
-#endif
 #ifdef TW_INCLUDE_CRYPTO
 	#include "crypto/lollipop/cryptfs.h"
 	#include "gpt/gpt.h"
-#else
-	#define CRYPT_FOOTER_OFFSET 0x4000
 #endif
 }
+
+#ifndef TW_INCLUDE_CRYPTO
+	#define CRYPT_FOOTER_OFFSET 0x4000
+#endif
 
 using namespace std;
 

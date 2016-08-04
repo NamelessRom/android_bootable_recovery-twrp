@@ -19,8 +19,9 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
-#include <string>
+
 #include <sstream>
+#include <string>
 
 #include "../data.hpp"
 #include "../minuitwrp/minui.h"

@@ -1,4 +1,4 @@
-/*update
+/*
 	Copyright 2013 bigbiff/Dees_Troy TeamWin
 	This file is part of TWRP/TeamWin Recovery Project.
 
@@ -19,21 +19,22 @@
 #include <cutils/properties.h>
 #include <errno.h>
 #include <linux/input.h>
-#include <map>
 #include <pthread.h>
 #include <pwd.h>
-#include <set>
 #include <signal.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string>
 #include <sys/select.h>
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <sys/wait.h>
 #include <time.h>
+
+#include <map>
+#include <set>
+#include <string>
 #include <utility>
 #include <vector>
 

@@ -18,7 +18,6 @@
 
 // pages.cpp - Source to manage GUI base objects
 
-#include <algorithm>
 #include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -26,11 +25,13 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <utility>
 #include <utime.h>
+
+#include <algorithm>
+#include <string>
+#include <utility>
 
 #include "../data.hpp"
 #include "../minuitwrp/minui.h"

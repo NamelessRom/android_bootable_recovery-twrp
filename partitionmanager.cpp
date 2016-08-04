@@ -22,14 +22,14 @@
 #include <linux/fs.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <string.h>
-#include <string>
 #include <sys/mount.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <time.h>
 #include <unistd.h>
+
+#include <string>
 #include <vector>
 
 #include "data.hpp"

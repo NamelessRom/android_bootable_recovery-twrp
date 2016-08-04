@@ -16,13 +16,14 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <algorithm>
+
 #include <dirent.h>
 #include <errno.h>
 #include <stddef.h>
-#include <string.h>
-#include <string>
 #include <sys/stat.h>
+
+#include <algorithm>
+#include <string>
 #include <vector>
 
 #include "gui/console.h"

@@ -18,20 +18,20 @@
 
 // terminal.cpp - GUITerminal object
 
-#include <algorithm>
-#include <cctype>
-#include <cstddef>
 #include <errno.h>
 #include <fcntl.h>
 #include <linux/input.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <string>
 #include <sys/ioctl.h>
 #include <sys/wait.h>
 #include <unistd.h>
+
+#include <algorithm>
+#include <cctype>
+#include <cstddef>
+#include <string>
 #include <vector>
 
 #include "../data.hpp"

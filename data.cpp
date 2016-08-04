@@ -16,21 +16,21 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <cctype>
 #include <cutils/properties.h>
 #include <errno.h>
-#include <fstream>
 #include <pthread.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <string>
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <sys/types.h>
 #include <time.h>
 #include <unistd.h>
+
+#include <cctype>
+#include <fstream>
+#include <string>
 
 #include "data.hpp"
 #include "find_file.hpp"

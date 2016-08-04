@@ -16,11 +16,11 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <algorithm>
 #include <dirent.h>
 #include <limits.h>
 #include <stdlib.h>
-#include <string.h>
+
+#include <algorithm>
 #include <string>
 #include <vector>
 

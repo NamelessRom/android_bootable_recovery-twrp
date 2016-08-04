@@ -16,11 +16,12 @@
 	along with TWRP.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
+
 #include <algorithm>
 #include <string>
-#include <stdbool.h>
 #include <vector>
 
 #include "../data.hpp"

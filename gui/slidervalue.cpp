@@ -18,12 +18,12 @@
 
 // slidervalue.cpp - GUISliderValue object
 
-#include <algorithm>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+
+#include <algorithm>
 #include <string>
 
 #include "../data.hpp"
