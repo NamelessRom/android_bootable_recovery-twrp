@@ -240,6 +240,7 @@ LOCAL_ADDITIONAL_DEPENDENCIES := \
     mkfs.fat \
     permissive.sh \
     pigz \
+    pigz_symlinks \
     simg2img_twrp \
     teamwin \
     toolbox \
@@ -303,6 +304,15 @@ ifeq ($(TARGET_USERIMAGES_USE_F2FS), true)
 endif
 
 include $(BUILD_EXECUTABLE)
+
+# Symlinks for pigz utilities
+include $(CLEAR_VARS)
+PIGZ_UTILITIES := gzip gunzip unpigz
+
+pigz_symlinks:
+	@mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/sbin
+	@echo -e ${CL_CYN}"Generate pigz links:"${CL_RST} $(PIGZ_UTILITIES)
+	$(hide) $(foreach t,$(PIGZ_UTILITIES),ln -sf pigz $(TARGET_RECOVERY_ROOT_OUT)/sbin/$(t);)
 
 # All the APIs for testing
 include $(CLEAR_VARS)
