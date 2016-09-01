@@ -243,16 +243,9 @@ void GUIPatternPassword::Resize(size_t n) {
 	mNeedRender = true;
 }
 
-static int pow(int x, int i)
-{
-	while (i-- > 1)
-		x *= x;
-	return x;
-}
-
 static bool IsInCircle(int x, int y, int ox, int oy, int r)
 {
-	return pow(x - ox, 2) + pow(y - oy, 2) <= pow(r, 2);
+	return (x-ox)*(x-ox) + (y-oy)*(y-oy) <= r*r;
 }
 
 int GUIPatternPassword::InDot(int x, int y)
