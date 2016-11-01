@@ -94,7 +94,8 @@ private:
 	string tarfn;
 	string basefn;
 	string password;
-
+	int input_fd;
+	int output_fd;
 	std::vector<TarListStruct> *ItemList;
 	unsigned thread_id;
 };
